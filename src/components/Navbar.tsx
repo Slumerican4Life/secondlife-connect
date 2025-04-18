@@ -1,10 +1,18 @@
 
 import { Link } from "react-router-dom";
-import { Bell, Globe, Home, MessageSquare, Search, Store, User, Droplet } from "lucide-react";
+import { Bell, Globe, Home, MessageSquare, Search, Store, User, Droplet, Heart, Building, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { currentUser } from "@/data/mockData";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   return (
@@ -46,11 +54,43 @@ const Navbar = () => {
               <Droplet className="h-5 w-5" />
             </Link>
           </Button>
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Store className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Markets</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/marketplace" className="flex items-center">
+                  <Store className="h-4 w-4 mr-2" />
+                  Virtual Marketplace
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/real-estate" className="flex items-center">
+                  <Building className="h-4 w-4 mr-2" />
+                  Land & Homes
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          
           <Button variant="ghost" size="icon" className="rounded-full" asChild>
-            <Link to="/marketplace">
-              <Store className="h-5 w-5" />
+            <Link to="/dating">
+              <Heart className="h-5 w-5" />
             </Link>
           </Button>
+          
+          <Button variant="ghost" size="icon" className="rounded-full" asChild>
+            <Link to="/clan-portal">
+              <Shield className="h-5 w-5" />
+            </Link>
+          </Button>
+          
           <Button variant="ghost" size="icon" className="rounded-full">
             <MessageSquare className="h-5 w-5" />
           </Button>

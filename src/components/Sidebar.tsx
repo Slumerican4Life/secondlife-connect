@@ -10,7 +10,12 @@ import {
   Settings,
   Globe, 
   Sparkles,
-  Droplet
+  Droplet,
+  Store,
+  Building,
+  Heart,
+  Shield,
+  Crown
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -21,16 +26,20 @@ interface NavItemProps {
   label: string;
   href: string;
   active?: boolean;
+  highlight?: "red" | "purple" | "gold";
 }
 
-const NavItem = ({ icon: Icon, label, href, active }: NavItemProps) => (
+const NavItem = ({ icon: Icon, label, href, active, highlight }: NavItemProps) => (
   <Link 
     to={href} 
     className={cn(
       buttonVariants({ variant: active ? "default" : "ghost" }),
       "w-full justify-start gap-3 rounded-full",
       active && "bg-virtual-300 text-white hover:bg-virtual-400 hover:text-white",
-      href === "/blood-market" && active && "bg-red-600 hover:bg-red-700"
+      highlight === "red" && active && "bg-red-600 hover:bg-red-700",
+      highlight === "gold" && active && "bg-amber-600 hover:bg-amber-700",
+      highlight === "red" && !active && "text-red-600",
+      highlight === "gold" && !active && "text-amber-600"
     )}
   >
     <Icon size={20} />
@@ -77,6 +86,31 @@ const Sidebar = () => {
           label="Blood Market" 
           href="/blood-market" 
           active={currentPath === "/blood-market"}
+          highlight="red"
+        />
+        <NavItem 
+          icon={Store} 
+          label="Marketplace" 
+          href="/marketplace" 
+          active={currentPath === "/marketplace"}
+        />
+        <NavItem 
+          icon={Building} 
+          label="Real Estate" 
+          href="/real-estate" 
+          active={currentPath === "/real-estate"}
+        />
+        <NavItem 
+          icon={Heart} 
+          label="Dating" 
+          href="/dating" 
+          active={currentPath === "/dating"}
+        />
+        <NavItem 
+          icon={Shield} 
+          label="Clan Portal" 
+          href="/clan-portal" 
+          active={currentPath === "/clan-portal"}
         />
         <NavItem 
           icon={Bell} 
@@ -107,6 +141,13 @@ const Sidebar = () => {
           label="Profile" 
           href="/profile" 
           active={currentPath === "/profile"}
+        />
+        <NavItem 
+          icon={Crown} 
+          label="Royal Portal" 
+          href="/royal-portal" 
+          active={currentPath === "/royal-portal"}
+          highlight="gold"
         />
         <NavItem 
           icon={Settings} 
