@@ -5,11 +5,13 @@ import CreatePost from "./CreatePost";
 import PostCard from "./PostCard";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "./ui/alert";
+import { toast } from 'sonner';
 
 const Feed = () => {
   const { data: posts, isLoading, error } = usePosts();
 
   if (error) {
+    toast.error('Error loading feed');
     return (
       <div className="p-4">
         <Alert variant="destructive">

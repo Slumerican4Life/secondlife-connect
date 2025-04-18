@@ -5,17 +5,16 @@ import { toast } from 'sonner';
 
 export interface Post {
   id: string;
+  userId: string;
   content: string;
-  created_at: string;
-  user_id: string;
+  createdAt: string;
+  likes: number;
+  comments: number;
   author: {
     username: string;
     avatar_url: string;
     full_name: string;
   };
-  likes_count: number;
-  comments_count: number;
-  has_liked?: boolean;
 }
 
 export const usePosts = () => {
@@ -25,7 +24,12 @@ export const usePosts = () => {
       const { data, error } = await supabase
         .from('posts')
         .select(`
-          *,
+          id,
+          user_id as userId,
+          content,
+          created_at as createdAt,
+          likes_count as likes,
+          comments_count as comments,
           author:profiles(username, avatar_url, full_name)
         `)
         .order('created_at', { ascending: false });
@@ -33,6 +37,10 @@ export const usePosts = () => {
       if (error) {
         toast.error('Failed to fetch posts');
         throw error;
+      }
+
+      if (!data?.length) {
+        toast.info('No posts available');
       }
 
       return data || [];
