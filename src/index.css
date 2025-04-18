@@ -1,12 +1,42 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
+    --background: 260 50% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 263 60% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 260 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 260 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 263 60% 96%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 263 70% 50%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -35,14 +65,6 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 263 70% 70%;
   }
-
-  html {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 125%; /* Increase base font size by 25% */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
-  }
 }
 
 @layer base {
@@ -53,23 +75,11 @@
   body {
     @apply bg-background text-foreground;
   }
-
-  h1 {
-    @apply text-3xl;
-  }
-
-  h2 {
-    @apply text-2xl;
-  }
-
-  p, span, a, button {
-    @apply text-lg;
-  }
 }
 
 .avatar-border {
   border: 3px solid transparent;
-  background-image: linear-gradient(hsl(222.2 84% 4.9%), hsl(222.2 84% 4.9%)), 
+  background-image: linear-gradient(white, white), 
     linear-gradient(to right, #9b87f5, #8B5CF6);
   background-origin: border-box;
   background-clip: content-box, border-box;
@@ -77,40 +87,4 @@
 
 .gradient-text {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-virtual-300 to-virtual-400;
-}
-
-.script-title {
-  font-family: 'Dancing Script', cursive;
-}
-
-/* 3D Button Styles */
-.button-3d {
-  @apply transform transition-all duration-200 shadow-lg hover:shadow-xl 
-    active:shadow-md active:translate-y-0.5 hover:-translate-y-0.5;
-}
-
-/* Hover Effects */
-.hover-effect {
-  @apply transition-all duration-200 hover:brightness-110 hover:scale-[1.02];
-}
-
-/* Card Hover Effects */
-.card-hover {
-  @apply transition-all duration-200 hover:shadow-xl hover:-translate-y-1;
-}
-
-/* Text Shadow for better readability */
-.text-shadow {
-  text-shadow: 0px 2px 3px rgba(0,0,0,0.3);
-}
-
-/* Points Display Animation */
-@keyframes point-pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.point-animate {
-  animation: point-pulse 1s ease-in-out;
 }

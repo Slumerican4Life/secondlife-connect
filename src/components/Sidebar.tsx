@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { 
   Home, 
@@ -8,14 +9,7 @@ import {
   User, 
   Settings,
   Globe, 
-  Sparkles,
-  Droplet,
-  Store,
-  Building,
-  Heart,
-  Shield,
-  Crown,
-  Navigation
+  Sparkles 
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -26,20 +20,15 @@ interface NavItemProps {
   label: string;
   href: string;
   active?: boolean;
-  highlight?: "red" | "purple" | "gold";
 }
 
-const NavItem = ({ icon: Icon, label, href, active, highlight }: NavItemProps) => (
+const NavItem = ({ icon: Icon, label, href, active }: NavItemProps) => (
   <Link 
     to={href} 
     className={cn(
       buttonVariants({ variant: active ? "default" : "ghost" }),
       "w-full justify-start gap-3 rounded-full",
-      active && "bg-virtual-300 text-white hover:bg-virtual-400 hover:text-white",
-      highlight === "red" && active && "bg-red-600 hover:bg-red-700",
-      highlight === "gold" && active && "bg-amber-600 hover:bg-amber-700",
-      highlight === "red" && !active && "text-red-600",
-      highlight === "gold" && !active && "text-amber-600"
+      active && "bg-virtual-300 text-white hover:bg-virtual-400 hover:text-white"
     )}
   >
     <Icon size={20} />
@@ -56,9 +45,9 @@ const Sidebar = () => {
       <div className="px-3 py-2">
         <Link to="/" className="flex items-center gap-2 px-3">
           <div className="h-8 w-8 rounded-full bg-gradient-to-r from-virtual-300 to-virtual-400 flex items-center justify-center">
-            <span className="text-white font-semibold">S</span>
+            <span className="text-white font-semibold">W</span>
           </div>
-          <h1 className="text-xl font-bold gradient-text font-script hidden lg:inline-block">SecondLife Connect</h1>
+          <h1 className="text-xl font-bold gradient-text hidden lg:inline-block">WorldWeave</h1>
         </Link>
       </div>
       
@@ -80,44 +69,6 @@ const Sidebar = () => {
           label="Virtual Worlds" 
           href="/worlds" 
           active={currentPath === "/worlds"}
-        />
-        <NavItem 
-          icon={Droplet} 
-          label="Blood Bank" 
-          href="/blood-bank" 
-          active={currentPath === "/blood-bank"}
-          highlight="red"
-        />
-        <NavItem 
-          icon={Store} 
-          label="Marketplace" 
-          href="/marketplace" 
-          active={currentPath === "/marketplace"}
-        />
-        <NavItem 
-          icon={Building} 
-          label="Real Estate" 
-          href="/real-estate" 
-          active={currentPath === "/real-estate"}
-        />
-        <NavItem 
-          icon={Heart} 
-          label="Dating" 
-          href="/dating" 
-          active={currentPath === "/dating"}
-        />
-        <NavItem 
-          icon={Shield} 
-          label="Clan Portal" 
-          href="/clan-portal" 
-          active={currentPath === "/clan-portal"}
-        />
-        <NavItem 
-          icon={Navigation} 
-          label="Map & Teleport" 
-          href="/royal-portal?tab=teleport" 
-          active={currentPath === "/royal-portal" && location.search.includes("teleport")}
-          highlight="gold"
         />
         <NavItem 
           icon={Bell} 
@@ -148,13 +99,6 @@ const Sidebar = () => {
           label="Profile" 
           href="/profile" 
           active={currentPath === "/profile"}
-        />
-        <NavItem 
-          icon={Crown} 
-          label="Royal Portal" 
-          href="/royal-portal" 
-          active={currentPath === "/royal-portal" && !location.search.includes("teleport")}
-          highlight="gold"
         />
         <NavItem 
           icon={Settings} 

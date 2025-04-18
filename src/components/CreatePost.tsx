@@ -19,21 +19,14 @@ const CreatePost = () => {
     
     // Simulate post creation
     setTimeout(() => {
-      toast.success("Post created successfully! +5 points", {
-        icon: '🌟',
-      });
-      
-      // Award points for creating post
-      const currentPoints = parseInt(localStorage.getItem('userPoints') || '0');
-      localStorage.setItem('userPoints', (currentPoints + 5).toString());
-      
+      toast.success("Post created successfully!");
       setContent("");
       setIsSubmitting(false);
     }, 1000);
   };
 
   return (
-    <Card className="mb-6 border shadow-sm card-hover">
+    <Card className="mb-6 border shadow-sm">
       <CardContent className="pt-4">
         <div className="flex gap-3">
           <Avatar className="h-10 w-10 border border-border">
@@ -73,7 +66,7 @@ const CreatePost = () => {
           className="rounded-full"
         >
           <Send className="h-4 w-4 mr-1" />
-          Post {content.trim() ? "(+5 points)" : ""}
+          Post
         </Button>
       </CardFooter>
     </Card>
