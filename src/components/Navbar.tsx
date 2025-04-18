@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Bell, Home, MessageSquare, Moon, Search, Sun, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -14,9 +15,9 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-full bg-gradient-to-r from-virtual-300 to-virtual-400 flex items-center justify-center">
-            <span className="text-white font-semibold">W</span>
+            <span className="text-white font-semibold">S</span>
           </div>
-          <h1 className="text-xl font-bold gradient-text">WorldWeave</h1>
+          <h1 className="text-xl font-bold gradient-text">Secondlife Connect</h1>
         </Link>
 
         <div className="hidden md:block w-1/3">
