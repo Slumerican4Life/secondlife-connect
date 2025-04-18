@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Bell, Home, MessageSquare, Search, User } from "lucide-react";
+import { Bell, Globe, Home, MapPin, MessageSquare, Search, Store, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -13,7 +13,7 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-full bg-gradient-to-r from-virtual-300 to-virtual-400 flex items-center justify-center">
-            <span className="text-white font-semibold">S</span>
+            <Globe className="h-5 w-5 text-white" />
           </div>
           <h1 className="text-xl font-bold gradient-text">SecondLife Connect</h1>
         </Link>
@@ -23,7 +23,7 @@ const Navbar = () => {
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search..."
+              placeholder="Search avatars, locations, events..."
               className="pl-8 bg-muted/50"
             />
           </div>
@@ -34,6 +34,16 @@ const Navbar = () => {
           <Button variant="ghost" size="icon" className="rounded-full" asChild>
             <Link to="/">
               <Home className="h-5 w-5" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" className="rounded-full" asChild>
+            <Link to="/worlds">
+              <Globe className="h-5 w-5" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" className="rounded-full" asChild>
+            <Link to="/marketplace">
+              <Store className="h-5 w-5" />
             </Link>
           </Button>
           <Button variant="ghost" size="icon" className="rounded-full">
