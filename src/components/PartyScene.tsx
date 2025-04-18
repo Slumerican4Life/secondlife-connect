@@ -1,4 +1,3 @@
-
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, PerspectiveCamera, useGLTF } from '@react-three/drei';
 import { Suspense, useRef } from 'react';
@@ -105,8 +104,8 @@ const FurryAvatar = ({ position, rotation }) => {
       </mesh>
       
       {/* Snout */}
-      <mesh position={[0, 1.6, 0.2]}>
-        <capsuleGeometry args={[0.14, 0.2, 8, 16]} rotation={[Math.PI / 2, 0, 0]} />
+      <mesh position={[0, 1.6, 0.2]} rotation={[Math.PI / 2, 0, 0]}>
+        <capsuleGeometry args={[0.14, 0.2, 8, 16]} />
         <meshStandardMaterial color="#d4a76a" roughness={0.8} />
       </mesh>
       
