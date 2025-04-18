@@ -16,14 +16,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Post, User } from "@/data/mockData";
+import { Post } from "@/hooks/use-posts";
 
 interface PostCardProps {
   post: Post;
-  user: User;
 }
 
-const PostCard = ({ post, user }: PostCardProps) => {
+const PostCard = ({ post }: PostCardProps) => {
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(post.likes);
 
@@ -50,12 +49,18 @@ const PostCard = ({ post, user }: PostCardProps) => {
         <div className="flex justify-between items-start">
           <div className="flex items-center space-x-2">
             <Avatar className="h-10 w-10 border border-border">
-              <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="bg-virtual-200">{user.name.substring(0, 2)}</AvatarFallback>
+              <AvatarImage src={post.author.avatar_url} alt={post.author.full_name} />
+              <AvatarFallback className="bg-virtual-200">
+                {post.author.full_name.substring(0, 2)}
+              </AvatarFallback>
             </Avatar>
             <div>
-              <Link to={`/profile/${user.id}`} className="font-medium hover:underline">{user.name}</Link>
-              <p className="text-sm text-muted-foreground">@{user.username} · {formatDate(post.createdAt)}</p>
+              <Link to={`/profile/${post.userId}`} className="font-medium hover:underline">
+                {post.author.full_name}
+              </Link>
+              <p className="text-sm text-muted-foreground">
+                @{post.author.username} · {formatDate(post.createdAt)}
+              </p>
             </div>
           </div>
           <DropdownMenu>
@@ -74,15 +79,6 @@ const PostCard = ({ post, user }: PostCardProps) => {
       </CardHeader>
       <CardContent className="px-4 py-2">
         <p className="mb-3">{post.content}</p>
-        {post.image && (
-          <div className="rounded-md overflow-hidden mt-2">
-            <img
-              src={post.image}
-              alt="Post content"
-              className="w-full h-auto object-cover max-h-96"
-            />
-          </div>
-        )}
       </CardContent>
       <CardFooter className="px-4 py-2 flex justify-between border-t">
         <Button 
