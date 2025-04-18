@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -112,4 +113,19 @@
 
 .point-animate {
   animation: point-pulse 1s ease-in-out;
+}
+
+/* Glass effect for dark mode */
+.dark-glass {
+  @apply backdrop-blur-lg bg-white/5 border border-white/10 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3)];
+}
+
+/* Neo blur effect for enhanced depth */
+.neo-blur {
+  @apply backdrop-blur-2xl bg-black/40 border border-white/10;
+}
+
+/* Text gradient for standout elements */
+.dark-text-gradient {
+  @apply bg-gradient-to-br from-white via-white/90 to-white/70 bg-clip-text text-transparent;
 }
