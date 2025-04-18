@@ -4,7 +4,6 @@ import AuthForm from '@/components/AuthForm';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import Feed from '@/components/Feed';
-import PartyScene from '@/components/PartyScene';
 import { Users, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -17,11 +16,13 @@ const Index = () => {
         <div className="absolute inset-0 bg-rust-texture opacity-10 z-0"></div>
         <div className="relative z-10 w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center">
           <div className="hidden md:block space-y-4">
-            <PartyScene />
+            <div className="rounded-lg overflow-hidden">
+              {/* Ready for your custom image */}
+            </div>
             <div className="flex justify-center space-x-4 mt-4">
               <Button variant="chrome" size="lg" className="flex items-center gap-2">
                 <Users className="w-5 h-5" />
-                Explore Avatars
+                Return to your Digital Realm
               </Button>
               <Button variant="outline" size="lg" className="flex items-center gap-2">
                 <Globe className="w-5 h-5" />
