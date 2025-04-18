@@ -18,9 +18,9 @@ const Feed = () => {
   }, [error]);
 
   return (
-    <div className="divide-y divide-border">
+    <div className="divide-y divide-border/10">
       {/* Always show create post form at the top */}
-      <div className="p-4">
+      <div className="p-4 bg-card/50">
         <CreatePost />
       </div>
 
@@ -28,15 +28,15 @@ const Feed = () => {
       {isLoading && (
         <div className="space-y-4 p-4">
           {[...Array(3)].map((_, i) => (
-            <div key={i} className="space-y-3">
+            <div key={i} className="space-y-3 bg-card/30 p-4 rounded-lg">
               <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-12 rounded-full" />
+                <Skeleton className="h-12 w-12 rounded-full bg-muted/20" />
                 <div className="space-y-2">
-                  <Skeleton className="h-4 w-[250px]" />
-                  <Skeleton className="h-4 w-[200px]" />
+                  <Skeleton className="h-4 w-[250px] bg-muted/20" />
+                  <Skeleton className="h-4 w-[200px] bg-muted/20" />
                 </div>
               </div>
-              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-24 w-full bg-muted/20" />
             </div>
           ))}
         </div>
@@ -45,7 +45,7 @@ const Feed = () => {
       {/* Error state */}
       {error && !isLoading && (
         <div className="p-4">
-          <Alert variant="destructive">
+          <Alert variant="destructive" className="border-destructive/50 bg-destructive/10">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
               Failed to load posts. Please try again later.
@@ -56,16 +56,18 @@ const Feed = () => {
 
       {/* Empty state */}
       {!isLoading && !error && (!posts || posts.length === 0) && (
-        <div className="p-8 text-center text-muted-foreground">
+        <div className="p-8 text-center text-muted-foreground bg-card/30">
           No posts yet. Be the first to share something!
         </div>
       )}
 
       {/* Posts list */}
       {!isLoading && !error && posts && posts.length > 0 && (
-        <div>
+        <div className="divide-y divide-border/10">
           {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+            <div key={post.id} className="bg-card/30 hover:bg-card/50 transition-colors">
+              <PostCard post={post} />
+            </div>
           ))}
         </div>
       )}

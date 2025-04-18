@@ -5,38 +5,6 @@
 
 @layer base {
   :root {
-    --background: 260 50% 98%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 263 60% 50%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 260 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 260 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 263 60% 96%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 263 70% 50%;
-
-    --radius: 0.5rem;
-  }
-
-  .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
@@ -79,7 +47,7 @@
 
 .avatar-border {
   border: 3px solid transparent;
-  background-image: linear-gradient(white, white), 
+  background-image: linear-gradient(hsl(222.2 84% 4.9%), hsl(222.2 84% 4.9%)), 
     linear-gradient(to right, #9b87f5, #8B5CF6);
   background-origin: border-box;
   background-clip: content-box, border-box;
