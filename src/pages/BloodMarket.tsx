@@ -1,12 +1,12 @@
-
-import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Heart, Droplet, User, Users, Calendar, MapPin } from "lucide-react";
-import { useIsMobile } from "@/hooks/use-mobile";
-import BloodDollCard from "@/components/BloodDollCard";
+import React from 'react';
+import Navbar from '@/components/Navbar';
+import Sidebar from '@/components/Sidebar';
+import { useIsMobile } from '@/hooks/use-mobile';
+import BloodDollCard from '@/components/BloodDollCard';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { BloodDollStatus } from '@/types/blood-bank';
 
 const BloodMarket = () => {
   const isMobile = useIsMobile();
@@ -24,156 +24,147 @@ const BloodMarket = () => {
 
         {/* Main content */}
         <main className="flex-1 border-x border-border/80">
-          <div className="p-6 max-w-4xl mx-auto">
-            <div className="mb-6">
-              <h1 className="text-3xl font-bold text-red-600 mb-2 flex items-center">
-                <Droplet className="mr-2 h-7 w-7 fill-red-600 text-white" />
-                Blood Market
-              </h1>
-              <p className="text-muted-foreground">Find willing blood dolls or vampire masters near you</p>
-            </div>
+          <div className="p-4">
+            <h1 className="text-2xl font-bold mb-6">Blood Market</h1>
             
-            <Tabs defaultValue="dolls" className="w-full">
-              <TabsList className="grid w-full grid-cols-2 mb-6">
-                <TabsTrigger value="dolls">Blood Dolls</TabsTrigger>
-                <TabsTrigger value="masters">Vampire Masters</TabsTrigger>
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList className="grid grid-cols-3 mb-6">
+                <TabsTrigger value="all">All Dolls</TabsTrigger>
+                <TabsTrigger value="donors">Donors</TabsTrigger>
+                <TabsTrigger value="masters">Masters</TabsTrigger>
               </TabsList>
               
-              <TabsContent value="dolls" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <BloodDollCard 
-                    name="Lillith" 
-                    type="O Negative"
-                    location="Virtual Berlin"
-                    image="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80"
+              <TabsContent value="all" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* Update the BloodDollCard props to match the expected interface */}
+                  <BloodDollCard
+                    name="Selene"
+                    image="/placeholder.svg"
+                    bloodType="O-"
+                    rarity="Rare"
                     status="available"
-                    level="Experienced"
+                    price={1500}
+                    age={127}
+                    lastFed="2 hours ago"
                   />
-                  <BloodDollCard 
-                    name="Viktor" 
-                    type="AB Positive"
-                    location="Tokyo Nights"
-                    image="https://images.unsplash.com/photo-1599566150163-29194dcaad36?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1887&q=80"
+                  
+                  <BloodDollCard
+                    name="Viktor"
+                    image="/placeholder.svg"
+                    bloodType="AB+"
+                    rarity="Uncommon"
                     status="meeting"
-                    level="Novice"
+                    price={850}
+                    age={243}
+                    lastFed="1 day ago"
                   />
-                  <BloodDollCard 
-                    name="Elena" 
-                    type="A Negative"
-                    location="Fantasy Realm"
-                    image="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1888&q=80"
+                  
+                  <BloodDollCard
+                    name="Lilith"
+                    image="/placeholder.svg"
+                    bloodType="A+"
+                    rarity="Common"
                     status="available"
-                    level="Intermediate"
+                    price={500}
+                    age={53}
+                    lastFed="3 hours ago"
                   />
-                  <BloodDollCard 
-                    name="Damon" 
-                    type="B Positive"
-                    location="Virtual Berlin"
-                    image="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1760&q=80"
+                  
+                  <BloodDollCard
+                    name="Damon"
+                    image="/placeholder.svg"
+                    bloodType="B-"
+                    rarity="Rare"
                     status="resting"
-                    level="Master"
+                    price={1200}
+                    age={176}
+                    lastFed="4 days ago"
                   />
                 </div>
-                
-                <div className="mt-6">
-                  <Button className="bg-red-600 hover:bg-red-700 text-white">
-                    <Calendar className="mr-2 h-4 w-4" /> Schedule Blood Meet
-                  </Button>
+              </TabsContent>
+              
+              <TabsContent value="donors" className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* Donor blood dolls */}
+                  <BloodDollCard
+                    name="Elara"
+                    image="/placeholder.svg"
+                    bloodType="A-"
+                    rarity="Common"
+                    status="available"
+                    price={450}
+                    age={28}
+                    lastFed="5 hours ago"
+                  />
+                  
+                  <BloodDollCard
+                    name="Marcus"
+                    image="/placeholder.svg"
+                    bloodType="O+"
+                    rarity="Uncommon"
+                    status="resting"
+                    price={700}
+                    age={42}
+                    lastFed="2 days ago"
+                  />
+                  
+                  <BloodDollCard
+                    name="Seraphina"
+                    image="/placeholder.svg"
+                    bloodType="B+"
+                    rarity="Rare"
+                    status="available"
+                    price={950}
+                    age={35}
+                    lastFed="6 hours ago"
+                  />
                 </div>
               </TabsContent>
               
               <TabsContent value="masters" className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <BloodDollCard 
-                    name="Count Orlock" 
-                    type="Ancient"
-                    location="Fantasy Realm"
-                    image="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80"
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {/* Master blood dolls */}
+                  <BloodDollCard
+                    name="Count Dracula"
+                    image="/placeholder.svg"
+                    bloodType="O+"
+                    rarity="Legendary"
                     status="hunting"
-                    level="Elder"
-                    isMaster={true}
+                    price={5000}
+                    age={752}
+                    lastFed="12 hours ago"
                   />
-                  <BloodDollCard 
-                    name="Lady Carmilla" 
-                    type="Pure Blood"
-                    location="Virtual Berlin"
-                    image="https://images.unsplash.com/photo-1526510747491-58f928ec870f?ixlib=rb-4.0.3&auto=format&fit=crop&w=764&q=80"
+                  
+                  <BloodDollCard
+                    name="Elizabeth Báthory"
+                    image="/placeholder.svg"
+                    bloodType="AB-"
+                    rarity="Mythic"
                     status="available"
-                    level="Noble"
-                    isMaster={true}
+                    price={4500}
+                    age={560}
+                    lastFed="1 hour ago"
                   />
-                </div>
-                
-                <div className="mt-6">
-                  <Button className="bg-red-600 hover:bg-red-700 text-white">
-                    <Users className="mr-2 h-4 w-4" /> Join Vampire Coven
-                  </Button>
                 </div>
               </TabsContent>
             </Tabs>
-            
-            <div className="mt-10">
-              <h2 className="text-xl font-semibold mb-4">Upcoming Blood Meets</h2>
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-red-600">Midnight Masquerade</CardTitle>
-                  <CardDescription>A gathering of dolls and masters under the virtual moonlight</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span>Tomorrow at Midnight SLT</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    <span>Crimson Manor, Fantasy Realm</span>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Button variant="outline" className="mr-2">More Info</Button>
-                  <Button className="bg-red-600 hover:bg-red-700 text-white">RSVP</Button>
-                </CardFooter>
-              </Card>
-            </div>
           </div>
         </main>
 
         {/* Right sidebar - Hidden on mobile */}
         {!isMobile && (
           <div className="w-80 hidden lg:block">
-            <div className="p-4 sticky top-[73px]">
-              <Card className="mb-4">
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base flex items-center">
-                    <Droplet className="mr-2 h-4 w-4 fill-red-600 text-white" />
-                    Blood Market AI
-                  </CardTitle>
+            <div className="p-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Blood Market Info</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    Our AI matches you with compatible blood dolls and masters based on your preferences.
+                  <p className="mb-4">
+                    Welcome to the Blood Market. Here you can find blood dolls for your vampire needs.
+                    Rates vary based on rarity and blood type.
                   </p>
-                  <Button className="mt-3 w-full" variant="outline">Configure Preferences</Button>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-base">Blood Type Market</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span>O Negative</span>
-                    <span className="text-green-500">↑ 12%</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>AB Positive</span>
-                    <span className="text-red-500">↓ 3%</span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span>A Positive</span>
-                    <span className="text-green-500">↑ 5%</span>
-                  </div>
+                  <Button className="w-full">Post a Listing</Button>
                 </CardContent>
               </Card>
             </div>
