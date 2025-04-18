@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -9,7 +8,6 @@ export default {
     "./app/**/*.{ts,tsx}",
     "./src/**/*.{ts,tsx}",
   ],
-  prefix: "",
   theme: {
     container: {
       center: true,
@@ -58,13 +56,15 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         virtual: {
-          100: "#E5DEFF",
-          200: "#D6BCFA",
-          300: "#9b87f5",
-          400: "#8B5CF6",
-          500: "#7E69AB",
-          600: "#6E59A5",
-          700: "#1A1F2C",
+          100: '#E5DEFF',
+          200: '#D6BCFA',
+          300: '#9b87f5',
+          400: '#8B5CF6',
+          500: '#7E69AB',
+          600: '#6E59A5',
+          700: '#1A1F2C',
+          800: '#151821',
+          900: '#0F1117',
         },
       },
       borderRadius: {
