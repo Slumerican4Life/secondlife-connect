@@ -1,0 +1,114 @@
+
+import { Link } from "react-router-dom";
+import { 
+  Home, 
+  Search, 
+  Bell, 
+  MessageSquare, 
+  Bookmark, 
+  User, 
+  Settings,
+  Globe, 
+  Sparkles 
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
+import { useLocation } from "react-router-dom";
+
+interface NavItemProps {
+  icon: React.ElementType;
+  label: string;
+  href: string;
+  active?: boolean;
+}
+
+const NavItem = ({ icon: Icon, label, href, active }: NavItemProps) => (
+  <Link 
+    to={href} 
+    className={cn(
+      buttonVariants({ variant: active ? "default" : "ghost" }),
+      "w-full justify-start gap-3 rounded-full",
+      active && "bg-virtual-300 text-white hover:bg-virtual-400 hover:text-white"
+    )}
+  >
+    <Icon size={20} />
+    <span className="hidden lg:inline-block">{label}</span>
+  </Link>
+);
+
+const Sidebar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  return (
+    <div className="h-full py-4 hidden sm:flex flex-col border-r">
+      <div className="px-3 py-2">
+        <Link to="/" className="flex items-center gap-2 px-3">
+          <div className="h-8 w-8 rounded-full bg-gradient-to-r from-virtual-300 to-virtual-400 flex items-center justify-center">
+            <span className="text-white font-semibold">W</span>
+          </div>
+          <h1 className="text-xl font-bold gradient-text hidden lg:inline-block">WorldWeave</h1>
+        </Link>
+      </div>
+      
+      <div className="flex-1 px-3 py-6 space-y-1">
+        <NavItem 
+          icon={Home} 
+          label="Home" 
+          href="/" 
+          active={currentPath === "/"}
+        />
+        <NavItem 
+          icon={Search} 
+          label="Explore" 
+          href="/explore" 
+          active={currentPath === "/explore"}
+        />
+        <NavItem 
+          icon={Globe} 
+          label="Virtual Worlds" 
+          href="/worlds" 
+          active={currentPath === "/worlds"}
+        />
+        <NavItem 
+          icon={Bell} 
+          label="Notifications" 
+          href="/notifications" 
+          active={currentPath === "/notifications"}
+        />
+        <NavItem 
+          icon={MessageSquare} 
+          label="Messages" 
+          href="/messages" 
+          active={currentPath === "/messages"}
+        />
+        <NavItem 
+          icon={Bookmark} 
+          label="Bookmarks" 
+          href="/bookmarks" 
+          active={currentPath === "/bookmarks"}
+        />
+        <NavItem 
+          icon={Sparkles} 
+          label="Trending" 
+          href="/trending" 
+          active={currentPath === "/trending"}
+        />
+        <NavItem 
+          icon={User} 
+          label="Profile" 
+          href="/profile" 
+          active={currentPath === "/profile"}
+        />
+        <NavItem 
+          icon={Settings} 
+          label="Settings" 
+          href="/settings" 
+          active={currentPath === "/settings"}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default Sidebar;

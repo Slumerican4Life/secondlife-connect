@@ -1,11 +1,39 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import Navbar from "@/components/Navbar";
+import Sidebar from "@/components/Sidebar";
+import Feed from "@/components/Feed";
+import SuggestedUsers from "@/components/SuggestedUsers";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
+  const isMobile = useIsMobile();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="flex-1 flex">
+        {/* Sidebar - Hidden on mobile */}
+        <div className="w-16 lg:w-64 hidden sm:block">
+          <div className="sticky top-[73px] h-[calc(100vh-73px)]">
+            <Sidebar />
+          </div>
+        </div>
+
+        {/* Main content */}
+        <main className="flex-1 border-x border-border/80">
+          <div className="py-6">
+            <Feed />
+          </div>
+        </main>
+
+        {/* Right sidebar - Hidden on mobile */}
+        {!isMobile && (
+          <div className="w-80 hidden lg:block">
+            <div className="p-4 sticky top-[73px]">
+              <SuggestedUsers />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
