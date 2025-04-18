@@ -4,6 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import Feed from "@/components/Feed";
 import SuggestedUsers from "@/components/SuggestedUsers";
 import WorldsWidget from "@/components/WorldsWidget";
+import BloodMarketPreview from "@/components/BloodMarketPreview";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 const Index = () => {
@@ -24,6 +25,7 @@ const Index = () => {
         <main className="flex-1 border-x border-border/80">
           <div className="py-6">
             <WorldsWidget />
+            <BloodMarketPreview />
             <Feed />
           </div>
         </main>

@@ -9,7 +9,8 @@ import {
   User, 
   Settings,
   Globe, 
-  Sparkles 
+  Sparkles,
+  Droplet
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -28,7 +29,8 @@ const NavItem = ({ icon: Icon, label, href, active }: NavItemProps) => (
     className={cn(
       buttonVariants({ variant: active ? "default" : "ghost" }),
       "w-full justify-start gap-3 rounded-full",
-      active && "bg-virtual-300 text-white hover:bg-virtual-400 hover:text-white"
+      active && "bg-virtual-300 text-white hover:bg-virtual-400 hover:text-white",
+      href === "/blood-market" && active && "bg-red-600 hover:bg-red-700"
     )}
   >
     <Icon size={20} />
@@ -69,6 +71,12 @@ const Sidebar = () => {
           label="Virtual Worlds" 
           href="/worlds" 
           active={currentPath === "/worlds"}
+        />
+        <NavItem 
+          icon={Droplet} 
+          label="Blood Market" 
+          href="/blood-market" 
+          active={currentPath === "/blood-market"}
         />
         <NavItem 
           icon={Bell} 
