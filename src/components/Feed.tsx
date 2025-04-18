@@ -14,6 +14,7 @@ const Feed = () => {
   useEffect(() => {
     // Show error toast when there's an error
     if (error) {
+      console.error('Feed error:', error);
       toast.error('Error loading feed');
     }
   }, [error]);
@@ -52,13 +53,13 @@ const Feed = () => {
             </div>
           ))}
         </div>
-      ) : posts?.length === 0 ? (
+      ) : !posts || posts.length === 0 ? (
         <div className="p-8 text-center text-muted-foreground">
           No posts yet. Be the first to share something!
         </div>
       ) : (
         <div>
-          {posts?.map((post) => (
+          {posts.map((post) => (
             <PostCard key={post.id} post={post} />
           ))}
         </div>
