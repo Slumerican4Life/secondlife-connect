@@ -5,10 +5,11 @@ import Feed from "@/components/Feed";
 import SuggestedUsers from "@/components/SuggestedUsers";
 import WorldsWidget from "@/components/WorldsWidget";
 import BloodMarketPreview from "@/components/BloodMarketPreview";
+import AIAgentHub from "@/components/AIAgentHub";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Store, Building, Shield, ArrowRight } from "lucide-react";
+import { Heart, Store, Building, Shield, ArrowRight, Bot } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Index = () => {
@@ -28,6 +29,17 @@ const Index = () => {
         {/* Main content */}
         <main className="flex-1 border-x border-border/80">
           <div className="py-6">
+            {/* AI Agent Hub section */}
+            <div className="px-4 mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <Bot className="h-5 w-5 text-virtual-400" />
+                  AI Assistance
+                </h2>
+              </div>
+              <AIAgentHub />
+            </div>
+            
             {/* Feature highlights section */}
             <div className="px-4 mb-8">
               <h2 className="text-lg font-semibold mb-4">Explore SecondLife Connect</h2>
