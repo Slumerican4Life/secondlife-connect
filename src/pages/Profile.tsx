@@ -1,15 +1,19 @@
-
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import UserProfile from "@/components/UserProfile";
-import PostCard from "@/components/PostCard";
 import { useProfile } from '@/hooks/use-profile';
 import { Skeleton } from "@/components/ui/skeleton";
 
 const Profile = () => {
+  const { session } = useAuth();
   const { id } = useParams();
   const { data: profile, isLoading } = useProfile(id);
+
+  if (!session) {
+    return <Navigate to="/" />;
+  }
 
   if (isLoading) {
     return (
