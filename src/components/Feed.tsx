@@ -12,33 +12,20 @@ const Feed = () => {
   const { data: posts, isLoading, error } = usePosts();
 
   useEffect(() => {
-    // Show error toast when there's an error
     if (error) {
-      console.error('Feed error:', error);
-      toast.error('Error loading feed');
+      toast.error('Failed to load posts');
     }
   }, [error]);
 
-  if (error) {
-    return (
-      <div className="p-4">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertDescription>
-            Failed to load posts. Please try again later.
-          </AlertDescription>
-        </Alert>
-      </div>
-    );
-  }
-
   return (
     <div className="divide-y divide-border">
+      {/* Always show create post form at the top */}
       <div className="p-4">
         <CreatePost />
       </div>
 
-      {isLoading ? (
+      {/* Loading state */}
+      {isLoading && (
         <div className="space-y-4 p-4">
           {[...Array(3)].map((_, i) => (
             <div key={i} className="space-y-3">
@@ -53,11 +40,29 @@ const Feed = () => {
             </div>
           ))}
         </div>
-      ) : !posts || posts.length === 0 ? (
+      )}
+
+      {/* Error state */}
+      {error && !isLoading && (
+        <div className="p-4">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Failed to load posts. Please try again later.
+            </AlertDescription>
+          </Alert>
+        </div>
+      )}
+
+      {/* Empty state */}
+      {!isLoading && !error && (!posts || posts.length === 0) && (
         <div className="p-8 text-center text-muted-foreground">
           No posts yet. Be the first to share something!
         </div>
-      ) : (
+      )}
+
+      {/* Posts list */}
+      {!isLoading && !error && posts && posts.length > 0 && (
         <div>
           {posts.map((post) => (
             <PostCard key={post.id} post={post} />

@@ -1,7 +1,6 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import { toast } from 'sonner';
 
 export interface Post {
   id: string;
@@ -21,9 +20,7 @@ export const usePosts = () => {
   return useQuery({
     queryKey: ['posts'],
     queryFn: async (): Promise<Post[]> => {
-      console.log('Starting posts query...');
-      
-      // Explicitly structure the query to match the database column names
+      // Fetch posts with author details using join
       const { data, error } = await supabase
         .from('posts')
         .select(`
@@ -38,56 +35,40 @@ export const usePosts = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Supabase query error:', error);
-        toast.error(`Failed to fetch posts: ${error.message}`);
-        throw error;
+        console.error('Failed to fetch posts:', error);
+        throw new Error(`Failed to load posts: ${error.message}`);
       }
 
-      console.log('Raw Supabase data:', data);
-
+      // Handle empty response gracefully
       if (!data || data.length === 0) {
-        console.warn('No posts available');
         return [];
       }
 
-      try {
-        const formattedPosts: Post[] = data.map(post => {
-          console.log('Processing post:', post);
-          
-          // Extract profile data regardless of structure (array or object)
-          let authorData;
-          
-          if (post.profiles) {
-            authorData = Array.isArray(post.profiles) && post.profiles.length > 0
-              ? post.profiles[0]
-              : post.profiles;
+      // Transform data to expected format
+      return data.map(post => {
+        // Handle profile data (could be array or object based on Supabase join format)
+        const profileData = Array.isArray(post.profiles) ? post.profiles[0] : post.profiles;
+        
+        return {
+          id: post.id,
+          userId: post.user_id,
+          content: post.content,
+          createdAt: post.created_at,
+          likes: post.likes_count || 0,
+          comments: post.comments_count || 0,
+          author: {
+            username: profileData?.username || 'unknown',
+            avatar_url: profileData?.avatar_url || '',
+            full_name: profileData?.full_name || 'Unknown User'
           }
-          
-          // Use default values if profile data is missing
-          const author = {
-            username: authorData?.username || 'unknown',
-            avatar_url: authorData?.avatar_url || '',
-            full_name: authorData?.full_name || 'Unknown User'
-          };
-
-          return {
-            id: post.id,
-            userId: post.user_id,
-            content: post.content,
-            createdAt: post.created_at,
-            likes: post.likes_count || 0,
-            comments: post.comments_count || 0,
-            author
-          };
-        });
-
-        console.log('Final formatted posts:', formattedPosts);
-        return formattedPosts;
-      } catch (formatError) {
-        console.error('Error formatting posts:', formatError);
-        toast.error('Error processing post data');
-        return [];
-      }
+        };
+      });
     },
+    // Implement standard error handling at the query level
+    meta: {
+      onError: (error) => {
+        console.error('Query error:', error);
+      }
+    }
   });
 };
