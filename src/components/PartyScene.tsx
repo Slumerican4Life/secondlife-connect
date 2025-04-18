@@ -36,21 +36,21 @@ const PartyScene = () => {
           {/* Dance floor */}
           <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.5, 0]}>
             <planeGeometry args={[10, 10]} />
-            <meshStandardMaterial color="#111" metalness={0.8} roughness={0.4} />
+            <meshStandardMaterial color="#111" />
           </mesh>
           
-          {/* Placeholder avatars as simple meshes until we have proper models */}
+          {/* Placeholder avatars as simple meshes */}
           <mesh position={[-1, 0, 0]}>
             <capsuleGeometry args={[0.3, 1, 4, 16]} />
-            <meshStandardMaterial color="#8B5CF6" metalness={0.5} roughness={0.4} />
+            <meshStandardMaterial color="#8B5CF6" />
           </mesh>
           <mesh position={[1, 0, -1]} rotation={[0, Math.PI / 4, 0]}>
             <capsuleGeometry args={[0.3, 1, 4, 16]} />
-            <meshStandardMaterial color="#D946EF" metalness={0.5} roughness={0.4} />
+            <meshStandardMaterial color="#D946EF" />
           </mesh>
           <mesh position={[0.5, 0, 1]} rotation={[0, -Math.PI / 6, 0]}>
             <capsuleGeometry args={[0.3, 1, 4, 16]} />
-            <meshStandardMaterial color="#F97316" metalness={0.5} roughness={0.4} />
+            <meshStandardMaterial color="#F97316" />
           </mesh>
         </Suspense>
       </Canvas>

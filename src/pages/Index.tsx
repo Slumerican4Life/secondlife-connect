@@ -1,10 +1,11 @@
+
 import { useAuth } from '@/contexts/AuthContext';
 import AuthForm from '@/components/AuthForm';
 import Navbar from '@/components/Navbar';
 import Sidebar from '@/components/Sidebar';
 import Feed from '@/components/Feed';
 import PartyScene from '@/components/PartyScene';
-import { Users, User, Globe } from 'lucide-react';
+import { Users, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const Index = () => {
