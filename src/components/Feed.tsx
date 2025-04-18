@@ -6,12 +6,19 @@ import PostCard from "./PostCard";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "./ui/alert";
 import { toast } from 'sonner';
+import { useEffect } from "react";
 
 const Feed = () => {
   const { data: posts, isLoading, error } = usePosts();
 
+  useEffect(() => {
+    // Show error toast when there's an error
+    if (error) {
+      toast.error('Error loading feed');
+    }
+  }, [error]);
+
   if (error) {
-    toast.error('Error loading feed');
     return (
       <div className="p-4">
         <Alert variant="destructive">

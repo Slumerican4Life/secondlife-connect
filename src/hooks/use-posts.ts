@@ -25,12 +25,12 @@ export const usePosts = () => {
         .from('posts')
         .select(`
           id,
-          user_id as userId,
+          user_id,
           content,
-          created_at as createdAt,
-          likes_count as likes,
-          comments_count as comments,
-          author:profiles(username, avatar_url, full_name)
+          created_at,
+          likes_count,
+          comments_count,
+          profiles(username, avatar_url, full_name)
         `)
         .order('created_at', { ascending: false });
 
@@ -43,7 +43,22 @@ export const usePosts = () => {
         toast.info('No posts available');
       }
 
-      return data || [];
+      // Transform the data to match our Post interface
+      const formattedPosts: Post[] = data?.map(post => ({
+        id: post.id,
+        userId: post.user_id,
+        content: post.content,
+        createdAt: post.created_at,
+        likes: post.likes_count,
+        comments: post.comments_count,
+        author: post.profiles || {
+          username: 'unknown',
+          avatar_url: '',
+          full_name: 'Unknown User'
+        }
+      })) || [];
+
+      return formattedPosts;
     },
   });
 };
