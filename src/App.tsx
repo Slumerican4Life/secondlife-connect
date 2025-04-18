@@ -19,9 +19,10 @@ import { useEffect } from "react";
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Apply dark mode class to html element
+  // Force dark mode application to html element and body
   useEffect(() => {
     document.documentElement.classList.add('dark');
+    document.body.style.backgroundColor = 'hsl(222.2 84% 4.9%)'; // Match the dark theme background
   }, []);
 
   return (
