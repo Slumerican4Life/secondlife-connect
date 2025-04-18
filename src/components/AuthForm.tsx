@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -97,23 +96,18 @@ const AuthForm = () => {
 
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
-      {/* Chrome Bumper Header */}
-      <div className="chrome-bumper p-6 rounded-t-lg">
-        <div className="relative z-10 space-y-2 text-center">
-          <span className="hood-ornament inline-block mb-2">
-            <CarFront className="h-10 w-10 text-white" />
-          </span>
-          <h1 className="slum-title text-3xl font-bold text-white drop-shadow-md">
-            SECONDLIFE CONNECT
-          </h1>
-          <p className="text-white/80">
-            {isSignUp ? "Create your digital legacy" : "Return to your digital realm"}
-          </p>
-        </div>
+      {/* Remove Chrome Bumper Header */}
+      <div className="space-y-2 text-center">
+        <h1 className="text-3xl font-bold text-white drop-shadow-md">
+          SECONDLIFE CONNECT
+        </h1>
+        <p className="text-white/80">
+          {isSignUp ? "Create your digital legacy" : "Return to your digital realm"}
+        </p>
       </div>
       
       {/* Body */}
-      <div className="p-6 bg-slum-dark rounded-b-lg shadow-rustic border-t-0 border-2 border-slum-metal/30">
+      <div className="p-6 bg-slum-dark rounded-lg shadow-rustic border-t-0 border-2 border-slum-metal/30">
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email" className="text-white">Email</Label>
