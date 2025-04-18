@@ -39,6 +39,9 @@
   html {
     font-family: 'Cormorant Garamond', serif;
     font-size: 125%; /* Increase base font size by 25% */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 }
 
@@ -96,3 +99,18 @@
   @apply transition-all duration-200 hover:shadow-xl hover:-translate-y-1;
 }
 
+/* Text Shadow for better readability */
+.text-shadow {
+  text-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+}
+
+/* Points Display Animation */
+@keyframes point-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.point-animate {
+  animation: point-pulse 1s ease-in-out;
+}

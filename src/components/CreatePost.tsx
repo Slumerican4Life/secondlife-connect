@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Image, Smile, MapPin, Calendar, Send } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -18,7 +19,14 @@ const CreatePost = () => {
     
     // Simulate post creation
     setTimeout(() => {
-      toast.success("Post created successfully!");
+      toast.success("Post created successfully! +5 points", {
+        icon: '🌟',
+      });
+      
+      // Award points for creating post
+      const currentPoints = parseInt(localStorage.getItem('userPoints') || '0');
+      localStorage.setItem('userPoints', (currentPoints + 5).toString());
+      
       setContent("");
       setIsSubmitting(false);
     }, 1000);
@@ -65,7 +73,7 @@ const CreatePost = () => {
           className="rounded-full"
         >
           <Send className="h-4 w-4 mr-1" />
-          Post
+          Post {content.trim() ? "(+5 points)" : ""}
         </Button>
       </CardFooter>
     </Card>
