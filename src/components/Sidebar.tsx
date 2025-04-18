@@ -10,12 +10,13 @@ import {
   Settings,
   Globe, 
   Sparkles,
-  Droplets,
-  Crown,
-  ShoppingBag,
+  Droplet,
+  Store,
   Building,
-  Users,
-  Calendar
+  Heart,
+  Shield,
+  Crown,
+  Navigation
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -26,15 +27,20 @@ interface NavItemProps {
   label: string;
   href: string;
   active?: boolean;
+  highlight?: "red" | "purple" | "gold";
 }
 
-const NavItem = ({ icon: Icon, label, href, active }: NavItemProps) => (
+const NavItem = ({ icon: Icon, label, href, active, highlight }: NavItemProps) => (
   <Link 
     to={href} 
     className={cn(
       buttonVariants({ variant: active ? "default" : "ghost" }),
       "w-full justify-start gap-3 rounded-full",
-      active && "bg-virtual-300 text-white hover:bg-virtual-400 hover:text-white"
+      active && "bg-virtual-300 text-white hover:bg-virtual-400 hover:text-white",
+      highlight === "red" && active && "bg-red-600 hover:bg-red-700",
+      highlight === "gold" && active && "bg-amber-600 hover:bg-amber-700",
+      highlight === "red" && !active && "text-red-600",
+      highlight === "gold" && !active && "text-amber-600"
     )}
   >
     <Icon size={20} />
@@ -53,7 +59,7 @@ const Sidebar = () => {
           <div className="h-8 w-8 rounded-full bg-gradient-to-r from-virtual-300 to-virtual-400 flex items-center justify-center">
             <span className="text-white font-semibold">S</span>
           </div>
-          <h1 className="text-xl font-bold gradient-text hidden lg:inline-block">Secondlife Connect</h1>
+          <h1 className="text-xl font-bold gradient-text hidden lg:inline-block">SecondLife Connect</h1>
         </Link>
       </div>
       
@@ -63,42 +69,6 @@ const Sidebar = () => {
           label="Home" 
           href="/" 
           active={currentPath === "/"}
-        />
-        <NavItem 
-          icon={Droplets} 
-          label="Blood Sanctuary" 
-          href="/blood-sanctuary" 
-          active={currentPath === "/blood-sanctuary"}
-        />
-        <NavItem 
-          icon={Users} 
-          label="Blood Dolls" 
-          href="/blood-dolls" 
-          active={currentPath === "/blood-dolls"}
-        />
-        <NavItem 
-          icon={Crown} 
-          label="Clan Hierarchy" 
-          href="/clan-hierarchy" 
-          active={currentPath === "/clan-hierarchy"}
-        />
-        <NavItem 
-          icon={Building} 
-          label="Virtual Lands" 
-          href="/virtual-lands" 
-          active={currentPath === "/virtual-lands"}
-        />
-        <NavItem 
-          icon={ShoppingBag} 
-          label="Marketplace" 
-          href="/marketplace" 
-          active={currentPath === "/marketplace"}
-        />
-        <NavItem 
-          icon={Calendar} 
-          label="Events" 
-          href="/events" 
-          active={currentPath === "/events"}
         />
         <NavItem 
           icon={Search} 
@@ -111,6 +81,44 @@ const Sidebar = () => {
           label="Virtual Worlds" 
           href="/worlds" 
           active={currentPath === "/worlds"}
+        />
+        <NavItem 
+          icon={Droplet} 
+          label="Blood Bank" 
+          href="/blood-bank" 
+          active={currentPath === "/blood-bank"}
+          highlight="red"
+        />
+        <NavItem 
+          icon={Store} 
+          label="Marketplace" 
+          href="/marketplace" 
+          active={currentPath === "/marketplace"}
+        />
+        <NavItem 
+          icon={Building} 
+          label="Real Estate" 
+          href="/real-estate" 
+          active={currentPath === "/real-estate"}
+        />
+        <NavItem 
+          icon={Heart} 
+          label="Dating" 
+          href="/dating" 
+          active={currentPath === "/dating"}
+        />
+        <NavItem 
+          icon={Shield} 
+          label="Clan Portal" 
+          href="/clan-portal" 
+          active={currentPath === "/clan-portal"}
+        />
+        <NavItem 
+          icon={Navigation} 
+          label="Map & Teleport" 
+          href="/royal-portal?tab=teleport" 
+          active={currentPath === "/royal-portal" && location.search.includes("teleport")}
+          highlight="gold"
         />
         <NavItem 
           icon={Bell} 
@@ -141,6 +149,13 @@ const Sidebar = () => {
           label="Profile" 
           href="/profile" 
           active={currentPath === "/profile"}
+        />
+        <NavItem 
+          icon={Crown} 
+          label="Royal Portal" 
+          href="/royal-portal" 
+          active={currentPath === "/royal-portal" && !location.search.includes("teleport")}
+          highlight="gold"
         />
         <NavItem 
           icon={Settings} 

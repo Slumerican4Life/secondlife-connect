@@ -3,7 +3,13 @@ import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Feed from "@/components/Feed";
 import SuggestedUsers from "@/components/SuggestedUsers";
+import WorldsWidget from "@/components/WorldsWidget";
+import BloodMarketPreview from "@/components/BloodMarketPreview";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Heart, Store, Building, Shield, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   const isMobile = useIsMobile();
@@ -22,6 +28,59 @@ const Index = () => {
         {/* Main content */}
         <main className="flex-1 border-x border-border/80">
           <div className="py-6">
+            {/* Feature highlights section */}
+            <div className="px-4 mb-8">
+              <h2 className="text-lg font-semibold mb-4">Explore SecondLife Connect</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <Link to="/marketplace">
+                  <Card className="hover:shadow-md transition-shadow h-full">
+                    <CardHeader className="p-3 pb-0">
+                      <Store className="h-5 w-5 text-virtual-400" />
+                    </CardHeader>
+                    <CardContent className="p-3 pt-1">
+                      <h3 className="font-medium text-sm">Marketplace</h3>
+                      <p className="text-xs text-muted-foreground">Buy and sell virtual items</p>
+                    </CardContent>
+                  </Card>
+                </Link>
+                <Link to="/real-estate">
+                  <Card className="hover:shadow-md transition-shadow h-full">
+                    <CardHeader className="p-3 pb-0">
+                      <Building className="h-5 w-5 text-virtual-400" />
+                    </CardHeader>
+                    <CardContent className="p-3 pt-1">
+                      <h3 className="font-medium text-sm">Real Estate</h3>
+                      <p className="text-xs text-muted-foreground">Find homes and land</p>
+                    </CardContent>
+                  </Card>
+                </Link>
+                <Link to="/dating">
+                  <Card className="hover:shadow-md transition-shadow h-full">
+                    <CardHeader className="p-3 pb-0">
+                      <Heart className="h-5 w-5 text-red-500" />
+                    </CardHeader>
+                    <CardContent className="p-3 pt-1">
+                      <h3 className="font-medium text-sm">Dating</h3>
+                      <p className="text-xs text-muted-foreground">Connect with others</p>
+                    </CardContent>
+                  </Card>
+                </Link>
+                <Link to="/clan-portal">
+                  <Card className="hover:shadow-md transition-shadow h-full">
+                    <CardHeader className="p-3 pb-0">
+                      <Shield className="h-5 w-5 text-virtual-400" />
+                    </CardHeader>
+                    <CardContent className="p-3 pt-1">
+                      <h3 className="font-medium text-sm">Clan Portal</h3>
+                      <p className="text-xs text-muted-foreground">Join vampire clans</p>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </div>
+            </div>
+            
+            <WorldsWidget />
+            <BloodMarketPreview />
             <Feed />
           </div>
         </main>
@@ -31,6 +90,28 @@ const Index = () => {
           <div className="w-80 hidden lg:block">
             <div className="p-4 sticky top-[73px]">
               <SuggestedUsers />
+              
+              <Card className="mt-4">
+                <CardHeader>
+                  <CardTitle className="text-sm">Featured Properties</CardTitle>
+                </CardHeader>
+                <CardContent className="p-3">
+                  <div className="space-y-2 text-sm">
+                    <div className="rounded overflow-hidden">
+                      <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1474&q=80" alt="Featured property" className="w-full h-20 object-cover" />
+                    </div>
+                    <p className="font-medium">Lakeside Villa</p>
+                    <p className="text-muted-foreground text-xs">Luxury waterfront property with private dock</p>
+                  </div>
+                </CardContent>
+                <CardFooter className="pt-0">
+                  <Button variant="ghost" size="sm" className="w-full" asChild>
+                    <Link to="/real-estate" className="flex items-center justify-center">
+                      View All <ArrowRight className="ml-2 h-3 w-3" />
+                    </Link>
+                  </Button>
+                </CardFooter>
+              </Card>
             </div>
           </div>
         )}
