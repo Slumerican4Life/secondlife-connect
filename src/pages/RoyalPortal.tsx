@@ -4,7 +4,7 @@ import Sidebar from "@/components/Sidebar";
 import Map from "@/components/Map";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Crown, CreditCard, TrendingUp, CoinIcon, Coins, ShieldCheck, Star, GemIcon } from "lucide-react";
+import { Crown, CreditCard, TrendingUp, Coins, ShieldCheck, Star, Gem, MapPin } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
@@ -74,13 +74,13 @@ const RoyalPortal = () => {
                         <h3 className="text-lg font-semibold mb-2">Current Exchange Rate</h3>
                         <div className="flex items-center justify-between p-3 bg-muted/50 rounded-md">
                           <div className="flex items-center">
-                            <CoinIcon className="h-5 w-5 mr-2 text-amber-500" />
+                            <Coins className="h-5 w-5 mr-2 text-amber-500" />
                             <span>1 USD</span>
                           </div>
                           <span>=</span>
                           <div className="flex items-center">
                             <span>L$ 250</span>
-                            <GemIcon className="h-5 w-5 ml-2 text-virtual-400" />
+                            <Gem className="h-5 w-5 ml-2 text-virtual-400" />
                           </div>
                         </div>
                       </div>
