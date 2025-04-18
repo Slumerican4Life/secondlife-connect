@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Image, Smile, MapPin, Calendar, Send } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -26,7 +25,7 @@ const CreatePost = () => {
   };
 
   return (
-    <Card className="mb-6 border shadow-sm">
+    <Card className="mb-6 border shadow-sm card-hover">
       <CardContent className="pt-4">
         <div className="flex gap-3">
           <Avatar className="h-10 w-10 border border-border">

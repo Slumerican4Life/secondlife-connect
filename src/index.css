@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 @tailwind base;
@@ -37,6 +38,7 @@
 
   html {
     font-family: 'Cormorant Garamond', serif;
+    font-size: 125%; /* Increase base font size by 25% */
   }
 }
 
@@ -47,6 +49,18 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  h1 {
+    @apply text-3xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  p, span, a, button {
+    @apply text-lg;
   }
 }
 
@@ -65,3 +79,20 @@
 .script-title {
   font-family: 'Dancing Script', cursive;
 }
+
+/* 3D Button Styles */
+.button-3d {
+  @apply transform transition-all duration-200 shadow-lg hover:shadow-xl 
+    active:shadow-md active:translate-y-0.5 hover:-translate-y-0.5;
+}
+
+/* Hover Effects */
+.hover-effect {
+  @apply transition-all duration-200 hover:brightness-110 hover:scale-[1.02];
+}
+
+/* Card Hover Effects */
+.card-hover {
+  @apply transition-all duration-200 hover:shadow-xl hover:-translate-y-1;
+}
+

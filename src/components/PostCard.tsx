@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart, MessageCircle, Share2, MoreHorizontal } from "lucide-react";
@@ -44,7 +43,7 @@ const PostCard = ({ post }: PostCardProps) => {
   };
 
   return (
-    <Card className="mb-4 border-none shadow-sm overflow-hidden animate-fade-in">
+    <Card className="mb-4 border-none shadow-sm overflow-hidden animate-fade-in card-hover">
       <CardHeader className="pb-2 pt-4 px-4">
         <div className="flex justify-between items-start">
           <div className="flex items-center space-x-2">
