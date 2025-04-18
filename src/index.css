@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -33,6 +34,10 @@
     --input: 217.2 32.6% 17.5%;
     --ring: 263 70% 70%;
   }
+
+  html {
+    font-family: 'Cormorant Garamond', serif;
+  }
 }
 
 @layer base {
@@ -55,4 +60,8 @@
 
 .gradient-text {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-virtual-300 to-virtual-400;
+}
+
+.script-title {
+  font-family: 'Dancing Script', cursive;
 }

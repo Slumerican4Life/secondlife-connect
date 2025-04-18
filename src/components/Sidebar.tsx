@@ -1,4 +1,3 @@
-
 import { Link } from "react-router-dom";
 import { 
   Home, 
@@ -59,7 +58,7 @@ const Sidebar = () => {
           <div className="h-8 w-8 rounded-full bg-gradient-to-r from-virtual-300 to-virtual-400 flex items-center justify-center">
             <span className="text-white font-semibold">S</span>
           </div>
-          <h1 className="text-xl font-bold gradient-text hidden lg:inline-block">SecondLife Connect</h1>
+          <h1 className="text-xl font-bold gradient-text font-script hidden lg:inline-block">SecondLife Connect</h1>
         </Link>
       </div>
       

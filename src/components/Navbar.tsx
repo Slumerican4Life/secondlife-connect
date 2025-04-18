@@ -23,7 +23,7 @@ const Navbar = () => {
           <div className="h-8 w-8 rounded-full bg-gradient-to-r from-virtual-300 to-virtual-400 flex items-center justify-center">
             <Globe className="h-5 w-5 text-white" />
           </div>
-          <h1 className="text-xl font-bold gradient-text">SecondLife Connect</h1>
+          <h1 className="text-xl font-bold gradient-text font-script">SecondLife Connect</h1>
         </Link>
 
         {/* Search */}
