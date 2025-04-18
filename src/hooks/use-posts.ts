@@ -44,19 +44,31 @@ export const usePosts = () => {
       }
 
       // Transform the data to match our Post interface
-      const formattedPosts: Post[] = data?.map(post => ({
-        id: post.id,
-        userId: post.user_id,
-        content: post.content,
-        createdAt: post.created_at,
-        likes: post.likes_count,
-        comments: post.comments_count,
-        author: post.profiles || {
-          username: 'unknown',
-          avatar_url: '',
-          full_name: 'Unknown User'
-        }
-      })) || [];
+      const formattedPosts: Post[] = data?.map(post => {
+        // Handle the nested profiles data structure
+        // The profiles field is an array with one object from the join
+        const profileData = Array.isArray(post.profiles) && post.profiles.length > 0
+          ? post.profiles[0]  // Get the first (and likely only) profile
+          : { 
+              username: 'unknown', 
+              avatar_url: '', 
+              full_name: 'Unknown User' 
+            };
+            
+        return {
+          id: post.id,
+          userId: post.user_id,
+          content: post.content,
+          createdAt: post.created_at,
+          likes: post.likes_count,
+          comments: post.comments_count,
+          author: {
+            username: profileData.username,
+            avatar_url: profileData.avatar_url,
+            full_name: profileData.full_name
+          }
+        };
+      }) || [];
 
       return formattedPosts;
     },
