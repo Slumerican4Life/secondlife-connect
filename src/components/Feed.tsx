@@ -5,8 +5,9 @@ import CreatePost from "./CreatePost";
 import PostCard from "./PostCard";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "./ui/alert";
-import { toast } from 'sonner';
+import { toast } from "sonner";
 import { useEffect } from "react";
+import { Post } from "@/types/profile";
 
 const Feed = () => {
   const { data: posts, isLoading, error } = usePosts();
@@ -64,7 +65,7 @@ const Feed = () => {
       {/* Posts list */}
       {!isLoading && !error && posts && posts.length > 0 && (
         <div className="divide-y divide-border/10">
-          {posts.map((post) => (
+          {posts.map((post: Post) => (
             <div key={post.id} className="bg-card/30 hover:bg-card/50 transition-colors">
               <PostCard post={post} />
             </div>
