@@ -13,9 +13,9 @@ const Navbar = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-full bg-gradient-to-r from-virtual-300 to-virtual-400 flex items-center justify-center">
-            <span className="text-white font-semibold">W</span>
+            <span className="text-white font-semibold">S</span>
           </div>
-          <h1 className="text-xl font-bold gradient-text">WorldWeave</h1>
+          <h1 className="text-xl font-bold gradient-text">SecondLife Connect</h1>
         </Link>
 
         {/* Search */}
