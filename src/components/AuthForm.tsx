@@ -6,7 +6,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { toast } from './ui/sonner';
 import { supabase } from '@/lib/supabase';
-import { Facebook, Twitter, Instagram, Share2 } from 'lucide-react';
+import { Facebook, Twitter, Instagram, Share2, Music, Youtube, Headphones, Chrome, CarFront } from 'lucide-react';
 import { 
   Dialog,
   DialogContent,
@@ -96,137 +96,187 @@ const AuthForm = () => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto space-y-6 p-6 bg-card rounded-lg shadow-lg">
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold script-title">SecondLife Connect</h1>
-        <p className="text-muted-foreground">
-          {isSignUp ? "Create an account to get started" : "Sign in to your account"}
-        </p>
+    <div className="w-full max-w-md mx-auto space-y-6">
+      {/* Chrome Bumper Header */}
+      <div className="chrome-bumper p-6 rounded-t-lg">
+        <div className="relative z-10 space-y-2 text-center">
+          <span className="hood-ornament inline-block mb-2">
+            <CarFront className="h-10 w-10 text-white" />
+          </span>
+          <h1 className="slum-title text-3xl font-bold text-white drop-shadow-md">
+            SECONDLIFE CONNECT
+          </h1>
+          <p className="text-white/80">
+            {isSignUp ? "Create your digital legacy" : "Return to your digital realm"}
+          </p>
+        </div>
       </div>
       
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="hover-effect"
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="hover-effect"
-          />
-        </div>
+      {/* Body */}
+      <div className="p-6 bg-slum-dark rounded-b-lg shadow-rustic border-t-0 border-2 border-slum-metal/30">
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email" className="text-white">Email</Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="bg-black/50 border-slum-metal/50 text-white hover-effect placeholder:text-white/30"
+            />
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-white">Password</Label>
+            <Input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="bg-black/50 border-slum-metal/50 text-white hover-effect placeholder:text-white/30"
+            />
+          </div>
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={isLoading}
-        >
-          {isLoading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
-        </Button>
-      </form>
-
-      <div className="relative">
-        <div className="absolute inset-0 flex items-center">
-          <Separator className="w-full" />
-        </div>
-        <div className="relative flex justify-center">
-          <span className="bg-card px-2 text-muted-foreground text-sm">
-            {isSignUp ? "Sign up with" : "Sign in with"}
-          </span>
-        </div>
-      </div>
-
-      <div className="flex justify-center space-x-4">
-        <Button 
-          type="button" 
-          size="icon" 
-          variant="outline"
-          onClick={() => handleShare('facebook')}
-        >
-          <Facebook className="h-5 w-5" />
-        </Button>
-        <Button 
-          type="button" 
-          size="icon" 
-          variant="outline"
-          onClick={() => handleShare('twitter')}
-        >
-          <Twitter className="h-5 w-5" />
-        </Button>
-        <Button 
-          type="button" 
-          size="icon" 
-          variant="outline"
-        >
-          <Instagram className="h-5 w-5" />
-        </Button>
-      </div>
-
-      <div className="text-center">
-        <Button
-          variant="link"
-          onClick={() => setIsSignUp(!isSignUp)}
-          className="text-sm"
-        >
-          {isSignUp 
-            ? "Already have an account? Sign in" 
-            : "Don't have an account? Sign up"}
-        </Button>
-      </div>
-
-      <div className="pt-2">
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button 
-              variant="secondary" 
-              className="w-full" 
-              onClick={() => addUserPoints(3, 'exploring share options')}
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={isLoading}
+            variant="chrome"
+          >
+            {isLoading ? "Loading..." : isSignUp ? "Sign Up" : "Sign In"}
+          </Button>
+          
+          <div className="text-center">
+            <Button
+              variant="link"
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-sm text-white"
             >
-              <Share2 className="mr-2 h-4 w-4" />
-              Share and Earn Points
+              {isSignUp 
+                ? "Already have an account? Sign in" 
+                : "Don't have an account? Sign up"}
             </Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
-            <DialogHeader>
-              <DialogTitle className="script-title">Share and Earn Points</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <p>Share SecondLife Connect with friends and earn reward points!</p>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>Earn <span className="text-primary font-bold">5 points</span> for copying the link</li>
-                <li>Earn <span className="text-primary font-bold">15 points</span> for sharing on social media</li>
-                <li>Earn <span className="text-primary font-bold">50 points</span> when a friend signs up</li>
-                <li>Collect points to unlock exclusive virtual items!</li>
-              </ul>
-              <div className="flex flex-col space-y-2 mt-4">
-                <Button onClick={() => handleShare('twitter')}>
-                  <Twitter className="mr-2 h-4 w-4" /> Share on Twitter
-                </Button>
-                <Button onClick={() => handleShare('facebook')}>
-                  <Facebook className="mr-2 h-4 w-4" /> Share on Facebook
-                </Button>
-                <Button variant="outline" onClick={() => handleShare('copy')}>
-                  <Share2 className="mr-2 h-4 w-4" /> Copy Link
-                </Button>
+          </div>
+        </form>
+
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <Separator className="w-full bg-slum-metal/30" />
+          </div>
+          <div className="relative flex justify-center">
+            <span className="bg-slum-dark px-2 text-white/70 text-sm">
+              {isSignUp ? "Sign up with" : "Sign in with"}
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-4 gap-3">
+          <Button 
+            type="button" 
+            size="icon" 
+            variant="rustic"
+            onClick={() => handleShare('facebook')}
+          >
+            <Facebook className="h-5 w-5" />
+          </Button>
+          <Button 
+            type="button" 
+            size="icon" 
+            variant="rustic"
+            onClick={() => handleShare('twitter')}
+          >
+            <Twitter className="h-5 w-5" />
+          </Button>
+          <Button 
+            type="button" 
+            size="icon" 
+            variant="rustic"
+          >
+            <Instagram className="h-5 w-5" />
+          </Button>
+          <Button 
+            type="button" 
+            size="icon" 
+            variant="rustic"
+          >
+            <Chrome className="h-5 w-5" />
+          </Button>
+        </div>
+
+        {/* Share & Music Section */}
+        <div className="flex gap-3 mt-4">
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="flex-1" 
+                onClick={() => addUserPoints(3, 'exploring share options')}
+              >
+                <Share2 className="h-4 w-4" />
+                Share
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-slum-dark border-slum-metal text-white">
+              <DialogHeader>
+                <DialogTitle className="slum-title text-slum-accent">SHARE & EARN</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <p>Share SecondLife Connect with friends and earn reward points!</p>
+                <ul className="list-disc pl-5 space-y-2">
+                  <li>Earn <span className="text-slum-accent font-bold">5 points</span> for copying the link</li>
+                  <li>Earn <span className="text-slum-accent font-bold">15 points</span> for sharing on social media</li>
+                  <li>Earn <span className="text-slum-accent font-bold">50 points</span> when a friend signs up</li>
+                </ul>
+                <div className="flex flex-col space-y-2 mt-4">
+                  <Button onClick={() => handleShare('twitter')} variant="outline">
+                    <Twitter className="mr-2 h-4 w-4" /> Share on Twitter
+                  </Button>
+                  <Button onClick={() => handleShare('facebook')} variant="outline">
+                    <Facebook className="mr-2 h-4 w-4" /> Share on Facebook
+                  </Button>
+                  <Button variant="chrome" onClick={() => handleShare('copy')}>
+                    <Share2 className="mr-2 h-4 w-4" /> Copy Link
+                  </Button>
+                </div>
               </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+          
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button 
+                variant="outline" 
+                className="flex-1"
+              >
+                <Music className="h-4 w-4" />
+                Music
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-slum-dark border-slum-metal text-white">
+              <DialogHeader>
+                <DialogTitle className="slum-title text-slum-accent">MUSIC CONNECTIONS</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 py-4">
+                <p>Connect with your favorite music services:</p>
+                <div className="flex flex-col space-y-2 mt-4">
+                  <Button variant="outline" className="justify-start">
+                    <Youtube className="mr-2 h-4 w-4" /> YouTube Music
+                  </Button>
+                  <Button variant="outline" className="justify-start">
+                    <Headphones className="mr-2 h-4 w-4" /> Streaming Services
+                  </Button>
+                  <Button variant="outline" className="justify-start">
+                    <Music className="mr-2 h-4 w-4" /> Local MP3/FLAC
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </div>
   );

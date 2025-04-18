@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap');
+
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Cormorant+Garamond:wght@400;500;600;700&family=Archivo+Black&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -36,16 +37,16 @@
   }
   
   .dark {
-    --background: 240 10% 3.9%;
+    --background: 222 47% 6%;
     --foreground: 0 0% 98%;
     
-    --card: 240 10% 5%;
+    --card: 222 47% 8%;
     --card-foreground: 0 0% 98%;
     
-    --popover: 240 10% 3.9%;
+    --popover: 222 47% 6%;
     --popover-foreground: 0 0% 98%;
     
-    --primary: 263 70% 70%;
+    --primary: 360 83% 57%;
     --primary-foreground: 222.2 47.4% 11.2%;
     
     --secondary: 217.2 32.6% 17.5%;
@@ -60,9 +61,9 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
     
-    --border: 240 10% 10%;
-    --input: 240 10% 8%;
-    --ring: 240 10% 20%;
+    --border: 240 10% 20%;
+    --input: 240 10% 15%;
+    --ring: 240 10% 25%;
   }
 
   html, body {
@@ -103,20 +104,57 @@
   }
 }
 
+/* Chrome Bumper Effect */
+.chrome-bumper {
+  @apply bg-gradient-to-b from-slum-chrome to-slum-metal relative 
+         shadow-chrome-heavy rounded-md overflow-hidden;
+  position: relative;
+}
+
+.chrome-bumper::before {
+  content: '';
+  @apply absolute inset-0 bg-chrome-gradient bg-[length:200%_100%] opacity-70 animate-chrome-shine;
+}
+
+.chrome-bumper::after {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-b from-white/10 to-black/20;
+  box-shadow: inset 0 2px 3px rgba(255,255,255,0.6), 
+              inset 0 -2px 3px rgba(0,0,0,0.6);
+}
+
+/* Hood Ornament Effect */
+.hood-ornament {
+  @apply relative inline-block;
+  filter: drop-shadow(0 0 4px rgba(204, 204, 204, 0.7));
+}
+
+.hood-ornament::before {
+  content: '';
+  @apply absolute -inset-1 bg-slum-chrome rounded-full blur-sm -z-10;
+  background: linear-gradient(45deg, #CCCCCC, #FFFFFF, #CCCCCC);
+}
+
 .avatar-border {
   border: 3px solid transparent;
   background-image: linear-gradient(var(--background), var(--background)), 
-    linear-gradient(to right, #9b87f5, #8B5CF6);
+    linear-gradient(to right, #ea384c, #222222);
   background-origin: border-box;
   background-clip: content-box, border-box;
 }
 
 .gradient-text {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-virtual-300 to-virtual-400;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-slum-accent to-slum-chrome;
 }
 
 .script-title {
   font-family: 'Dancing Script', cursive;
+}
+
+.slum-title {
+  font-family: 'Archivo Black', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .button-3d {
@@ -125,15 +163,26 @@
     hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.7)] 
     active:shadow-md active:translate-y-0.5 
     hover:-translate-y-0.5 
-    bg-gradient-to-b from-virtual-700 to-virtual-800 
-    hover:from-virtual-600 hover:to-virtual-700;
+    bg-gradient-to-b from-slum-dark to-black 
+    hover:from-slum-accent hover:to-slum-dark;
+  position: relative;
+  overflow: hidden;
+}
+
+.button-3d::after {
+  content: '';
+  @apply absolute inset-0 bg-gradient-to-b from-white/5 to-transparent opacity-0 transition-opacity duration-200;
+}
+
+.button-3d:hover::after {
+  opacity: 1;
 }
 
 .card-hover {
   @apply transition-all duration-200 
     hover:shadow-[0_8px_16px_-4px_rgba(0,0,0,0.7)] 
     hover:-translate-y-1 
-    bg-gradient-to-b from-virtual-700/50 to-virtual-800/50;
+    bg-gradient-to-b from-slum-dark to-black/80;
 }
 
 .hover-effect {
@@ -142,6 +191,12 @@
 
 .text-shadow {
   text-shadow: 0px 2px 3px rgba(0,0,0,0.3);
+}
+
+.rustic-metal {
+  background-color: #8B4513;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.6);
 }
 
 .point-animate {
