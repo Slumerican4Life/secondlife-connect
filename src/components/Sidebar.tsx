@@ -9,7 +9,13 @@ import {
   User, 
   Settings,
   Globe, 
-  Sparkles 
+  Sparkles,
+  Droplets,
+  Crown,
+  ShoppingBag,
+  Building,
+  Users,
+  Calendar
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -57,6 +63,42 @@ const Sidebar = () => {
           label="Home" 
           href="/" 
           active={currentPath === "/"}
+        />
+        <NavItem 
+          icon={Droplets} 
+          label="Blood Sanctuary" 
+          href="/blood-sanctuary" 
+          active={currentPath === "/blood-sanctuary"}
+        />
+        <NavItem 
+          icon={Users} 
+          label="Blood Dolls" 
+          href="/blood-dolls" 
+          active={currentPath === "/blood-dolls"}
+        />
+        <NavItem 
+          icon={Crown} 
+          label="Clan Hierarchy" 
+          href="/clan-hierarchy" 
+          active={currentPath === "/clan-hierarchy"}
+        />
+        <NavItem 
+          icon={Building} 
+          label="Virtual Lands" 
+          href="/virtual-lands" 
+          active={currentPath === "/virtual-lands"}
+        />
+        <NavItem 
+          icon={ShoppingBag} 
+          label="Marketplace" 
+          href="/marketplace" 
+          active={currentPath === "/marketplace"}
+        />
+        <NavItem 
+          icon={Calendar} 
+          label="Events" 
+          href="/events" 
+          active={currentPath === "/events"}
         />
         <NavItem 
           icon={Search} 

@@ -22,6 +22,12 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/blood-sanctuary" element={<NotFound />} />
+            <Route path="/blood-dolls" element={<NotFound />} />
+            <Route path="/clan-hierarchy" element={<NotFound />} />
+            <Route path="/virtual-lands" element={<NotFound />} />
+            <Route path="/marketplace" element={<NotFound />} />
+            <Route path="/events" element={<NotFound />} />
             <Route path="/explore" element={<NotFound />} />
             <Route path="/worlds" element={<NotFound />} />
             <Route path="/notifications" element={<NotFound />} />

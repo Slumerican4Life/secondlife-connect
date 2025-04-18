@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Bell, Home, MessageSquare, Moon, Search, Sun, User } from "lucide-react";
+import { Bell, Droplets, Globe, Home, MessageSquare, Moon, Search, ShoppingBag, Sun, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -46,6 +46,21 @@ const Navbar = () => {
           <Button variant="ghost" size="icon" className="rounded-full" asChild>
             <Link to="/">
               <Home className="h-5 w-5" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" className="rounded-full" asChild>
+            <Link to="/blood-sanctuary">
+              <Droplets className="h-5 w-5" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" className="rounded-full" asChild>
+            <Link to="/marketplace">
+              <ShoppingBag className="h-5 w-5" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" className="rounded-full" asChild>
+            <Link to="/virtual-lands">
+              <Globe className="h-5 w-5" />
             </Link>
           </Button>
           <Button variant="ghost" size="icon" className="rounded-full">
