@@ -1,76 +1,92 @@
 
+import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { usePosts } from "@/hooks/use-posts";
+import { users, posts } from "@/data/mockData";
 import CreatePost from "./CreatePost";
-import PostCard from "./PostCard";
-import { AlertCircle } from "lucide-react";
-import { Alert, AlertDescription } from "./ui/alert";
-import { toast } from 'sonner';
-import { useEffect } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
+import { Card } from "./ui/card";
+import { Heart, MessageCircle, Share2, MoreHorizontal } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 const Feed = () => {
-  const { data: posts, isLoading, error } = usePosts();
+  const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
 
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to load posts');
-    }
-  }, [error]);
+  const handleLike = (postId: string) => {
+    setLikedPosts(prev => {
+      const newLiked = new Set(prev);
+      if (newLiked.has(postId)) {
+        newLiked.delete(postId);
+      } else {
+        newLiked.add(postId);
+      }
+      return newLiked;
+    });
+  };
 
   return (
-    <div className="divide-y divide-border/10">
-      {/* Always show create post form at the top */}
-      <div className="p-4 bg-card/50">
+    <div className="max-w-2xl mx-auto">
+      <div className="p-4">
         <CreatePost />
       </div>
 
-      {/* Loading state */}
-      {isLoading && (
-        <div className="space-y-4 p-4">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="space-y-3 bg-card/30 p-4 rounded-lg">
-              <div className="flex items-center space-x-4">
-                <Skeleton className="h-12 w-12 rounded-full bg-muted/20" />
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-[250px] bg-muted/20" />
-                  <Skeleton className="h-4 w-[200px] bg-muted/20" />
+      <div className="divide-y">
+        {posts.map((post) => {
+          const author = users.find(u => u.id === post.userId);
+          const isLiked = likedPosts.has(post.id);
+
+          return (
+            <div key={post.id} className="p-4 hover:bg-gray-50">
+              <div className="flex items-start space-x-3">
+                <Avatar>
+                  <AvatarImage src={author?.avatar} />
+                  <AvatarFallback>{author?.name.substring(0, 2)}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-semibold">{author?.name}</p>
+                      <p className="text-sm text-gray-500">
+                        {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
+                      </p>
+                    </div>
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="h-5 w-5" />
+                    </Button>
+                  </div>
+                  <p className="mt-2 text-gray-700">{post.content}</p>
+                  {post.image && (
+                    <img 
+                      src={post.image} 
+                      alt="Post content"
+                      className="mt-3 rounded-lg max-h-96 w-full object-cover"
+                    />
+                  )}
+                  <div className="flex items-center gap-4 mt-4">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => handleLike(post.id)}
+                      className={isLiked ? "text-red-500" : ""}
+                    >
+                      <Heart className={`h-5 w-5 mr-1 ${isLiked ? "fill-current" : ""}`} />
+                      {post.likes + (isLiked ? 1 : 0)}
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      <MessageCircle className="h-5 w-5 mr-1" />
+                      {post.comments}
+                    </Button>
+                    <Button variant="ghost" size="sm">
+                      <Share2 className="h-5 w-5 mr-1" />
+                      Share
+                    </Button>
+                  </div>
                 </div>
               </div>
-              <Skeleton className="h-24 w-full bg-muted/20" />
             </div>
-          ))}
-        </div>
-      )}
-
-      {/* Error state */}
-      {error && !isLoading && (
-        <div className="p-4">
-          <Alert variant="destructive" className="border-destructive/50 bg-destructive/10">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Failed to load posts. Please try again later.
-            </AlertDescription>
-          </Alert>
-        </div>
-      )}
-
-      {/* Empty state */}
-      {!isLoading && !error && (!posts || posts.length === 0) && (
-        <div className="p-8 text-center text-muted-foreground bg-card/30">
-          No posts yet. Be the first to share something!
-        </div>
-      )}
-
-      {/* Posts list */}
-      {!isLoading && !error && posts && posts.length > 0 && (
-        <div className="divide-y divide-border/10">
-          {posts.map((post) => (
-            <div key={post.id} className="bg-card/30 hover:bg-card/50 transition-colors">
-              <PostCard post={post} />
-            </div>
-          ))}
-        </div>
-      )}
+          );
+        })}
+      </div>
     </div>
   );
 };
