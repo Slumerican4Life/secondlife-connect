@@ -21,6 +21,8 @@ export const usePosts = () => {
   return useQuery({
     queryKey: ['posts'],
     queryFn: async (): Promise<Post[]> => {
+      console.log('Starting posts query...');
+
       const { data, error } = await supabase
         .from('posts')
         .select(`
@@ -35,41 +37,35 @@ export const usePosts = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
+        console.error('Supabase query error:', error);
         toast.error('Failed to fetch posts');
         throw error;
       }
 
+      console.log('Raw Supabase data:', data);
+
       if (!data?.length) {
+        console.warn('No posts available');
         toast.info('No posts available');
+        return [];
       }
 
-      // Transform the data to match our Post interface
-      const formattedPosts: Post[] = data?.map(post => {
-        // Extract the profile data - the profiles field might be an object or an array
-        let profileData;
+      const formattedPosts: Post[] = data.map(post => {
+        console.log('Processing post:', post);
 
-        // Check if post.profiles exists and how it's structured
-        if (post.profiles) {
-          if (Array.isArray(post.profiles)) {
-            // If it's an array, get the first item
-            profileData = post.profiles.length > 0 ? post.profiles[0] : null;
-          } else {
-            // If it's an object, use it directly
-            profileData = post.profiles;
-          }
-        }
+        // Handle profiles data which could be array or object
+        const profileData = Array.isArray(post.profiles) 
+          ? post.profiles[0] 
+          : post.profiles;
 
-        // Default values if profile data is missing
-        const defaultProfile = {
+        // Fallback to default profile if no data
+        const author = profileData || {
           username: 'unknown',
           avatar_url: '',
           full_name: 'Unknown User'
         };
 
-        // Use profile data if available, otherwise use defaults
-        const author = profileData || defaultProfile;
-            
-        return {
+        const formattedPost: Post = {
           id: post.id,
           userId: post.user_id,
           content: post.content,
@@ -82,12 +78,12 @@ export const usePosts = () => {
             full_name: author.full_name
           }
         };
-      }) || [];
 
-      // Add console logs to help debug the structure
-      console.log('Raw Supabase data:', data);
-      console.log('Formatted posts:', formattedPosts);
+        console.log('Formatted post:', formattedPost);
+        return formattedPost;
+      });
 
+      console.log('Final formatted posts:', formattedPosts);
       return formattedPosts;
     },
   });
