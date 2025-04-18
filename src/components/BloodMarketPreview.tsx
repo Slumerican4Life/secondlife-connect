@@ -28,17 +28,17 @@ const BloodMarketPreview = () => {
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold flex items-center gap-2">
           <Droplet className="h-5 w-5 text-red-600" />
-          Blood Dolls Available
+          Blood Bank Donors Available
         </h2>
         <Button variant="ghost" size="sm" asChild>
-          <Link to="/blood-market" className="flex items-center gap-1">
+          <Link to="/blood-bank" className="flex items-center gap-1">
             View All <ArrowRight className="h-4 w-4" />
           </Link>
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {dolls.map((doll) => (
-          <Link to="/blood-market" key={doll.name}>
+          <Link to="/blood-bank" key={doll.name}>
             <Card className="overflow-hidden hover:shadow-lg transition-shadow group">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-70 group-hover:opacity-90 transition-opacity" />

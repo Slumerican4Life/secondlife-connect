@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Bell, Globe, Home, MessageSquare, Search, Store, User, Droplet, Heart, Building, Shield } from "lucide-react";
+import { Bell, Globe, Home, MessageSquare, Search, Store, User, Droplet, Heart, Building, Shield, Crown, Navigation } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -50,7 +50,7 @@ const Navbar = () => {
             </Link>
           </Button>
           <Button variant="ghost" size="icon" className="rounded-full text-red-600" asChild>
-            <Link to="/blood-market">
+            <Link to="/blood-bank">
               <Droplet className="h-5 w-5" />
             </Link>
           </Button>
@@ -85,11 +85,35 @@ const Navbar = () => {
             </Link>
           </Button>
           
-          <Button variant="ghost" size="icon" className="rounded-full" asChild>
-            <Link to="/clan-portal">
-              <Shield className="h-5 w-5" />
-            </Link>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Crown className="h-5 w-5 text-amber-500" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Royal Access</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/royal-portal" className="flex items-center">
+                  <Crown className="h-4 w-4 mr-2" />
+                  Monetization
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/royal-portal?tab=teleport" className="flex items-center">
+                  <Navigation className="h-4 w-4 mr-2" />
+                  Map & Teleport
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/clan-portal" className="flex items-center">
+                  <Shield className="h-4 w-4 mr-2" />
+                  Clan Portal
+                </Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           
           <Button variant="ghost" size="icon" className="rounded-full">
             <MessageSquare className="h-5 w-5" />

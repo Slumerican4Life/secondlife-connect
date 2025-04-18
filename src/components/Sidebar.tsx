@@ -15,7 +15,8 @@ import {
   Building,
   Heart,
   Shield,
-  Crown
+  Crown,
+  Navigation
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
@@ -83,9 +84,9 @@ const Sidebar = () => {
         />
         <NavItem 
           icon={Droplet} 
-          label="Blood Market" 
-          href="/blood-market" 
-          active={currentPath === "/blood-market"}
+          label="Blood Bank" 
+          href="/blood-bank" 
+          active={currentPath === "/blood-bank"}
           highlight="red"
         />
         <NavItem 
@@ -111,6 +112,13 @@ const Sidebar = () => {
           label="Clan Portal" 
           href="/clan-portal" 
           active={currentPath === "/clan-portal"}
+        />
+        <NavItem 
+          icon={Navigation} 
+          label="Map & Teleport" 
+          href="/royal-portal?tab=teleport" 
+          active={currentPath === "/royal-portal" && location.search.includes("teleport")}
+          highlight="gold"
         />
         <NavItem 
           icon={Bell} 
@@ -146,7 +154,7 @@ const Sidebar = () => {
           icon={Crown} 
           label="Royal Portal" 
           href="/royal-portal" 
-          active={currentPath === "/royal-portal"}
+          active={currentPath === "/royal-portal" && !location.search.includes("teleport")}
           highlight="gold"
         />
         <NavItem 

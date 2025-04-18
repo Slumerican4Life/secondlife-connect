@@ -7,11 +7,12 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
-import BloodMarket from "./pages/BloodMarket";
+import BloodBank from "./pages/BloodBank";
 import Marketplace from "./pages/Marketplace";
 import RealEstate from "./pages/RealEstate";
 import Dating from "./pages/Dating";
 import ClanPortal from "./pages/ClanPortal";
+import RoyalPortal from "./pages/RoyalPortal";
 import AIAssistant from "./components/AIAssistant";
 
 const queryClient = new QueryClient();
@@ -26,11 +27,12 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:id" element={<Profile />} />
-          <Route path="/blood-market" element={<BloodMarket />} />
+          <Route path="/blood-bank" element={<BloodBank />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/real-estate" element={<RealEstate />} />
           <Route path="/dating" element={<Dating />} />
           <Route path="/clan-portal" element={<ClanPortal />} />
+          <Route path="/royal-portal" element={<RoyalPortal />} />
           {/* These routes will be implemented later */}
           <Route path="/explore" element={<NotFound />} />
           <Route path="/worlds" element={<NotFound />} />
