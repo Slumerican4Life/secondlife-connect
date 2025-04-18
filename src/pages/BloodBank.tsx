@@ -8,12 +8,13 @@ import { Droplet, UserPlus, ShieldCheck, Calendar } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import type { BloodDoll } from "@/types/blood-bank";
 
 const BloodBank = () => {
   const isMobile = useIsMobile();
 
-  // Mock data for blood dolls
-  const bloodDolls = [
+  // Mock data for blood dolls with correct status type
+  const bloodDolls: BloodDoll[] = [
     {
       id: 1,
       name: "Lillith",
