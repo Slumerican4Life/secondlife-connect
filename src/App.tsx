@@ -14,48 +14,39 @@ import ClanPortal from "./pages/ClanPortal";
 import RoyalPortal from "./pages/RoyalPortal";
 import AIAssistant from "./components/AIAssistant";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-const App = () => {
-  // Force dark mode application to html element and body
-  useEffect(() => {
-    document.documentElement.classList.add('dark');
-    document.body.style.backgroundColor = 'hsl(222.2 84% 4.9%)'; // Match the dark theme background
-  }, []);
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <BrowserRouter>
-          <AuthProvider>
-            <Toaster />
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/profile/:id" element={<Profile />} />
-              <Route path="/blood-bank" element={<BloodBank />} />
-              <Route path="/marketplace" element={<Marketplace />} />
-              <Route path="/real-estate" element={<RealEstate />} />
-              <Route path="/dating" element={<Dating />} />
-              <Route path="/clan-portal" element={<ClanPortal />} />
-              <Route path="/royal-portal" element={<RoyalPortal />} />
-              <Route path="/explore" element={<NotFound />} />
-              <Route path="/worlds" element={<NotFound />} />
-              <Route path="/notifications" element={<NotFound />} />
-              <Route path="/messages" element={<NotFound />} />
-              <Route path="/bookmarks" element={<NotFound />} />
-              <Route path="/trending" element={<NotFound />} />
-              <Route path="/settings" element={<NotFound />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-            <AIAssistant />
-          </AuthProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  );
-};
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <Toaster />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/blood-bank" element={<BloodBank />} />
+            <Route path="/marketplace" element={<Marketplace />} />
+            <Route path="/real-estate" element={<RealEstate />} />
+            <Route path="/dating" element={<Dating />} />
+            <Route path="/clan-portal" element={<ClanPortal />} />
+            <Route path="/royal-portal" element={<RoyalPortal />} />
+            <Route path="/explore" element={<NotFound />} />
+            <Route path="/worlds" element={<NotFound />} />
+            <Route path="/notifications" element={<NotFound />} />
+            <Route path="/messages" element={<NotFound />} />
+            <Route path="/bookmarks" element={<NotFound />} />
+            <Route path="/trending" element={<NotFound />} />
+            <Route path="/settings" element={<NotFound />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+          <AIAssistant />
+        </AuthProvider>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;

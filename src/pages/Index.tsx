@@ -11,32 +11,22 @@ const Index = () => {
   if (!session) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="w-full max-w-5xl grid md:grid-cols-2 gap-8 items-center">
-          <div className="hidden md:block">
-            <h1 className="text-4xl font-bold mb-4">Connect with your virtual world</h1>
-            <p className="text-muted-foreground text-lg mb-8">
-              Share experiences, join communities, and explore digital realms.
-            </p>
-          </div>
-          <AuthForm />
-        </div>
+        <AuthForm />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-1 flex container mx-auto">
-        <div className="w-64 hidden sm:block">
+      <div className="flex-1 flex">
+        <div className="w-16 lg:w-64 hidden sm:block">
           <Sidebar />
         </div>
-        <main className="flex-1 border-x">
+        <main className="flex-1 border-x border-border/80">
           <Feed />
         </main>
-        <div className="w-80 hidden lg:block">
-          {/* Space for additional widgets */}
-        </div>
+        <div className="w-80 hidden lg:block" />
       </div>
     </div>
   );

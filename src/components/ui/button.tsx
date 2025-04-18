@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -9,14 +8,12 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-slum-dark text-white hover:bg-slum-accent border border-slum-metal/30",
-        chrome: "chrome-bumper text-white border border-slum-chrome/50",
-        destructive: "bg-destructive text-destructive-foreground shadow-destructive/10 hover:bg-destructive/90",
-        outline: "border-2 border-slum-accent bg-slum-dark/70 hover:bg-slum-accent/20 text-white",
-        secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: "hover:bg-slum-dark/50 hover:text-slum-accent",
+        default: "bg-primary text-primary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_2px_4px_-2px_rgba(0,0,0,0.5)] hover:bg-primary/90",
+        destructive: "bg-destructive text-destructive-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_2px_4px_-2px_rgba(0,0,0,0.5)] hover:bg-destructive/90",
+        outline: "border-2 border-input bg-background hover:bg-accent hover:text-accent-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_2px_4px_-2px_rgba(0,0,0,0.5)]",
+        secondary: "bg-secondary text-secondary-foreground shadow-[inset_0_1px_0_0_rgba(255,255,255,0.1),0_2px_4px_-2px_rgba(0,0,0,0.5)] hover:bg-secondary/80",
+        ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
-        rustic: "rustic-metal text-white border border-slum-rust/50",
       },
       size: {
         default: "h-12 px-6 py-3",

@@ -5,7 +5,7 @@ import CreatePost from "./CreatePost";
 import PostCard from "./PostCard";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription } from "./ui/alert";
-import { toast } from "sonner";
+import { toast } from 'sonner';
 import { useEffect } from "react";
 
 const Feed = () => {
@@ -66,19 +66,7 @@ const Feed = () => {
         <div className="divide-y divide-border/10">
           {posts.map((post) => (
             <div key={post.id} className="bg-card/30 hover:bg-card/50 transition-colors">
-              <PostCard post={{
-                id: post.id,
-                content: post.content,
-                user: {
-                  id: post.userId,
-                  name: post.author.full_name,
-                  username: post.author.username,
-                  avatar: post.author.avatar_url,
-                },
-                timestamp: post.createdAt,
-                likes: post.likes,
-                comments: post.comments,
-              }} />
+              <PostCard post={post} />
             </div>
           ))}
         </div>
