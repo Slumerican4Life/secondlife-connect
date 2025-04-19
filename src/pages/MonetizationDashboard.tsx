@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
@@ -39,12 +38,13 @@ import {
   Percent,
   Gift,
   ShoppingBag,
-  Award
+  Award,
+  Building
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import AIAgentHub from "@/components/AIAgentHub";
+import SecureFinancePanel from "@/components/SecureFinancePanel";
 
-// Dummy data for demonstration
 const revenueData = [
   { name: 'Jan', premium: 4000, advertising: 2400, marketplace: 1800, virtual: 1200 },
   { name: 'Feb', premium: 4200, advertising: 2100, marketplace: 2000, virtual: 1500 },
@@ -74,19 +74,18 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 const MonetizationDashboard = () => {
   const isMobile = useIsMobile();
   const [showAgentHub, setShowAgentHub] = useState(false);
+  const [currentTab, setCurrentTab] = useState("revenue");
   
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <div className="flex-1 flex">
-        {/* Sidebar - Hidden on mobile */}
         <div className="w-16 lg:w-64 hidden sm:block">
           <div className="sticky top-[73px] h-[calc(100vh-73px)]">
             <Sidebar />
           </div>
         </div>
 
-        {/* Main content */}
         <main className="flex-1 border-x border-border/80 overflow-y-auto">
           <div className="py-6 px-4">
             <div className="flex items-center justify-between mb-6">
@@ -99,17 +98,26 @@ const MonetizationDashboard = () => {
                   Track and optimize your revenue streams
                 </p>
               </div>
-              <Button 
-                variant="default" 
-                className="bg-gradient-to-r from-green-500 to-green-700"
-                onClick={() => setShowAgentHub(true)}
-              >
-                <Gift className="mr-2 h-4 w-4" />
-                Monetization Assistant
-              </Button>
+              <div className="flex gap-2">
+                <Button 
+                  variant="outline"
+                  className="flex items-center gap-2"
+                  onClick={() => setCurrentTab("banking")}
+                >
+                  <Building className="h-4 w-4" />
+                  <span className="hidden sm:inline">Banking Setup</span>
+                </Button>
+                <Button 
+                  variant="default" 
+                  className="bg-gradient-to-r from-green-500 to-green-700"
+                  onClick={() => setShowAgentHub(true)}
+                >
+                  <Gift className="mr-2 h-4 w-4" />
+                  Monetization Assistant
+                </Button>
+              </div>
             </div>
             
-            {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <Card>
                 <CardHeader className="pb-2">
@@ -168,8 +176,8 @@ const MonetizationDashboard = () => {
               </Card>
             </div>
             
-            <Tabs defaultValue="revenue" className="w-full">
-              <TabsList className="grid grid-cols-4 mb-6">
+            <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
+              <TabsList className="grid grid-cols-5 mb-6">
                 <TabsTrigger value="revenue" className="flex items-center gap-2">
                   <BarChart2 className="h-4 w-4" />
                   <span className="hidden sm:inline">Revenue</span>
@@ -185,6 +193,10 @@ const MonetizationDashboard = () => {
                 <TabsTrigger value="marketplace" className="flex items-center gap-2">
                   <ShoppingBag className="h-4 w-4" />
                   <span className="hidden sm:inline">Marketplace</span>
+                </TabsTrigger>
+                <TabsTrigger value="banking" className="flex items-center gap-2">
+                  <Building className="h-4 w-4" />
+                  <span className="hidden sm:inline">Banking</span>
                 </TabsTrigger>
               </TabsList>
               
@@ -326,11 +338,14 @@ const MonetizationDashboard = () => {
                   <p className="text-muted-foreground">Transaction volumes, popular items, and fee structure analysis</p>
                 </div>
               </TabsContent>
+              
+              <TabsContent value="banking" className="space-y-6">
+                <SecureFinancePanel userId="user-123" />
+              </TabsContent>
             </Tabs>
           </div>
         </main>
 
-        {/* Right sidebar - Hidden on mobile */}
         {!isMobile && (
           <div className="w-80 hidden lg:block">
             <div className="p-4 sticky top-[73px]">

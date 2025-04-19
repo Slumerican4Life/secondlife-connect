@@ -77,9 +77,17 @@ export const useSafety = (userId?: string) => {
     }
 
     try {
+      // Enhanced security for financial data
+      const sensitiveDataTypes = ['banking_info', 'payment_details', 'api_keys'];
+      const shouldEnhanceSecurity = sensitiveDataTypes.includes(dataType);
+      
+      // For sensitive data, always enforce encryption regardless of user settings
+      const enforceEncryption = shouldEnhanceSecurity ? true : encryptionOptions.encryptionEnabled;
+      const encryptionLevel = shouldEnhanceSecurity ? 'high' : encryptionOptions.encryptionLevel;
+      
       // In a real implementation, we would encrypt the data here
-      const encryptedValue = encryptionOptions.encryptionEnabled 
-        ? encryptData(data, encryptionOptions.encryptionLevel) 
+      const encryptedValue = enforceEncryption 
+        ? encryptData(data, encryptionLevel) 
         : data;
 
       const { error } = await supabase
@@ -88,8 +96,9 @@ export const useSafety = (userId?: string) => {
           user_id: userId,
           data_type: dataType,
           encrypted_value: encryptedValue,
-          encryption_level: encryptionOptions.encryptionEnabled ? encryptionOptions.encryptionLevel : null,
-          updated_at: new Date().toISOString()
+          encryption_level: enforceEncryption ? encryptionLevel : null,
+          updated_at: new Date().toISOString(),
+          is_sensitive: shouldEnhanceSecurity
         }, {
           onConflict: 'user_id, data_type'
         });
@@ -127,7 +136,7 @@ export const useSafety = (userId?: string) => {
 
       const { data, error } = await supabase
         .from('encrypted_user_data')
-        .select('encrypted_value, encryption_level')
+        .select('encrypted_value, encryption_level, is_sensitive')
         .eq('user_id', userId)
         .eq('data_type', dataType)
         .single();
@@ -143,8 +152,16 @@ export const useSafety = (userId?: string) => {
       if (data) {
         const value = data.encrypted_value;
         
-        // Auto-decrypt if enabled
-        if (encryptionOptions.autoDecrypt && data.encryption_level) {
+        // Auto-decrypt if enabled and authorized
+        const canDecrypt = encryptionOptions.autoDecrypt && isAuthorized;
+        
+        // Add additional security check for sensitive data
+        if (data.is_sensitive && !isAuthorized) {
+          console.error('User not authorized to access sensitive data');
+          return null;
+        }
+        
+        if (canDecrypt && data.encryption_level) {
           const decrypted = decryptData(value, data.encryption_level);
           
           // Update cached value
