@@ -150,28 +150,39 @@ const GitTerminal = () => {
         <Tooltip>
           <TooltipTrigger asChild>
             <div className="fixed bottom-4 right-4 z-50 flex gap-2">
-              <Button
-                variant="default"
-                size="icon"
-                className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all bg-primary"
-                onClick={() => {
-                  setPendingCommand('git commit -m "Quick save"');
-                  setOutput(prev => `${prev}\n> Command queued: git commit -m "Quick save"\nEnter activation keyword to execute`);
-                }}
-              >
-                <GitCommitHorizontal className="h-6 w-6" />
-                {lastOperation && (
-                  <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full" />
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all"
-                onClick={() => setIsOpen(true)}
-              >
-                <Terminal className="h-6 w-6" />
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="default"
+                    size="icon"
+                    className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all bg-primary"
+                    onClick={() => {
+                      setPendingCommand('git commit -m "Quick save"');
+                      setOutput(prev => `${prev}\n> Command queued: git commit -m "Quick save"\nEnter activation keyword to execute`);
+                    }}
+                  >
+                    <GitCommitHorizontal className="h-6 w-6" />
+                    {lastOperation && (
+                      <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full" />
+                    )}
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Quick commit changes</TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all"
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <Terminal className="h-6 w-6" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Open Git Terminal</TooltipContent>
+              </Tooltip>
             </div>
           </TooltipTrigger>
           <TooltipContent side="top" align="end" className="max-w-[300px]">
@@ -200,7 +211,12 @@ const GitTerminal = () => {
             <DrawerTitle className="flex items-center gap-2">
               Git Terminal
               {showSuccess && (
-                <CheckCircle className="h-5 w-5 text-green-500 animate-scale-in" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <CheckCircle className="h-5 w-5 text-green-500 animate-scale-in" />
+                  </TooltipTrigger>
+                  <TooltipContent>Operation completed successfully</TooltipContent>
+                </Tooltip>
               )}
             </DrawerTitle>
           </DrawerHeader>
@@ -253,8 +269,19 @@ const GitTerminal = () => {
             </div>
 
             <div className="flex space-x-2">
-              <Button onClick={handleCommit}>Commit</Button>
-              <Button onClick={handlePush}>Push</Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button onClick={handleCommit}>Commit</Button>
+                </TooltipTrigger>
+                <TooltipContent>Create a new commit</TooltipContent>
+              </Tooltip>
+              
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button onClick={handlePush}>Push</Button>
+                </TooltipTrigger>
+                <TooltipContent>Push changes to remote repository</TooltipContent>
+              </Tooltip>
             </div>
 
             {operationHistory.length > 0 && (
