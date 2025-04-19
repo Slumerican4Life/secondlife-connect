@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Feed from "@/components/Feed";
@@ -11,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/componen
 import { Button } from "@/components/ui/button";
 import { Heart, Store, Building, Shield, ArrowRight, Bot } from "lucide-react";
 import { Link } from "react-router-dom";
+import GitTerminal from "@/components/GitTerminal";
 
 const Index = () => {
   const isMobile = useIsMobile();
@@ -128,6 +128,7 @@ const Index = () => {
           </div>
         )}
       </div>
+      <GitTerminal />
     </div>
   );
 };
