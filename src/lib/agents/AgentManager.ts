@@ -7,6 +7,9 @@ import { AIRealEstateAgent } from "./AIRealEstateAgent";
 import { AIMarketplaceAgent } from "./AIMarketplaceAgent";
 import { AIIntelligenceAgent } from "./AIIntelligenceAgent";
 import { AIMonetizationAgent } from "./AIMonetizationAgent";
+import { AIContentAgent } from "./AIContentAgent";  // New agent for content management
+import { AINewsAgent } from "./AINewsAgent";        // New agent for news aggregation
+import { AIResearchAgent } from "./AIResearchAgent"; // New agent for research topics
 
 /**
  * Central manager for all AI agents in the system.
@@ -23,6 +26,9 @@ export class AgentManager {
   private marketplaceAgent: AIMarketplaceAgent;
   private intelligenceAgent: AIIntelligenceAgent;
   private monetizationAgent: AIMonetizationAgent;
+  private contentAgent: AIContentAgent;
+  private newsAgent: AINewsAgent;
+  private researchAgent: AIResearchAgent;
 
   private constructor() {
     // Initialize all agents
@@ -34,6 +40,9 @@ export class AgentManager {
     this.marketplaceAgent = new AIMarketplaceAgent();
     this.intelligenceAgent = new AIIntelligenceAgent(this);
     this.monetizationAgent = new AIMonetizationAgent();
+    this.contentAgent = new AIContentAgent();
+    this.newsAgent = new AINewsAgent();
+    this.researchAgent = new AIResearchAgent();
   }
 
   public static getInstance(): AgentManager {
@@ -75,6 +84,18 @@ export class AgentManager {
   public getMonetizationAgent(): AIMonetizationAgent {
     return this.monetizationAgent;
   }
+  
+  public getContentAgent(): AIContentAgent {
+    return this.contentAgent;
+  }
+  
+  public getNewsAgent(): AINewsAgent {
+    return this.newsAgent;
+  }
+  
+  public getResearchAgent(): AIResearchAgent {
+    return this.researchAgent;
+  }
 
   // Cross-agent communication methods
   public shareIntelligence(data: any, targetAgents: string[]): void {
@@ -104,6 +125,15 @@ export class AgentManager {
           break;
         case 'monetization':
           this.monetizationAgent.receiveIntelligence(data);
+          break;
+        case 'content':
+          this.contentAgent.receiveIntelligence(data);
+          break;
+        case 'news':
+          this.newsAgent.receiveIntelligence(data);
+          break;
+        case 'research':
+          this.researchAgent.receiveIntelligence(data);
           break;
       }
     });

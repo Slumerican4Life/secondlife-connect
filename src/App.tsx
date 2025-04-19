@@ -13,6 +13,9 @@ import RealEstate from "./pages/RealEstate";
 import Dating from "./pages/Dating";
 import ClanPortal from "./pages/ClanPortal";
 import RoyalPortal from "./pages/RoyalPortal";
+import UAPWatch from "./pages/UAPWatch";
+import ContentExplore from "./pages/ContentExplore";
+import News from "./pages/News";
 import AIAssistant from "./components/AIAssistant";
 import { AuthProvider } from "@/contexts/AuthContext";
 
@@ -35,7 +38,9 @@ const App = () => (
             <Route path="/dating" element={<Dating />} />
             <Route path="/clan-portal" element={<ClanPortal />} />
             <Route path="/royal-portal" element={<RoyalPortal />} />
-            <Route path="/explore" element={<NotFound />} />
+            <Route path="/uap-watch" element={<UAPWatch />} />
+            <Route path="/explore" element={<ContentExplore />} />
+            <Route path="/news" element={<News />} />
             <Route path="/worlds" element={<NotFound />} />
             <Route path="/notifications" element={<NotFound />} />
             <Route path="/messages" element={<NotFound />} />
