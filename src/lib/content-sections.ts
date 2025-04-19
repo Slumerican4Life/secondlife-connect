@@ -1,4 +1,3 @@
-
 /**
  * Content sections configuration for the platform
  */
@@ -19,6 +18,15 @@ export interface ContentSection {
 
 // Main content sections for the platform
 export const contentSections: ContentSection[] = [
+  {
+    id: 'slumerican',
+    name: 'Slumerican Corner',
+    description: 'Dedicated to Yelawolf, slum culture, and the Slumerican movement',
+    icon: Star,
+    path: '/slumerican',
+    badge: 'new',
+    color: 'text-red-500'
+  },
   {
     id: 'uap-watch',
     name: 'UAP/UFO Watch',

@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -18,6 +17,7 @@ import ContentExplore from "./pages/ContentExplore";
 import News from "./pages/News";
 import AIAssistant from "./components/AIAssistant";
 import { AuthProvider } from "@/contexts/AuthContext";
+import SlumericanCorner from "./pages/SlumericanCorner";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +47,7 @@ const App = () => (
             <Route path="/bookmarks" element={<NotFound />} />
             <Route path="/trending" element={<NotFound />} />
             <Route path="/settings" element={<NotFound />} />
+            <Route path="/slumerican" element={<SlumericanCorner />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <AIAssistant />
