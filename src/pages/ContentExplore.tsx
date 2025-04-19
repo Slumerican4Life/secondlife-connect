@@ -5,6 +5,8 @@ import Sidebar from "@/components/Sidebar";
 import ContentExplorer from "@/components/ContentExplorer";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Compass } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ContentExplore: React.FC = () => {
   const isMobile = useIsMobile();
@@ -33,7 +35,75 @@ const ContentExplore: React.FC = () => {
               </p>
             </div>
 
-            <ContentExplorer />
+            <Tabs defaultValue="all" className="w-full">
+              <TabsList className="grid grid-cols-4 mb-6">
+                <TabsTrigger value="all">All Topics</TabsTrigger>
+                <TabsTrigger value="paranormal">Paranormal & Spiritual</TabsTrigger>
+                <TabsTrigger value="science">Science & Tech</TabsTrigger>
+                <TabsTrigger value="current">News & Current Events</TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="all">
+                <ContentExplorer />
+              </TabsContent>
+              
+              <TabsContent value="paranormal">
+                <Card className="bg-muted/40 border-violet-500/20 mb-6">
+                  <CardHeader>
+                    <CardTitle>Paranormal & Spiritual Content</CardTitle>
+                    <CardDescription>
+                      Explore supernatural phenomena, spiritual practices, and unexplained mysteries
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ContentExplorer 
+                      filter={(section) => {
+                        const topics = ['paranormal', 'spiritual', 'astrology', 'ancient-news', 'conspiracy', 'uap-watch'];
+                        return topics.includes(section.id);
+                      }} 
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="science">
+                <Card className="bg-muted/40 border-cyan-500/20 mb-6">
+                  <CardHeader>
+                    <CardTitle>Science & Technology</CardTitle>
+                    <CardDescription>
+                      Discover the latest in AI, quantum physics, astronomy, and medical research
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ContentExplorer 
+                      filter={(section) => {
+                        const topics = ['ai-tech', 'quantum-physics', 'astronomy', 'advanced-tech', 'space', 'science', 'health'];
+                        return topics.includes(section.id);
+                      }} 
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+              
+              <TabsContent value="current">
+                <Card className="bg-muted/40 border-blue-500/20 mb-6">
+                  <CardHeader>
+                    <CardTitle>News & Current Events</CardTitle>
+                    <CardDescription>
+                      Stay informed with the latest news, politics, and accountability reports
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <ContentExplorer 
+                      filter={(section) => {
+                        const topics = ['news', 'politics', 'police-watch', 'events'];
+                        return topics.includes(section.id);
+                      }} 
+                    />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </div>
         </main>
 

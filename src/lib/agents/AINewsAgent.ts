@@ -2,154 +2,331 @@
 import { BaseAIAgent, AgentResponse } from "./AIAgent";
 
 /**
- * Agent focused on collecting and delivering news across different topics
+ * Agent focused on news aggregation and virtual newscasting
  */
 export class AINewsAgent extends BaseAIAgent {
-  private newsCache: Record<string, any[]>;
-  private lastUpdated: Record<string, Date>;
+  private newsCache: Record<string, any>;
+  private newsSources: string[];
+  private virtualNewscasters: VirtualNewscaster[];
+  private lastCacheRefresh: Date;
   
   constructor() {
     super(
-      "News Aggregator", 
-      "AI agent that collects, verifies, and distributes news content"
+      "News Network", 
+      "AI agent that finds, aggregates, and distributes news content"
     );
     
     this.newsCache = {};
-    this.lastUpdated = {};
+    this.newsSources = [
+      "Associated Press",
+      "Reuters",
+      "Bloomberg",
+      "TechCrunch",
+      "Scientific American",
+      "Space.com",
+      "Nature",
+      "Wired"
+    ];
     
-    // Initialize news categories
-    this.refreshNewsCache('technology');
-    this.refreshNewsCache('science');
-    this.refreshNewsCache('uap');
-    this.refreshNewsCache('health');
-    this.refreshNewsCache('politics');
-  }
-  
-  private async refreshNewsCache(category: string): Promise<void> {
-    // In a real implementation, this would fetch from news APIs or sources
-    console.log(`Refreshing news cache for category: ${category}`);
+    this.virtualNewscasters = [
+      { 
+        id: 'nc1', 
+        name: 'Alex Chen', 
+        specialties: ['technology', 'science'], 
+        experience: 'senior',
+        availability: 'full-time',
+        bio: 'Former tech journalist with 15 years of experience covering Silicon Valley'
+      },
+      { 
+        id: 'nc2', 
+        name: 'Morgan Hayes', 
+        specialties: ['politics', 'international affairs'], 
+        experience: 'expert',
+        availability: 'contract',
+        bio: 'Political analyst with background in international relations'
+      },
+      { 
+        id: 'nc3', 
+        name: 'Jordan Liu', 
+        specialties: ['paranormal', 'uap', 'conspiracy'], 
+        experience: 'mid-level',
+        availability: 'part-time',
+        bio: 'Investigative reporter specializing in unusual phenomena'
+      },
+      { 
+        id: 'nc4', 
+        name: 'Taylor Washington', 
+        specialties: ['health', 'science', 'medicine'], 
+        experience: 'senior',
+        availability: 'full-time',
+        bio: 'Medical correspondent with a PhD in Biochemistry'
+      },
+      { 
+        id: 'nc5', 
+        name: 'Riley Parker', 
+        specialties: ['space', 'astronomy', 'quantum physics'], 
+        experience: 'expert',
+        availability: 'full-time',
+        bio: 'Astrophysicist and science communicator'
+      }
+    ];
     
-    // Mock news data
-    const mockNews = {
-      'technology': [
-        { id: 'tech1', title: 'New Quantum Computing Breakthrough', source: 'TechDaily', date: new Date() },
-        { id: 'tech2', title: 'AI System Passes Medical Licensing Exam', source: 'FutureTech', date: new Date() }
-      ],
-      'science': [
-        { id: 'sci1', title: 'James Webb Telescope Reveals New Exoplanet Details', source: 'SpaceNews', date: new Date() },
-        { id: 'sci2', title: 'Fusion Energy Test Achieves Record Efficiency', source: 'ScienceToday', date: new Date() }
-      ],
-      'uap': [
-        { id: 'uap1', title: 'Multiple UAP Reports Over Pacific Northwest', source: 'UAP Observer', date: new Date() },
-        { id: 'uap2', title: 'Analysis of Government UAP Footage Released', source: 'PhenomenaPost', date: new Date() }
-      ],
-      'health': [
-        { id: 'health1', title: 'New Cancer Treatment Shows Promising Results', source: 'MedicalDaily', date: new Date() },
-        { id: 'health2', title: 'Research Links Gut Microbiome to Immune Response', source: 'HealthScience', date: new Date() }
-      ],
-      'politics': [
-        { id: 'pol1', title: 'Senate Debates New Privacy Legislation', source: 'CapitolNews', date: new Date() },
-        { id: 'pol2', title: 'Global Summit Addresses Climate Policy', source: 'WorldPolitics', date: new Date() }
-      ]
-    };
-    
-    this.newsCache[category] = mockNews[category] || [];
-    this.lastUpdated[category] = new Date();
+    this.lastCacheRefresh = new Date();
+    this.refreshNewsCache();
   }
   
   async processQuery(query: string): Promise<string> {
     const normalizedQuery = query.toLowerCase();
     
-    if (normalizedQuery.includes("latest news") || normalizedQuery.includes("breaking news")) {
+    // Check if we need to refresh the cache
+    const cacheAge = Date.now() - this.lastCacheRefresh.getTime();
+    if (cacheAge > 3600000) { // Refresh if older than 1 hour
+      await this.refreshNewsCache();
+    }
+    
+    if (normalizedQuery.includes("latest") || normalizedQuery.includes("news")) {
+      const category = this.determineCategoryFromQuery(normalizedQuery);
       return this.formatResponse({
-        message: "Here are the latest news stories across categories:",
+        message: `Here are the latest news stories in ${category}:`,
+        success: true,
+        data: this.getNewsByCategory(category)
+      });
+    }
+    
+    if (normalizedQuery.includes("newscaster") || normalizedQuery.includes("reporter")) {
+      return this.formatResponse({
+        message: "Here are our virtual newscasters available for assignments:",
         success: true,
         data: {
-          technology: this.newsCache['technology']?.[0],
-          science: this.newsCache['science']?.[0],
-          uap: this.newsCache['uap']?.[0]
+          newscasters: this.virtualNewscasters
         }
       });
     }
     
-    if (normalizedQuery.includes("uap") || normalizedQuery.includes("ufo")) {
+    if (normalizedQuery.includes("assign") || normalizedQuery.includes("schedule")) {
+      // Logic to assign stories to newscasters would go here
       return this.formatResponse({
-        message: "Here are the latest UAP/UFO news stories:",
+        message: "What type of news story would you like to assign to a newscaster?",
         success: true,
-        data: {
-          news: this.newsCache['uap'] || []
-        }
+        suggestions: [
+          "Assign a technology story to Alex Chen",
+          "Schedule a political roundtable with Morgan Hayes",
+          "Assign a UAP investigation to Jordan Liu",
+          "Schedule health news segment with Taylor Washington"
+        ]
       });
-    }
-    
-    // Match other categories
-    for (const category of ['technology', 'science', 'health', 'politics']) {
-      if (normalizedQuery.includes(category)) {
-        return this.formatResponse({
-          message: `Here are the latest ${category} news stories:`,
-          success: true,
-          data: {
-            news: this.newsCache[category] || []
-          }
-        });
-      }
     }
     
     return this.formatResponse({
-      message: "I can provide you with the latest news on various topics. What are you interested in?",
+      message: "I can help you find the latest news, manage virtual newscasters, and schedule news segments.",
       success: true,
       suggestions: [
-        "Show latest news",
-        "Show UAP/UFO news", 
-        "Show technology news",
-        "Show health research news"
+        "Show latest technology news",
+        "Show available newscasters",
+        "Assign a story to a newscaster",
+        "Get news about quantum computing",
+        "Find paranormal news stories"
       ]
     });
   }
   
-  // Method to get top news from multiple categories
-  async getTopNews(categories: string[] = ['technology', 'science', 'uap', 'health', 'politics'], count: number = 1): Promise<Record<string, any[]>> {
-    const result: Record<string, any[]> = {};
+  // Refresh the news cache with the latest stories
+  private async refreshNewsCache(): Promise<void> {
+    console.log("Refreshing news cache...");
+    
+    // In a real implementation, this would fetch from news APIs
+    // For now, we'll use mock data
+    
+    const categories = ["technology", "science", "politics", "health", "uap"];
     
     for (const category of categories) {
-      // Check if cache needs refreshing (older than 1 hour)
-      const lastUpdate = this.lastUpdated[category] || new Date(0);
-      const oneHourAgo = new Date();
-      oneHourAgo.setHours(oneHourAgo.getHours() - 1);
-      
-      if (lastUpdate < oneHourAgo) {
-        await this.refreshNewsCache(category);
-      }
-      
-      result[category] = this.newsCache[category]?.slice(0, count) || [];
+      console.log(`Refreshing news cache for category: ${category}`);
+      this.newsCache[category] = this.generateMockNewsForCategory(category);
     }
     
-    return result;
+    this.lastCacheRefresh = new Date();
   }
   
-  // Method to verify news authenticity
-  async verifyNewsSource(url: string): Promise<{reliable: boolean, score: number, reasons: string[]}> {
-    // In a real implementation, this would check against known reliable sources
-    // and potentially use fact-checking APIs
+  // Generate mock news data for a given category
+  private generateMockNewsForCategory(category: string): any[] {
+    const currentDate = new Date();
     
-    // Mock implementation
-    const knownReliableDomains = ['reuters.com', 'apnews.com', 'bbc.com', 'npr.org'];
-    const domain = new URL(url).hostname;
+    switch(category) {
+      case "technology":
+        return [
+          {
+            id: `tech-${Date.now()}-1`,
+            title: "New Quantum Computing Breakthrough Announced",
+            summary: "Researchers achieve stable qubits at room temperature",
+            source: "TechCrunch",
+            date: currentDate,
+            url: "#",
+            category: "technology"
+          },
+          {
+            id: `tech-${Date.now()}-2`,
+            title: "AI System Passes Medical Licensing Exam",
+            summary: "Neural network outperforms human doctors on diagnostic tests",
+            source: "Wired",
+            date: currentDate,
+            url: "#",
+            category: "technology"
+          }
+        ];
+        
+      case "science":
+        return [
+          {
+            id: `sci-${Date.now()}-1`,
+            title: "CERN Discovers New Particle",
+            summary: "Higgs boson variant could change understanding of physics",
+            source: "Nature",
+            date: currentDate,
+            url: "#",
+            category: "science"
+          },
+          {
+            id: `sci-${Date.now()}-2`,
+            title: "Mars Sample Return Mission Delayed",
+            summary: "Technical issues push timeline back by two years",
+            source: "Space.com",
+            date: currentDate,
+            url: "#",
+            category: "science"
+          }
+        ];
+        
+      case "uap":
+        return [
+          {
+            id: `uap-${Date.now()}-1`,
+            title: "Pentagon Releases New UAP Footage",
+            summary: "Declassified video shows unusual aerial phenomena over Pacific",
+            source: "Associated Press",
+            date: currentDate,
+            url: "#",
+            category: "uap"
+          },
+          {
+            id: `uap-${Date.now()}-2`,
+            title: "Congressional Hearing on UAP Transparency",
+            summary: "Lawmakers push for more disclosure from intelligence agencies",
+            source: "Reuters",
+            date: currentDate,
+            url: "#",
+            category: "uap"
+          }
+        ];
+        
+      default:
+        return [
+          {
+            id: `gen-${Date.now()}-1`,
+            title: `Latest ${category.charAt(0).toUpperCase() + category.slice(1)} Developments`,
+            summary: `Breaking news in ${category}`,
+            source: this.newsSources[Math.floor(Math.random() * this.newsSources.length)],
+            date: currentDate,
+            url: "#",
+            category: category
+          }
+        ];
+    }
+  }
+  
+  // Determine news category from query
+  private determineCategoryFromQuery(query: string): string {
+    if (query.includes("tech") || query.includes("ai") || query.includes("computer")) {
+      return "technology";
+    }
+    if (query.includes("science") || query.includes("research")) {
+      return "science";
+    }
+    if (query.includes("politic") || query.includes("government")) {
+      return "politics";
+    }
+    if (query.includes("uap") || query.includes("ufo") || query.includes("alien")) {
+      return "uap";
+    }
+    if (query.includes("health") || query.includes("medical") || query.includes("cancer")) {
+      return "health";
+    }
+    if (query.includes("space") || query.includes("astro")) {
+      return "space";
+    }
+    if (query.includes("paranormal") || query.includes("ghost")) {
+      return "paranormal";
+    }
+    if (query.includes("spirit") || query.includes("meditation")) {
+      return "spiritual";
+    }
+    // Default category
+    return "general";
+  }
+  
+  // Get news by category
+  private getNewsByCategory(category: string): any[] {
+    return this.newsCache[category] || [];
+  }
+  
+  // Methods to work with virtual newscasters
+  
+  // Get available newscasters specialized in a topic
+  public getNewscastersBySpecialty(specialty: string): VirtualNewscaster[] {
+    return this.virtualNewscasters.filter(
+      newscaster => newscaster.specialties.includes(specialty)
+    );
+  }
+  
+  // Assign a news story to a virtual newscaster
+  public assignStoryToNewscaster(storyId: string, newcasterId: string): { success: boolean, message: string } {
+    const newscaster = this.virtualNewscasters.find(nc => nc.id === newcasterId);
     
-    const isReliable = knownReliableDomains.some(d => domain.includes(d));
+    if (!newscaster) {
+      return { success: false, message: "Newscaster not found" };
+    }
     
+    // In a real system, this would update a database
     return {
-      reliable: isReliable,
-      score: isReliable ? 0.95 : 0.5,
-      reasons: isReliable ? 
-        ['Recognized trusted news source'] : 
-        ['Source not in verified database', 'Consider cross-referencing with other sources']
+      success: true,
+      message: `Story assigned to ${newscaster.name} successfully`
     };
   }
   
-  // Method to generate news summary
-  async summarizeArticle(articleUrl: string): Promise<string> {
-    // In a real implementation, this would fetch and summarize the article
-    return "This article discusses recent developments in quantum computing technology, highlighting breakthroughs in qubit stability and potential applications in cryptography and material science.";
+  // Create a news broadcast schedule
+  public createBroadcastSchedule(): any {
+    // This would create a schedule for news broadcasts
+    // In a real system, this would be more sophisticated
+    return {
+      morning: {
+        time: "08:00",
+        anchor: this.virtualNewscasters[0],
+        segments: ["headlines", "weather", "technology"]
+      },
+      afternoon: {
+        time: "14:00",
+        anchor: this.virtualNewscasters[1],
+        segments: ["breaking", "politics", "international"]
+      },
+      evening: {
+        time: "19:00",
+        anchor: this.virtualNewscasters[2],
+        segments: ["summary", "investigation", "uap-update"]
+      }
+    };
   }
+  
+  // Helper method to get all news categories
+  public getNewsCategories(): string[] {
+    return Object.keys(this.newsCache);
+  }
+}
+
+// Type definition for virtual newscasters
+interface VirtualNewscaster {
+  id: string;
+  name: string;
+  specialties: string[];
+  experience: 'junior' | 'mid-level' | 'senior' | 'expert';
+  availability: 'full-time' | 'part-time' | 'contract';
+  bio: string;
 }

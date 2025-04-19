@@ -12,18 +12,25 @@ interface ContentExplorerProps {
   featured?: boolean;
   limit?: number;
   className?: string;
+  filter?: (section: ContentSection) => boolean;
 }
 
 const ContentExplorer: React.FC<ContentExplorerProps> = ({ 
   featured = false, 
   limit,
-  className 
+  className,
+  filter
 }) => {
-  const sections = featured 
+  let sections = featured 
     ? getFeaturedContentSections(limit || 6)
     : limit 
       ? contentSections.slice(0, limit) 
       : contentSections;
+  
+  // Apply filter if provided
+  if (filter) {
+    sections = sections.filter(filter);
+  }
 
   const renderBadge = (section: ContentSection) => {
     if (!section.badge) return null;

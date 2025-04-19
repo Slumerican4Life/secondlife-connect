@@ -3,7 +3,7 @@
  * Content sections configuration for the platform
  */
 
-import { Bot, Droplet, PieChart, Globe, AlertTriangle, Newspaper, Music, Coins, Calendar, Activity, Scale, Zap, Layers, Microscope, ScrollText, LucideIcon } from 'lucide-react';
+import { Bot, Droplet, PieChart, Globe, AlertTriangle, Newspaper, Music, Coins, Calendar, Activity, Scale, Zap, Layers, Microscope, ScrollText, LucideIcon, Star, Moon, Sparkles, Telescope, Atom, Orbit } from 'lucide-react';
 
 export interface ContentSection {
   id: string;
@@ -45,6 +45,42 @@ export const contentSections: ContentSection[] = [
     color: 'text-orange-600'
   },
   {
+    id: 'paranormal',
+    name: 'Paranormal',
+    description: 'Explore supernatural phenomena, hauntings, and unexplained events',
+    icon: Sparkles,
+    path: '/paranormal',
+    badge: 'new',
+    color: 'text-violet-600'
+  },
+  {
+    id: 'spiritual',
+    name: 'Spiritual Wisdom',
+    description: 'Explore spiritual practices, meditation techniques, and consciousness expansion',
+    icon: Star,
+    path: '/spiritual',
+    badge: 'new',
+    color: 'text-indigo-400'
+  },
+  {
+    id: 'astronomy',
+    name: 'Space Tracking',
+    description: 'Track celestial events, meteors, asteroids, and other near-Earth objects',
+    icon: Telescope,
+    path: '/astronomy',
+    badge: 'new',
+    color: 'text-sky-600'
+  },
+  {
+    id: 'astrology',
+    name: 'Astrology',
+    description: 'Daily horoscopes, zodiac insights, and celestial influences',
+    icon: Moon,
+    path: '/astrology',
+    badge: 'new',
+    color: 'text-purple-400'
+  },
+  {
     id: 'politics',
     name: 'Politics & Rights',
     description: 'Stay informed on political developments and civil liberties',
@@ -68,6 +104,14 @@ export const contentSections: ContentSection[] = [
     icon: Zap,
     path: '/advanced-tech',
     color: 'text-cyan-500'
+  },
+  {
+    id: 'quantum-physics',
+    name: 'Quantum Physics',
+    description: 'Explore quantum mechanics, theoretical physics, and breakthrough research',
+    icon: Atom,
+    path: '/quantum-physics',
+    color: 'text-blue-400'
   },
   {
     id: 'health',
@@ -106,7 +150,7 @@ export const contentSections: ContentSection[] = [
     id: 'space',
     name: 'Space Exploration',
     description: 'Latest discoveries and missions in space science',
-    icon: Layers,
+    icon: Orbit,
     path: '/space',
     color: 'text-slate-500'
   },
