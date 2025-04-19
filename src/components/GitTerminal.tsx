@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,34 @@ import * as git from 'isomorphic-git';
 import fs from 'fs';
 import path from 'path';
 import { Alert, AlertDescription } from "@/components/ui/alert";
+
+// Define a simple HTTP client for isomorphic-git
+const http = {
+  request: async ({ url, method, headers, body }) => {
+    try {
+      const response = await fetch(url, {
+        method,
+        headers,
+        body,
+      });
+      
+      const responseData = await response.text();
+      
+      return {
+        url,
+        method,
+        headers,
+        body,
+        status: response.status,
+        statusText: response.statusText,
+        data: new Uint8Array(Buffer.from(responseData)),
+      };
+    } catch (error) {
+      console.error('HTTP request failed:', error);
+      throw error;
+    }
+  },
+};
 
 const GitTerminal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -61,7 +90,7 @@ const GitTerminal = () => {
         case 'git push origin main':
           await git.push({
             fs,
-            http: {},
+            http,
             dir: repoPath,
             remote: 'origin',
             ref: 'main'
@@ -124,7 +153,7 @@ const GitTerminal = () => {
 
   const handleCommit = () => {
     const timestamp = new Date().toISOString();
-    const command = `git commit -m "Update ${timestamp}"`;
+    const command = `git commit -m "Update timestamp"`;
     setPendingCommand(command);
     setOutput(prev => `${prev}\n> Command queued: ${command}\nEnter activation keyword to execute`);
   };
