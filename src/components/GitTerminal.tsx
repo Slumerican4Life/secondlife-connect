@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
@@ -8,6 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
+import * as git from 'isomorphic-git';
+import fs from 'fs';
+import path from 'path';
 
 const GitTerminal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,32 +18,29 @@ const GitTerminal = () => {
   const [pendingCommand, setPendingCommand] = useState<string | null>(null);
   const [selectedRepo, setSelectedRepo] = useState('auto-detect');
   const [customPath, setCustomPath] = useState('');
+  const [currentRepoPath, setCurrentRepoPath] = useState('');
   
   const ACTIVATION_KEYWORD = 'melons';
 
-  const repositories = {
-    'auto-detect': 'Auto-detect repository',
-    'github': 'https://github.com/yourusername/SecondlifeConnect',
-    'd-drive': 'D:/SecondlifeConnect',
-    'c-drive': 'C:/path/to/repository',
-    'custom': customPath
+  const detectRepository = async () => {
+    try {
+      // In a real Electron/desktop app, this would use a more robust method
+      const projectRoot = process.cwd();
+      const gitDir = path.join(projectRoot, '.git');
+      
+      if (fs.existsSync(gitDir)) {
+        setCurrentRepoPath(projectRoot);
+        setOutput(prev => `${prev}\n> Auto-detected repository at: ${projectRoot}`);
+      } else {
+        toast.error('No Git repository found in the current directory');
+      }
+    } catch (error) {
+      console.error('Repository detection failed:', error);
+      toast.error('Failed to detect repository');
+    }
   };
 
   useEffect(() => {
-    // Attempt to auto-detect repository path when component mounts
-    const detectRepository = async () => {
-      try {
-        // In a real implementation, this would use Node's process.cwd()
-        // or similar to detect the current working directory
-        const detectedPath = 'D:/SecondlifeConnect'; // Simulated detection
-        setOutput(prev => `${prev}\n> Auto-detected repository at: ${detectedPath}`);
-        setCustomPath(detectedPath);
-      } catch (error) {
-        console.error('Failed to auto-detect repository:', error);
-        toast.error('Failed to auto-detect repository path');
-      }
-    };
-
     if (selectedRepo === 'auto-detect') {
       detectRepository();
     }
@@ -49,19 +48,50 @@ const GitTerminal = () => {
 
   const executeGitCommand = async (command: string) => {
     try {
-      const repoPath = selectedRepo === 'custom' ? customPath : repositories[selectedRepo as keyof typeof repositories];
-      setOutput(prev => `${prev}\n> Using repository: ${repoPath}\n> ${command}\nExecuting git command...\nSuccess!`);
+      const repoPath = selectedRepo === 'custom' ? customPath : currentRepoPath;
+      
+      switch (command) {
+        case 'git push origin main':
+          await git.push({
+            fs,
+            http: {},
+            dir: repoPath,
+            remote: 'origin',
+            ref: 'main'
+          });
+          setOutput(prev => `${prev}\n> Successfully pushed to main branch`);
+          break;
+        
+        case 'git commit -m "Update timestamp"':
+          const timestamp = new Date().toISOString();
+          await git.commit({
+            fs,
+            dir: repoPath,
+            message: `Update ${timestamp}`,
+            author: {
+              name: 'SecondLife Connect',
+              email: 'git@secondlife.connect'
+            }
+          });
+          setOutput(prev => `${prev}\n> Commit created with timestamp: ${timestamp}`);
+          break;
+        
+        default:
+          setOutput(prev => `${prev}\n> Unsupported command: ${command}`);
+      }
+      
       setPendingCommand(null);
       setKeyword('');
       
-      // Broadcast the command execution to other components that might be listening
       const event = new CustomEvent('git-command-executed', { 
         detail: { command, repository: repoPath } 
       });
       window.dispatchEvent(event);
       
     } catch (error) {
-      setOutput(prev => `${prev}\n> ${command}\nError: ${error}`);
+      console.error('Git command failed:', error);
+      setOutput(prev => `${prev}\n> Error executing command: ${error}`);
+      toast.error('Git operation failed');
     }
   };
 
