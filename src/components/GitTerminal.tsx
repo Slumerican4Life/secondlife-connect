@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Terminal, FolderOpen, CheckCircle, Calendar, Clock } from "lucide-react";
+import { Terminal, FolderOpen, CheckCircle, Calendar, Clock, GitCommitHorizontal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -150,17 +149,30 @@ const GitTerminal = () => {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="fixed bottom-4 right-20 h-12 w-12 group relative"
-              onClick={() => setIsOpen(true)}
-            >
-              <Terminal className="h-6 w-6" />
-              {lastOperation && (
-                <div className="absolute top-0 right-0 h-3 w-3 bg-green-500 rounded-full transform -translate-y-1 translate-x-1" />
-              )}
-            </Button>
+            <div className="fixed bottom-4 right-4 z-50 flex gap-2">
+              <Button
+                variant="default"
+                size="icon"
+                className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all bg-primary"
+                onClick={() => {
+                  setPendingCommand('git commit -m "Quick save"');
+                  setOutput(prev => `${prev}\n> Command queued: git commit -m "Quick save"\nEnter activation keyword to execute`);
+                }}
+              >
+                <GitCommitHorizontal className="h-6 w-6" />
+                {lastOperation && (
+                  <div className="absolute -top-1 -right-1 h-3 w-3 bg-green-500 rounded-full" />
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all"
+                onClick={() => setIsOpen(true)}
+              >
+                <Terminal className="h-6 w-6" />
+              </Button>
+            </div>
           </TooltipTrigger>
           <TooltipContent side="top" align="end" className="max-w-[300px]">
             {lastOperation ? (
@@ -176,7 +188,7 @@ const GitTerminal = () => {
                 )}
               </div>
             ) : (
-              <span>Git Terminal</span>
+              <span>Git Terminal & Quick Commit</span>
             )}
           </TooltipContent>
         </Tooltip>
