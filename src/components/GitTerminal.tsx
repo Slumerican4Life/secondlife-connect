@@ -1,17 +1,20 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Terminal, FolderOpen, CheckCircle } from "lucide-react";
+import { Terminal, FolderOpen, CheckCircle, Calendar, Clock } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import * as git from 'isomorphic-git';
-import http from 'isomorphic-git/http/web';
-import fs from 'fs';
-import path from 'path';
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const GitTerminal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +29,10 @@ const GitTerminal = () => {
     type: 'push' | 'commit';
     timestamp: string;
   } | null>(null);
+  const [operationHistory, setOperationHistory] = useState<Array<{
+    type: 'push' | 'commit';
+    timestamp: string;
+  }>>([]);
   const successAudioRef = useRef<HTMLAudioElement | null>(null);
 
   const ACTIVATION_KEYWORD = 'melons';
@@ -33,14 +40,10 @@ const GitTerminal = () => {
   const detectRepository = async () => {
     try {
       const projectRoot = process.cwd();
-      const gitDir = path.join(projectRoot, '.git');
       
-      if (fs.existsSync(gitDir)) {
-        setCurrentRepoPath(projectRoot);
-        setOutput(prev => `${prev}\n> Auto-detected repository at: ${projectRoot}`);
-      } else {
-        toast.error('No Git repository found in the current directory');
-      }
+      // Mock detection (since fs is not available in browser)
+      setCurrentRepoPath(projectRoot);
+      setOutput(prev => `${prev}\n> Auto-detected repository at: ${projectRoot}`);
     } catch (error) {
       console.error('Repository detection failed:', error);
       toast.error('Failed to detect repository');
@@ -64,10 +67,14 @@ const GitTerminal = () => {
         const timestamp = new Date().toISOString();
         
         if (command === 'git push origin main') {
-          setLastOperation({ type: 'push', timestamp });
+          const newOperation = { type: 'push' as const, timestamp };
+          setLastOperation(newOperation);
+          setOperationHistory(prev => [newOperation, ...prev.slice(0, 9)]); // Keep last 10 operations
           setOutput(prev => `${prev}\n> Successfully pushed to main branch at ${timestamp}`);
         } else if (command.includes('git commit')) {
-          setLastOperation({ type: 'commit', timestamp });
+          const newOperation = { type: 'commit' as const, timestamp };
+          setLastOperation(newOperation);
+          setOperationHistory(prev => [newOperation, ...prev.slice(0, 9)]); // Keep last 10 operations
           setOutput(prev => `${prev}\n> Commit created with timestamp: ${timestamp}`);
         }
         
@@ -133,22 +140,48 @@ const GitTerminal = () => {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
+
   return (
     <>
-      <Button
-        variant="outline"
-        size="icon"
-        className="fixed bottom-4 right-20 h-12 w-12 group relative"
-        onClick={() => setIsOpen(true)}
-      >
-        <Terminal className="h-6 w-6" />
-        {lastOperation && (
-          <div className="absolute -top-14 right-0 bg-black/80 text-white text-xs rounded p-2 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-            Last {lastOperation.type}: {new Date(lastOperation.timestamp).toLocaleString()}
-          </div>
-        )}
-      </Button>
-
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              className="fixed bottom-4 right-20 h-12 w-12 group relative"
+              onClick={() => setIsOpen(true)}
+            >
+              <Terminal className="h-6 w-6" />
+              {lastOperation && (
+                <div className="absolute top-0 right-0 h-3 w-3 bg-green-500 rounded-full transform -translate-y-1 translate-x-1" />
+              )}
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="top" align="end" className="max-w-[300px]">
+            {lastOperation ? (
+              <div className="space-y-1">
+                <div className="font-semibold flex items-center gap-1">
+                  <Calendar className="h-4 w-4" /> 
+                  Last {lastOperation.type}: {formatDate(lastOperation.timestamp)}
+                </div>
+                {operationHistory.length > 1 && (
+                  <div className="text-xs text-muted-foreground">
+                    {operationHistory.length > 1 && `+${operationHistory.length - 1} more operations`}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <span>Git Terminal</span>
+            )}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
         <DrawerContent>
           <DrawerHeader>
@@ -211,6 +244,23 @@ const GitTerminal = () => {
               <Button onClick={handleCommit}>Commit</Button>
               <Button onClick={handlePush}>Push</Button>
             </div>
+
+            {operationHistory.length > 0 && (
+              <div className="border rounded-md p-3 space-y-2">
+                <h3 className="text-sm font-medium flex items-center gap-1">
+                  <Clock className="h-4 w-4" />
+                  Recent Operations
+                </h3>
+                <div className="space-y-1 max-h-32 overflow-y-auto text-sm">
+                  {operationHistory.map((op, index) => (
+                    <div key={index} className="flex justify-between text-muted-foreground">
+                      <span className="capitalize">{op.type}</span>
+                      <span>{formatDate(op.timestamp)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
             <Textarea
               value={output}

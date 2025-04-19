@@ -6,6 +6,7 @@ import { AIDatingAgent } from "./AIDatingAgent";
 import { AIRealEstateAgent } from "./AIRealEstateAgent";
 import { AIMarketplaceAgent } from "./AIMarketplaceAgent";
 import { AIIntelligenceAgent } from "./AIIntelligenceAgent";
+import { AIMonetizationAgent } from "./AIMonetizationAgent";
 
 /**
  * Central manager for all AI agents in the system.
@@ -21,6 +22,7 @@ export class AgentManager {
   private realEstateAgent: AIRealEstateAgent;
   private marketplaceAgent: AIMarketplaceAgent;
   private intelligenceAgent: AIIntelligenceAgent;
+  private monetizationAgent: AIMonetizationAgent;
 
   private constructor() {
     // Initialize all agents
@@ -31,6 +33,7 @@ export class AgentManager {
     this.realEstateAgent = new AIRealEstateAgent();
     this.marketplaceAgent = new AIMarketplaceAgent();
     this.intelligenceAgent = new AIIntelligenceAgent(this);
+    this.monetizationAgent = new AIMonetizationAgent();
   }
 
   public static getInstance(): AgentManager {
@@ -68,6 +71,10 @@ export class AgentManager {
   public getIntelligenceAgent(): AIIntelligenceAgent {
     return this.intelligenceAgent;
   }
+  
+  public getMonetizationAgent(): AIMonetizationAgent {
+    return this.monetizationAgent;
+  }
 
   // Cross-agent communication methods
   public shareIntelligence(data: any, targetAgents: string[]): void {
@@ -94,6 +101,9 @@ export class AgentManager {
           break;
         case 'marketplace':
           this.marketplaceAgent.receiveIntelligence(data);
+          break;
+        case 'monetization':
+          this.monetizationAgent.receiveIntelligence(data);
           break;
       }
     });

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { AgentManager } from "@/lib/agents/AgentManager";
-import { Bot, HelpCircle, FileText, BarChart3, Heart, Home, ShoppingBag, Brain } from "lucide-react";
+import { Bot, HelpCircle, FileText, BarChart3, Heart, Home, ShoppingBag, Brain, DollarSign } from "lucide-react";
 import { toast } from "sonner";
 
 const AIAgentHub = () => {
@@ -53,6 +53,9 @@ const AIAgentHub = () => {
         case "intelligence":
           agentResponse = await agentManager.getIntelligenceAgent().processQuery(query);
           break;
+        case "monetization":
+          agentResponse = await agentManager.getMonetizationAgent().processQuery(query);
+          break;
         default:
           agentResponse = '{"message": "Select an agent first", "success": false}';
       }
@@ -95,7 +98,7 @@ const AIAgentHub = () => {
       
       <CardContent>
         <Tabs value={activeAgentTab} onValueChange={setActiveAgentTab} className="w-full">
-          <TabsList className="grid grid-cols-7">
+          <TabsList className="grid grid-cols-8">
             <TabsTrigger value="help" className="flex flex-col items-center text-xs p-2">
               <HelpCircle className="h-4 w-4 mb-1" />
               Help
@@ -124,9 +127,13 @@ const AIAgentHub = () => {
               <Brain className="h-4 w-4 mb-1" />
               Intel
             </TabsTrigger>
+            <TabsTrigger value="monetization" className="flex flex-col items-center text-xs p-2">
+              <DollarSign className="h-4 w-4 mb-1" />
+              Money
+            </TabsTrigger>
           </TabsList>
           
-          {["help", "posting", "advertising", "dating", "realestate", "marketplace", "intelligence"].map((tab) => (
+          {["help", "posting", "advertising", "dating", "realestate", "marketplace", "intelligence", "monetization"].map((tab) => (
             <TabsContent key={tab} value={tab} className="mt-4">
               <Card className="border-none shadow-none">
                 <CardHeader className="p-3">
@@ -138,6 +145,7 @@ const AIAgentHub = () => {
                     {tab === "realestate" && "Real Estate Assistant"}
                     {tab === "marketplace" && "Marketplace Assistant"}
                     {tab === "intelligence" && "Intelligence Network"}
+                    {tab === "monetization" && "Monetization & Revenue"}
                   </CardTitle>
                   <CardDescription className="text-xs">
                     {tab === "help" && "Get help with platform features and issues"}
@@ -147,6 +155,7 @@ const AIAgentHub = () => {
                     {tab === "realestate" && "Discover and evaluate virtual properties"}
                     {tab === "marketplace" && "Buy and sell items with AI assistance"}
                     {tab === "intelligence" && "Access platform trends and insights"}
+                    {tab === "monetization" && "Maximize revenue streams and monetization options"}
                   </CardDescription>
                 </CardHeader>
               </Card>
