@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
@@ -5,21 +6,27 @@ import { Textarea } from "@/components/ui/textarea";
 import { Terminal } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 const GitTerminal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [output, setOutput] = useState('');
-  const [repoPath, setRepoPath] = useState('D:/SecondlifeConnect');
   const [keyword, setKeyword] = useState('');
   const [pendingCommand, setPendingCommand] = useState<string | null>(null);
+  const [selectedRepo, setSelectedRepo] = useState('d-drive');
   
-  const ACTIVATION_KEYWORD = 'melons'; // You can change this to any keyword you prefer
+  const ACTIVATION_KEYWORD = 'melons';
+
+  const repositories = {
+    'github': 'https://github.com/yourusername/SecondlifeConnect',
+    'd-drive': 'D:/SecondlifeConnect',
+    'c-drive': 'C:/path/to/repository'
+  };
 
   const executeGitCommand = async (command: string) => {
     try {
-      // In a real implementation, this would connect to a backend service
-      // that executes git commands. For now, we'll simulate the output
-      setOutput(prev => `${prev}\n> ${command}\nExecuting git command...\nSuccess!`);
+      const repoPath = repositories[selectedRepo as keyof typeof repositories];
+      setOutput(prev => `${prev}\n> Using repository: ${repoPath}\n> ${command}\nExecuting git command...\nSuccess!`);
       setPendingCommand(null);
       setKeyword('');
     } catch (error) {
@@ -66,6 +73,19 @@ const GitTerminal = () => {
             <DrawerTitle>Git Terminal</DrawerTitle>
           </DrawerHeader>
           <div className="p-4 space-y-4">
+            <div className="space-y-2">
+              <Label>Select Repository</Label>
+              <Select value={selectedRepo} onValueChange={setSelectedRepo}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select a repository" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="github">GitHub Repository</SelectItem>
+                  <SelectItem value="d-drive">D: Drive Repository</SelectItem>
+                  <SelectItem value="c-drive">C: Drive Repository</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <div className="flex space-x-2">
               <Button onClick={handleCommit}>Commit</Button>
               <Button onClick={handlePush}>Push</Button>
