@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Terminal, FolderOpen } from "lucide-react";
+import { Terminal, FolderOpen, CheckCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import * as git from 'isomorphic-git';
 import fs from 'fs';
 import path from 'path';
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const GitTerminal = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,12 +20,13 @@ const GitTerminal = () => {
   const [selectedRepo, setSelectedRepo] = useState('auto-detect');
   const [customPath, setCustomPath] = useState('');
   const [currentRepoPath, setCurrentRepoPath] = useState('');
-  
+  const [showSuccess, setShowSuccess] = useState(false);
+  const successAudioRef = useRef<HTMLAudioElement | null>(null);
+
   const ACTIVATION_KEYWORD = 'melons';
 
   const detectRepository = async () => {
     try {
-      // In a real Electron/desktop app, this would use a more robust method
       const projectRoot = process.cwd();
       const gitDir = path.join(projectRoot, '.git');
       
@@ -46,6 +48,11 @@ const GitTerminal = () => {
     }
   }, [selectedRepo]);
 
+  useEffect(() => {
+    const audio = new Audio('data:audio/mp3;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTguNDUuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/81DEFgAKuX1X7DEAAXc0an2GIABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+    successAudioRef.current = audio;
+  }, []);
+
   const executeGitCommand = async (command: string) => {
     try {
       const repoPath = selectedRepo === 'custom' ? customPath : currentRepoPath;
@@ -60,6 +67,7 @@ const GitTerminal = () => {
             ref: 'main'
           });
           setOutput(prev => `${prev}\n> Successfully pushed to main branch`);
+          showSuccessNotification();
           break;
         
         case 'git commit -m "Update timestamp"':
@@ -74,6 +82,7 @@ const GitTerminal = () => {
             }
           });
           setOutput(prev => `${prev}\n> Commit created with timestamp: ${timestamp}`);
+          showSuccessNotification();
           break;
         
         default:
@@ -93,6 +102,19 @@ const GitTerminal = () => {
       setOutput(prev => `${prev}\n> Error executing command: ${error}`);
       toast.error('Git operation failed');
     }
+  };
+
+  const showSuccessNotification = () => {
+    if (successAudioRef.current) {
+      successAudioRef.current.play().catch(console.error);
+    }
+    
+    setShowSuccess(true);
+    toast.success('Git operation completed successfully!');
+    
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 3000);
   };
 
   const handlePush = () => {
@@ -131,9 +153,23 @@ const GitTerminal = () => {
       <Drawer open={isOpen} onOpenChange={setIsOpen}>
         <DrawerContent>
           <DrawerHeader>
-            <DrawerTitle>Git Terminal</DrawerTitle>
+            <DrawerTitle className="flex items-center gap-2">
+              Git Terminal
+              {showSuccess && (
+                <CheckCircle className="h-5 w-5 text-green-500 animate-scale-in" />
+              )}
+            </DrawerTitle>
           </DrawerHeader>
           <div className="p-4 space-y-4">
+            {showSuccess && (
+              <Alert className="bg-green-50 border-green-200">
+                <CheckCircle className="h-4 w-4 text-green-500" />
+                <AlertDescription className="text-green-600">
+                  Repository is up to date!
+                </AlertDescription>
+              </Alert>
+            )}
+            
             <div className="space-y-2">
               <Label>Repository Location</Label>
               <Select value={selectedRepo} onValueChange={setSelectedRepo}>
@@ -162,7 +198,6 @@ const GitTerminal = () => {
                       variant="outline"
                       size="icon"
                       onClick={() => {
-                        // In a real implementation, this would open a file picker
                         toast.info('File picker would open here');
                       }}
                     >
