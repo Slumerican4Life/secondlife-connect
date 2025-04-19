@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
@@ -18,8 +19,6 @@ import {
 const GitTerminal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [output, setOutput] = useState('');
-  const [keyword, setKeyword] = useState('');
-  const [pendingCommand, setPendingCommand] = useState<string | null>(null);
   const [selectedRepo, setSelectedRepo] = useState('auto-detect');
   const [customPath, setCustomPath] = useState('');
   const [currentRepoPath, setCurrentRepoPath] = useState('');
@@ -33,8 +32,6 @@ const GitTerminal = () => {
     timestamp: string;
   }>>([]);
   const successAudioRef = useRef<HTMLAudioElement | null>(null);
-
-  const ACTIVATION_KEYWORD = 'melons';
 
   const detectRepository = async () => {
     try {
@@ -88,8 +85,6 @@ const GitTerminal = () => {
       
       await mockGitOperations(command);
       
-      setPendingCommand(null);
-      setKeyword('');
       showSuccessNotification();
       
       const event = new CustomEvent('git-command-executed', { 
@@ -118,25 +113,22 @@ const GitTerminal = () => {
   };
 
   const handlePush = () => {
-    setPendingCommand('git push origin main');
-    setOutput(prev => `${prev}\n> Command queued: git push origin main\nEnter activation keyword to execute`);
+    setOutput(prev => `${prev}\n> Executing: git push origin main`);
+    executeGitCommand('git push origin main');
   };
 
   const handleCommit = () => {
     const timestamp = new Date().toISOString();
     const command = `git commit -m "Update timestamp"`;
-    setPendingCommand(command);
-    setOutput(prev => `${prev}\n> Command queued: ${command}\nEnter activation keyword to execute`);
+    setOutput(prev => `${prev}\n> Executing: ${command}`);
+    executeGitCommand(command);
   };
 
-  const handleKeywordSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (keyword.toLowerCase() === ACTIVATION_KEYWORD && pendingCommand) {
-      executeGitCommand(pendingCommand);
-    } else {
-      setOutput(prev => `${prev}\n> Invalid keyword. Command not executed.`);
-      setKeyword('');
-    }
+  const handleQuickCommit = () => {
+    const command = `git commit -m "Quick save"`;
+    setOutput(prev => `${prev}\n> Executing: ${command}`);
+    executeGitCommand(command);
+    toast.success("Quick commit initiated");
   };
 
   const formatDate = (dateString: string) => {
@@ -156,10 +148,7 @@ const GitTerminal = () => {
                     variant="default"
                     size="icon"
                     className="h-12 w-12 rounded-full shadow-lg hover:shadow-xl transition-all bg-primary"
-                    onClick={() => {
-                      setPendingCommand('git commit -m "Quick save"');
-                      setOutput(prev => `${prev}\n> Command queued: git commit -m "Quick save"\nEnter activation keyword to execute`);
-                    }}
+                    onClick={handleQuickCommit}
                   >
                     <GitCommitHorizontal className="h-6 w-6" />
                     {lastOperation && (
@@ -237,7 +226,7 @@ const GitTerminal = () => {
                   <SelectValue placeholder="Select a repository" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="auto-detect">Auto-detect Repository</SelectItem>
+                  <SelectItem value="auto-detect">Auto-detected Repository</SelectItem>
                   <SelectItem value="github">GitHub Repository</SelectItem>
                   <SelectItem value="d-drive">D: Drive Repository</SelectItem>
                   <SelectItem value="c-drive">C: Drive Repository</SelectItem>
@@ -306,22 +295,6 @@ const GitTerminal = () => {
               readOnly
               className="font-mono text-sm h-[200px] bg-black text-green-400"
             />
-
-            {pendingCommand && (
-              <form onSubmit={handleKeywordSubmit} className="space-y-2">
-                <Label htmlFor="keyword">Enter activation keyword to execute command:</Label>
-                <div className="flex space-x-2">
-                  <Input
-                    id="keyword"
-                    type="text"
-                    value={keyword}
-                    onChange={(e) => setKeyword(e.target.value)}
-                    placeholder="Enter keyword..."
-                  />
-                  <Button type="submit">Execute</Button>
-                </div>
-              </form>
-            )}
           </div>
         </DrawerContent>
       </Drawer>
