@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,6 +20,8 @@ import ContentExplore from "./pages/ContentExplore";
 import News from "./pages/News";
 import AIAssistant from "./components/AIAssistant";
 import SlumericanCorner from "./pages/SlumericanCorner";
+import MonetizationDashboard from "./pages/MonetizationDashboard";
+import LindenExchange from "./pages/LindenExchange";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +53,8 @@ const App = () => (
               <Route path="/trending" element={<NotFound />} />
               <Route path="/settings" element={<NotFound />} />
               <Route path="/slumerican" element={<SlumericanCorner />} />
+              <Route path="/monetization" element={<MonetizationDashboard />} />
+              <Route path="/linden-exchange" element={<LindenExchange />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
             <AIAssistant />

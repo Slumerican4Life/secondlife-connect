@@ -44,10 +44,10 @@ export class AIMonetizationAgent extends BaseAIAgent {
       {
         type: "virtual_currency",
         name: "Linden Dollar Exchange",
-        description: "In-app currency that can be purchased with real money",
-        estimatedRevenue: "Medium to high with good engagement",
-        implementationComplexity: "high",
-        requirements: ["Payment processor", "Virtual goods", "Economy balancing"]
+        description: "Integrate with official Linden Dollar system for seamless transactions",
+        estimatedRevenue: "High with strong user adoption",
+        implementationComplexity: "medium",
+        requirements: ["Linden API integration", "Secure wallet management", "Transaction monitoring"]
       },
       {
         type: "advertising",
@@ -72,6 +72,22 @@ export class AIMonetizationAgent extends BaseAIAgent {
         estimatedRevenue: "Medium with quality content",
         implementationComplexity: "low",
         requirements: ["Content gating", "Payment processor"]
+      },
+      {
+        type: "land_leasing",
+        name: "Virtual Land Leasing",
+        description: "Lease parcels of virtual land to users for monthly fees",
+        estimatedRevenue: "Very high with prime locations",
+        implementationComplexity: "high",
+        requirements: ["Land management system", "Automated billing", "Zoning regulations"]
+      },
+      {
+        type: "creator_tools",
+        name: "Premium Creator Tools",
+        description: "Advanced tools for content creators with subscription fee",
+        estimatedRevenue: "Medium with creator adoption",
+        implementationComplexity: "medium",
+        requirements: ["Tool development", "Creator support", "Regular updates"]
       }
     ];
     
@@ -104,6 +120,20 @@ export class AIMonetizationAgent extends BaseAIAgent {
         budget: 3500,
         targetDemographic: "New users and customization enthusiasts",
         preferredPlacement: ["User profile editor", "Social hubs"]
+      },
+      {
+        name: "LindenExchange",
+        industry: "Virtual Currency",
+        budget: 10000,
+        targetDemographic: "Active traders and premium users",
+        preferredPlacement: ["Marketplace", "Financial dashboards", "Premium features"]
+      },
+      {
+        name: "SecondLife Builders Guild",
+        industry: "Design & Construction",
+        budget: 7500,
+        targetDemographic: "Land owners and design enthusiasts",
+        preferredPlacement: ["Real estate listings", "Design showcases"]
       }
     ];
   }
@@ -118,12 +148,12 @@ export class AIMonetizationAgent extends BaseAIAgent {
         data: {
           recommendedStrategies: this.monetizationStrategies.slice(0, 3),
           estimatedMonthlyRevenue: "$5,000 - $15,000 depending on user activity and implementation",
-          keyRecommendation: "Implement a multi-faceted approach combining subscriptions, virtual currency, and transaction fees"
+          keyRecommendation: "Implement a multi-faceted approach combining Linden Dollar integration, subscriptions, and transaction fees"
         },
         suggestions: [
           "Show me subscription models",
           "How can I monetize virtual land?",
-          "Optimize ad revenue"
+          "Optimize Linden Dollar exchange"
         ]
       });
     }
@@ -150,17 +180,27 @@ export class AIMonetizationAgent extends BaseAIAgent {
     
     if (normalizedQuery.includes("linden") || normalizedQuery.includes("currency") || normalizedQuery.includes("crypto")) {
       return this.formatResponse({
-        message: "Here are strategies for implementing virtual currency and cryptocurrency options.",
+        message: "Here are strategies for implementing Linden Dollar integration and cryptocurrency options.",
         success: true,
         data: {
-          virtualCurrencyOptions: [
-            { name: "Linden Dollars", exchangeRate: "L$250 = $1 USD", implementation: "Direct integration with Linden Lab" },
-            { name: "Custom Tokens", exchangeRate: "Variable", implementation: "Custom blockchain implementation" }
+          lindenDollarIntegration: {
+            officialExchange: true,
+            exchangeRate: "L$250 = $1 USD",
+            implementationComplexity: "Medium",
+            revenueModel: "Transaction fees + premium exchange rates",
+            estimatedMonthlyRevenue: "$2,500 - $7,500 depending on volume"
+          },
+          keyBenefits: [
+            "Seamless integration with Second Life economy",
+            "Established user trust and familiarity",
+            "Lower regulatory hurdles compared to cryptocurrency",
+            "Potential for high transaction volume"
           ],
-          keyConsiderations: [
-            "Regulatory compliance varies by jurisdiction",
-            "Exchange rate volatility management",
-            "Security requirements for virtual wallets"
+          implementationSteps: [
+            "Establish official partnership with Linden Lab",
+            "Implement secure wallet system",
+            "Create transaction monitoring dashboard",
+            "Set competitive exchange rates and fee structure"
           ]
         },
         suggestions: [
@@ -178,7 +218,7 @@ export class AIMonetizationAgent extends BaseAIAgent {
         "Show monetization options",
         "Find potential advertisers",
         "Calculate potential revenue",
-        "Optimize premium content"
+        "Optimize Linden Dollar integration"
       ]
     });
   }
@@ -190,12 +230,14 @@ export class AIMonetizationAgent extends BaseAIAgent {
       highValueSegments: [
         { segment: "Active creators", monetizationPotential: "High", recommendedApproach: "Premium tools and visibility boosting" },
         { segment: "Social connectors", monetizationPotential: "Medium", recommendedApproach: "Group features and event hosting" },
-        { segment: "Land owners", monetizationPotential: "Very high", recommendedApproach: "Property enhancement services and taxes" }
+        { segment: "Land owners", monetizationPotential: "Very high", recommendedApproach: "Property enhancement services and taxes" },
+        { segment: "Linden traders", monetizationPotential: "High", recommendedApproach: "Premium exchange rates and financial tools" }
       ],
       untappedOpportunities: [
         "Education and training services",
         "Exclusive virtual events",
-        "Digital collectibles marketplace"
+        "Digital collectibles marketplace",
+        "Linden Dollar investment products"
       ]
     };
   }
@@ -206,18 +248,23 @@ export class AIMonetizationAgent extends BaseAIAgent {
     const subscriptionRevenue = activeUsers * 0.05 * 9.99; // 5% conversion at $9.99/month
     const adRevenue = activeUsers * 0.5; // $0.50 per active user per month
     const transactionRevenue = activeUsers * 0.2 * 2; // 20% make transactions with $2 average fee
+    const lindenExchangeRevenue = activeUsers * 0.15 * 3; // 15% use Linden exchange with $3 average fee
+    
+    const totalMonthly = subscriptionRevenue + adRevenue + transactionRevenue + lindenExchangeRevenue;
     
     return {
-      totalMonthly: subscriptionRevenue + adRevenue + transactionRevenue,
+      totalMonthly: totalMonthly,
       breakdown: {
         subscriptions: subscriptionRevenue,
         advertising: adRevenue,
-        transactions: transactionRevenue
+        transactions: transactionRevenue,
+        lindenExchange: lindenExchangeRevenue
       },
       growthOpportunities: [
         "Increase subscription conversion by 2% with improved onboarding",
         "Implement targeted ads for 30% higher CPM rates",
-        "Add premium marketplace options with 5% higher transaction fees"
+        "Add premium marketplace options with 5% higher transaction fees",
+        "Optimize Linden Dollar exchange rates for 20% higher volume"
       ]
     };
   }

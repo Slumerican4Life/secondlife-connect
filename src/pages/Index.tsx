@@ -11,7 +11,7 @@ import ContentExplorer from "@/components/ContentExplorer";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Heart, Store, Building, Shield, ArrowRight, Bot, Newspaper } from "lucide-react";
+import { Heart, Store, Building, Shield, ArrowRight, Bot, Newspaper, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import GitTerminal from "@/components/GitTerminal";
 
@@ -43,6 +43,39 @@ const Index = () => {
                 </Button>
               </div>
               <UAPWatchMap />
+            </div>
+            
+            {/* Linden Exchange - New section */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <DollarSign className="h-5 w-5 text-blue-500" />
+                  Linden Dollar Exchange
+                </h2>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/linden-exchange" className="flex items-center gap-1">
+                    Go to Exchange <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
+                </Button>
+              </div>
+              <Card>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-base">Current Exchange Rate</CardTitle>
+                </CardHeader>
+                <CardContent className="pb-2">
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-2xl font-bold">L$250 = $1 USD</p>
+                      <p className="text-xs text-muted-foreground">Updated April 19, 2025</p>
+                    </div>
+                    <Link to="/linden-exchange">
+                      <Button className="bg-blue-500 hover:bg-blue-600">
+                        Buy Linden Dollars
+                      </Button>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
             
             {/* Content Explorer - New section */}

@@ -1,4 +1,3 @@
-
 import { AIHelpAgent } from "./AIHelpAgent";
 import { AIPostingAgent } from "./AIPostingAgent";
 import { AIAdvertisingAgent } from "./AIAdvertisingAgent";
@@ -7,9 +6,10 @@ import { AIRealEstateAgent } from "./AIRealEstateAgent";
 import { AIMarketplaceAgent } from "./AIMarketplaceAgent";
 import { AIIntelligenceAgent } from "./AIIntelligenceAgent";
 import { AIMonetizationAgent } from "./AIMonetizationAgent";
-import { AIContentAgent } from "./AIContentAgent";  // New agent for content management
-import { AINewsAgent } from "./AINewsAgent";        // New agent for news aggregation
-import { AIResearchAgent } from "./AIResearchAgent"; // New agent for research topics
+import { AIContentAgent } from "./AIContentAgent";  
+import { AINewsAgent } from "./AINewsAgent";        
+import { AIResearchAgent } from "./AIResearchAgent"; 
+import { AILindenAgent } from "./AILindenAgent";  // Add import for the new agent
 
 /**
  * Central manager for all AI agents in the system.
@@ -29,6 +29,7 @@ export class AgentManager {
   private contentAgent: AIContentAgent;
   private newsAgent: AINewsAgent;
   private researchAgent: AIResearchAgent;
+  private lindenAgent: AILindenAgent; // Add the new agent
 
   private constructor() {
     // Initialize all agents
@@ -43,6 +44,7 @@ export class AgentManager {
     this.contentAgent = new AIContentAgent();
     this.newsAgent = new AINewsAgent();
     this.researchAgent = new AIResearchAgent();
+    this.lindenAgent = new AILindenAgent(); // Initialize the new agent
   }
 
   public static getInstance(): AgentManager {
@@ -52,7 +54,6 @@ export class AgentManager {
     return AgentManager.instance;
   }
 
-  // Get specific agents
   public getHelpAgent(): AIHelpAgent {
     return this.helpAgent;
   }
@@ -97,7 +98,10 @@ export class AgentManager {
     return this.researchAgent;
   }
 
-  // Cross-agent communication methods
+  public getLindenAgent(): AILindenAgent {
+    return this.lindenAgent;
+  }
+
   public shareIntelligence(data: any, targetAgents: string[]): void {
     // Implementation for sharing intelligence data between agents
     console.log(`Sharing intelligence data with ${targetAgents.join(', ')}`);
@@ -134,6 +138,9 @@ export class AgentManager {
           break;
         case 'research':
           this.researchAgent.receiveIntelligence(data);
+          break;
+        case 'linden':
+          this.lindenAgent.receiveIntelligence(data);
           break;
       }
     });
