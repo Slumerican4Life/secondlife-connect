@@ -4,29 +4,50 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Terminal } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const GitTerminal = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [output, setOutput] = useState('');
   const [repoPath, setRepoPath] = useState('D:/SecondlifeConnect');
+  const [keyword, setKeyword] = useState('');
+  const [pendingCommand, setPendingCommand] = useState<string | null>(null);
+  
+  const ACTIVATION_KEYWORD = 'execute'; // You can change this to any keyword you prefer
 
   const executeGitCommand = async (command: string) => {
     try {
       // In a real implementation, this would connect to a backend service
       // that executes git commands. For now, we'll simulate the output
       setOutput(prev => `${prev}\n> ${command}\nExecuting git command...\nSuccess!`);
+      setPendingCommand(null);
+      setKeyword('');
     } catch (error) {
       setOutput(prev => `${prev}\n> ${command}\nError: ${error}`);
     }
   };
 
   const handlePush = () => {
-    executeGitCommand(`git push origin main`);
+    setPendingCommand('git push origin main');
+    setOutput(prev => `${prev}\n> Command queued: git push origin main\nEnter activation keyword to execute`);
   };
 
   const handleCommit = () => {
     const timestamp = new Date().toISOString();
-    executeGitCommand(`git commit -m "Update ${timestamp}"`);
+    const command = `git commit -m "Update ${timestamp}"`;
+    setPendingCommand(command);
+    setOutput(prev => `${prev}\n> Command queued: ${command}\nEnter activation keyword to execute`);
+  };
+
+  const handleKeywordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (keyword.toLowerCase() === ACTIVATION_KEYWORD && pendingCommand) {
+      executeGitCommand(pendingCommand);
+    } else {
+      setOutput(prev => `${prev}\n> Invalid keyword. Command not executed.`);
+      setKeyword('');
+    }
   };
 
   return (
@@ -55,6 +76,21 @@ const GitTerminal = () => {
               readOnly
               className="font-mono text-sm h-[200px] bg-black text-green-400"
             />
+            {pendingCommand && (
+              <form onSubmit={handleKeywordSubmit} className="space-y-2">
+                <Label htmlFor="keyword">Enter activation keyword to execute command:</Label>
+                <div className="flex space-x-2">
+                  <Input
+                    id="keyword"
+                    type="text"
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
+                    placeholder="Enter keyword..."
+                  />
+                  <Button type="submit">Execute</Button>
+                </div>
+              </form>
+            )}
           </div>
         </DrawerContent>
       </Drawer>
