@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
@@ -14,7 +13,7 @@ const GitTerminal = () => {
   const [keyword, setKeyword] = useState('');
   const [pendingCommand, setPendingCommand] = useState<string | null>(null);
   
-  const ACTIVATION_KEYWORD = 'execute'; // You can change this to any keyword you prefer
+  const ACTIVATION_KEYWORD = 'melons'; // You can change this to any keyword you prefer
 
   const executeGitCommand = async (command: string) => {
     try {
