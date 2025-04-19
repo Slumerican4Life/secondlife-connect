@@ -24,6 +24,7 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 import { useLocation } from "react-router-dom";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "./ThemeToggle";
 
 interface NavItemProps {
   icon: React.ElementType;
@@ -168,6 +169,9 @@ const Sidebar = () => {
               href="/settings" 
               active={currentPath === "/settings"}
             />
+            <div className="mt-auto p-2">
+              <ThemeToggle />
+            </div>
           </div>
         </SheetContent>
       </Sheet>
@@ -282,6 +286,9 @@ const Sidebar = () => {
             href="/settings" 
             active={currentPath === "/settings"}
           />
+          <div className="mt-auto p-2">
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </>
