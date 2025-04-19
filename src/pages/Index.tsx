@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Feed from "@/components/Feed";
@@ -221,6 +220,7 @@ const Index = () => {
           </div>
         )}
       </div>
+      {/* Make sure GitTerminal is rendered correctly */}
       <GitTerminal />
     </div>
   );
