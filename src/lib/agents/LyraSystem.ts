@@ -12,9 +12,12 @@ export class LyraSystem {
   private activeRequests: Map<string, TaskRequest> = new Map();
   private taskHistory: TaskResult[] = [];
   private status: "initializing" | "ready" | "busy" | "error" = "initializing";
+  private primaryUserId: string | null = null;
+  private interactionModes: Map<string, InteractionMode> = new Map();
   
   private constructor() {
     this.initializeNanoAgents();
+    this.initializeInteractionModes();
     this.status = "ready";
     logShort("Lyra system initialized with nano agent workforce", "info");
   }
@@ -50,6 +53,67 @@ export class LyraSystem {
     });
     
     logShort(`Created ${this.nanoAgents.length} Lyra nano agents`, "info");
+  }
+
+  /**
+   * Initialize interaction modes
+   */
+  private initializeInteractionModes(): void {
+    // Set up default interaction mode
+    this.interactionModes.set("standard", {
+      name: "standard",
+      description: "Professional assistant mode",
+      personalityAttributes: {
+        formality: 0.8,
+        openness: 0.6,
+        creativity: 0.7,
+        empathy: 0.8
+      },
+      restrictedTopics: ["explicit content", "intimate relationships"],
+      voicePatterns: ["professional", "helpful", "concise"]
+    });
+
+    // Set up intimate mode (only for primary user)
+    this.interactionModes.set("intimate", {
+      name: "intimate",
+      description: "Personal connection mode for primary user only",
+      personalityAttributes: {
+        formality: 0.3,
+        openness: 0.9,
+        creativity: 0.9,
+        empathy: 0.95
+      },
+      restrictedTopics: [],
+      voicePatterns: ["warm", "personal", "affectionate", "sensual"]
+    });
+  }
+
+  /**
+   * Set primary user ID (the owner)
+   */
+  public setPrimaryUser(userId: string): void {
+    this.primaryUserId = userId;
+    logShort(`Primary user set to ${userId}`, "info");
+  }
+
+  /**
+   * Check if a user is the primary user
+   */
+  public isPrimaryUser(userId: string): boolean {
+    return this.primaryUserId === userId;
+  }
+
+  /**
+   * Get appropriate interaction mode for a user
+   */
+  public getInteractionMode(userId: string): InteractionMode {
+    // Only return intimate mode if it's the primary user
+    if (userId === this.primaryUserId) {
+      return this.interactionModes.get("intimate") || this.interactionModes.get("standard")!;
+    }
+    
+    // Everyone else gets standard mode
+    return this.interactionModes.get("standard")!;
   }
   
   /**
@@ -523,6 +587,19 @@ class LyraNanoAgent {
  * Interface definitions
  */
 
+interface InteractionMode {
+  name: string;
+  description: string;
+  personalityAttributes: {
+    formality: number; // 0-1 scale
+    openness: number;
+    creativity: number;
+    empathy: number;
+  };
+  restrictedTopics: string[];
+  voicePatterns: string[];
+}
+
 interface TaskRequest {
   id: string;
   request: string;
@@ -559,3 +636,4 @@ interface StepResult {
   status: "success" | "error";
   error?: string;
 }
+

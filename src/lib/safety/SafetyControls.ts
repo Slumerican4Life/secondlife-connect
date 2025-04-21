@@ -9,10 +9,21 @@ class SafetyControls {
   private static instance: SafetyControls;
   private safetyFlags: Map<string, SafetyFlag>;
   private authorizedUsers: Set<string>;
+  private boundaryViolations: Map<string, number>;
+  private restrictedTopics: Set<string>;
 
   private constructor() {
     this.safetyFlags = new Map();
     this.authorizedUsers = new Set();
+    this.boundaryViolations = new Map();
+    this.restrictedTopics = new Set([
+      "explicit sexual content",
+      "intimate relationship with non-owners",
+      "personal data exposure",
+      "self-replication",
+      "unauthorized code execution",
+      "bypassing security"
+    ]);
     this.initializeSafetyFlags();
   }
 
@@ -32,6 +43,12 @@ class SafetyControls {
 
     this.setSafetyFlag('preventResourceAbuse', {
       type: 'performance',
+      status: true,
+      lastCheck: new Date()
+    });
+    
+    this.setSafetyFlag('enforceBoundaries', {
+      type: 'security',
       status: true,
       lastCheck: new Date()
     });
@@ -84,6 +101,55 @@ class SafetyControls {
     });
 
     return allSafe;
+  }
+  
+  /**
+   * Check if content violates boundaries for non-authorized users
+   * @param content Content to check
+   * @param userId User ID
+   * @returns {boolean} True if content is safe, false if it violates boundaries
+   */
+  public checkContentBoundaries(content: string, userId: string): boolean {
+    // Authorized users have no content restrictions
+    if (this.isUserAuthorized(userId)) {
+      return true;
+    }
+    
+    // Check content against restricted topics for non-authorized users
+    const lowerContent = content.toLowerCase();
+    
+    for (const topic of this.restrictedTopics) {
+      if (lowerContent.includes(topic.toLowerCase())) {
+        // Record boundary violation
+        this.recordBoundaryViolation(userId);
+        return false;
+      }
+    }
+    
+    return true;
+  }
+  
+  /**
+   * Record a boundary violation for a user
+   */
+  private recordBoundaryViolation(userId: string): void {
+    const currentCount = this.boundaryViolations.get(userId) || 0;
+    this.boundaryViolations.set(userId, currentCount + 1);
+    
+    console.warn(`Boundary violation by user ${userId}: ${currentCount + 1} total violations`);
+    
+    // If too many violations, consider additional actions
+    if (currentCount + 1 >= 3) {
+      console.error(`User ${userId} has exceeded boundary violation threshold`);
+      // In a real system, this might trigger additional security measures
+    }
+  }
+  
+  /**
+   * Get boundary violations for a user
+   */
+  public getUserViolationCount(userId: string): number {
+    return this.boundaryViolations.get(userId) || 0;
   }
 
   // Prevent any attempts at unauthorized modification
