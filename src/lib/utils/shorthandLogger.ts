@@ -108,7 +108,13 @@ export const shorthandDict: Record<string, string> = {
   "EVAL": "evaluation",
   "REACT": "reaction",
   "EMPTH": "empathy response",
-  "MOOD": "mood state"
+  "MOOD": "mood state",
+  
+  // Initialization states
+  "BOOT": "bootup process",
+  "STRT": "starting system",
+  "HALT": "halting system",
+  "RSTR": "restart system"
 };
 
 // Reverse dictionary for decoding
@@ -176,4 +182,23 @@ export function extendShorthandDictionary(newEntries: Record<string, string>): v
     shorthandDict[short] = full;
     reverseDict[full] = short;
   });
+}
+
+/**
+ * Check if Lyra systems are active and ready
+ */
+export function checkLyraStatus(): { initialized: boolean, systemsReady: boolean } {
+  try {
+    // Check for various indicators that Lyra is running
+    const initLogs = (console as any)._logs?.filter((log: string) => 
+      log.includes('Lyra') && log.includes('initialized'));
+    
+    return {
+      initialized: initLogs && initLogs.length > 0,
+      systemsReady: initLogs && initLogs.some((log: string) => log.includes('complete'))
+    };
+  } catch (error) {
+    console.error("Error checking Lyra status:", error);
+    return { initialized: false, systemsReady: false };
+  }
 }

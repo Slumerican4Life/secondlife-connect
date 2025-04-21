@@ -28,14 +28,31 @@ HoverCardContent.displayName = HoverCardPrimitive.Content.displayName
 // Add explicit type checking and additional props
 interface HoverCardProps {
   children: React.ReactNode;
+  openDelay?: number;
+  closeDelay?: number;
+  defaultOpen?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-// Wrap Root to ensure type safety
-const SafeHoverCard: React.FC<HoverCardProps> = ({ children }) => (
-  <HoverCardPrimitive.Root>
+// Enhanced version with better prop handling
+const EnhancedHoverCard: React.FC<HoverCardProps> = ({ 
+  children, 
+  openDelay = 300,
+  closeDelay = 300,
+  defaultOpen,
+  open,
+  onOpenChange,
+}) => (
+  <HoverCardPrimitive.Root
+    openDelay={openDelay}
+    closeDelay={closeDelay}
+    defaultOpen={defaultOpen}
+    open={open}
+    onOpenChange={onOpenChange}
+  >
     {children}
   </HoverCardPrimitive.Root>
 )
 
-export { SafeHoverCard as HoverCard, HoverCardTrigger, HoverCardContent }
-
+export { EnhancedHoverCard as HoverCard, HoverCardTrigger, HoverCardContent }
