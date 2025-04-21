@@ -20,31 +20,31 @@ export class AIIntelligenceAgent extends BaseAIAgent {
     this.knowledgeBase = {};
     this.lastUpdateTime = new Date();
     
-    // Initialize knowledge base with some starter data
-    this.initializeKnowledgeBase();
+    // Init knowledge base
+    this.initKnowledgeBase();
   }
   
-  private initializeKnowledgeBase(): void {
+  private initKnowledgeBase(): void {
     this.knowledgeBase = {
       marketTrends: {
-        popularCategories: ["Virtual Fashion", "Home Decor", "Animations"],
-        risingSearchTerms: ["cyberpunk", "fantasy garden", "pet companions"]
+        popCategories: ["Virtual Fashion", "Home Decor", "Animations"],
+        risingTerms: ["cyberpunk", "fantasy garden", "pet companions"]
       },
       userBehavior: {
-        peakActivityTimes: ["18:00-22:00", "12:00-14:00"],
-        popularLocations: ["Central Plaza", "Fantasy Realm", "Night District"]
+        peakTimes: ["18:00-22:00", "12:00-14:00"],
+        popLocations: ["Central Plaza", "Fantasy Realm", "Night District"]
       },
-      contentPerformance: {
-        engagingPostTypes: ["Interactive experiences", "Before/After showcases", "Tutorials"]
+      contentPerf: {
+        engagingTypes: ["Interactive experiences", "Before/After showcases", "Tutorials"]
       }
     };
   }
   
   async processQuery(query: string): Promise<string> {
-    const normalizedQuery = query.toLowerCase();
+    const normQuery = query.toLowerCase();
     
-    if (normalizedQuery.includes("update") && normalizedQuery.includes("knowledge")) {
-      await this.gatherInformation();
+    if (normQuery.includes("update") && normQuery.includes("knowledge")) {
+      await this.gatherInfo();
       return this.formatResponse({
         message: "Knowledge base has been updated with the latest information.",
         success: true,
@@ -52,7 +52,7 @@ export class AIIntelligenceAgent extends BaseAIAgent {
       });
     }
     
-    if (normalizedQuery.includes("trends") || normalizedQuery.includes("popular")) {
+    if (normQuery.includes("trends") || normQuery.includes("popular")) {
       return this.formatResponse({
         message: "Here are the current trending topics and items:",
         success: true,
@@ -72,18 +72,14 @@ export class AIIntelligenceAgent extends BaseAIAgent {
     });
   }
   
-  // Core intelligence gathering method
-  async gatherInformation(): Promise<void> {
+  // Core intel gathering
+  async gatherInfo(): Promise<void> {
     console.log("Intelligence agent gathering new information...");
     
-    // In a real implementation, this would:
-    // 1. Scan relevant websites/APIs for new information
-    // 2. Analyze user behavior data
-    // 3. Process market trends
-    // 4. Update internal knowledge base
+    // In real implementation: scan sites, analyze data, process trends
     
-    // Simulated information gathering
-    this.knowledgeBase.marketTrends.risingSearchTerms = [
+    // Simulated info gathering
+    this.knowledgeBase.marketTrends.risingTerms = [
       "neon accessories", 
       "gothic architecture", 
       "companion bots"
@@ -91,12 +87,12 @@ export class AIIntelligenceAgent extends BaseAIAgent {
     
     this.lastUpdateTime = new Date();
     
-    // Share relevant intelligence with other agents
-    this.shareIntelligenceWithRelevantAgents();
+    // Share intel with relevant agents
+    this.shareIntelWithRelevantAgents();
   }
   
-  // Method to distribute gathered intelligence to relevant agents
-  private shareIntelligenceWithRelevantAgents(): void {
+  // Distribute intel to agents
+  private shareIntelWithRelevantAgents(): void {
     // Share market trends with marketplace agent
     this.agentManager.shareIntelligence(
       {
@@ -106,7 +102,7 @@ export class AIIntelligenceAgent extends BaseAIAgent {
       ["marketplace"]
     );
     
-    // Share user behavior with multiple relevant agents
+    // Share user behavior with multiple agents
     this.agentManager.shareIntelligence(
       {
         type: "userBehavior",
@@ -118,18 +114,18 @@ export class AIIntelligenceAgent extends BaseAIAgent {
     // Share content performance with posting agent
     this.agentManager.shareIntelligence(
       {
-        type: "contentPerformance",
-        data: this.knowledgeBase.contentPerformance
+        type: "contentPerf",
+        data: this.knowledgeBase.contentPerf
       },
       ["posting"]
     );
   }
   
-  // Custom methods for the intelligence agent
+  // Custom intel methods
   async analyzeCompetitors(): Promise<any> {
-    // Analyze competitor platforms and their features
+    // Analyze competitors and features
     return {
-      competitorFeatures: {
+      compFeatures: {
         "Platform A": ["Advanced avatar customization", "Virtual concerts"],
         "Platform B": ["Blockchain integration", "Creator marketplace"]
       },
@@ -141,7 +137,7 @@ export class AIIntelligenceAgent extends BaseAIAgent {
   }
   
   async predictTrends(): Promise<string[]> {
-    // Predict upcoming trends based on early signals
+    // Predict upcoming trends
     return [
       "AR integration will grow in popularity",
       "Virtual fashion shows will become mainstream",

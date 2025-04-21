@@ -5,23 +5,143 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { AgentManager } from "@/lib/agents/AgentManager";
-import { Bot, HelpCircle, FileText, BarChart3, Heart, Home, ShoppingBag, Brain, DollarSign } from "lucide-react";
+import { 
+  Bot, HelpCircle, FileText, BarChart3, Heart, Home, 
+  ShoppingBag, Brain, DollarSign, Shield, Newspaper, Eye 
+} from "lucide-react";
 import { toast } from "sonner";
+
+// Agent tab configuration for better organization
+const AGENT_TABS = [
+  { id: "help", icon: HelpCircle, label: "Help", description: "Get help with platform features and issues" },
+  { id: "posting", icon: FileText, label: "Posts", description: "Create engaging posts and optimize content" },
+  { id: "advertising", icon: BarChart3, label: "Ads", description: "Organize and optimize your advertisements" },
+  { id: "dating", icon: Heart, label: "Dating", description: "Find compatible matches and improve your dating profile" },
+  { id: "realestate", icon: Home, label: "Homes", description: "Discover and evaluate virtual properties" },
+  { id: "marketplace", icon: ShoppingBag, label: "Market", description: "Buy and sell items with AI assistance" },
+  { id: "intelligence", icon: Brain, label: "Intel", description: "Access platform trends and insights" },
+  { id: "monetization", icon: DollarSign, label: "Money", description: "Maximize revenue streams and monetization options" },
+  { id: "monitor", icon: Eye, label: "Watch", description: "System monitoring and issue detection" },
+];
+
+// AgentTab component for better organization
+const AgentTab = ({ tab }) => (
+  <TabsTrigger value={tab.id} className="flex flex-col items-center text-xs p-2">
+    <tab.icon className="h-4 w-4 mb-1" />
+    {tab.label}
+  </TabsTrigger>
+);
+
+// AgentContent component for better organization
+const AgentContent = ({ 
+  tab, 
+  query, 
+  setQuery, 
+  handleQuerySubmit, 
+  isProcessing, 
+  response,
+  handleSuggestionClick 
+}) => (
+  <TabsContent key={tab.id} value={tab.id} className="mt-4">
+    <Card className="border-none shadow-none">
+      <CardHeader className="p-3">
+        <CardTitle className="text-sm">
+          {tab.label} Assistant
+        </CardTitle>
+        <CardDescription className="text-xs">
+          {tab.description}
+        </CardDescription>
+      </CardHeader>
+    </Card>
+    
+    <form onSubmit={handleQuerySubmit} className="space-y-4 mt-2">
+      <div className="flex gap-2">
+        <Input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={`Ask the ${tab.label.toLowerCase()} assistant...`}
+          className="flex-1"
+        />
+        <Button type="submit" disabled={isProcessing}>
+          {isProcessing ? "Processing..." : "Send"}
+        </Button>
+      </div>
+    </form>
+    
+    {response && <ResponseDisplay response={response} onSuggestionClick={handleSuggestionClick} />}
+  </TabsContent>
+);
+
+// ResponseDisplay component for better organization
+const ResponseDisplay = ({ response, onSuggestionClick }) => (
+  <Card className="mt-4 bg-muted/50">
+    <CardContent className="p-4">
+      <p>{response.message}</p>
+      
+      {response.data && (
+        <div className="mt-2 text-sm">
+          <pre className="bg-black/20 p-2 rounded overflow-auto">
+            {JSON.stringify(response.data, null, 2)}
+          </pre>
+        </div>
+      )}
+      
+      {response.suggestions && response.suggestions.length > 0 && (
+        <div className="mt-4">
+          <p className="text-sm font-medium mb-2">Suggestions:</p>
+          <div className="flex flex-wrap gap-2">
+            {response.suggestions.map((suggestion, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                onClick={() => onSuggestionClick(suggestion)}
+                className="text-xs"
+              >
+                {suggestion}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
+    </CardContent>
+  </Card>
+);
 
 const AIAgentHub = () => {
   const [activeAgentTab, setActiveAgentTab] = useState("help");
   const [query, setQuery] = useState("");
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [agentManager, setAgentManager] = useState<AgentManager | null>(null);
+  const [agentManager, setAgentManager] = useState(null);
 
   useEffect(() => {
     // Initialize agent manager
     const manager = AgentManager.getInstance();
     setAgentManager(manager);
+    
+    // Log initialization for monitor
+    if (manager) {
+      try {
+        const monitorAgent = manager.getMonitorAgent();
+        if (monitorAgent) {
+          monitorAgent.recordEvent({
+            type: "system_init",
+            source: "ai_agent_hub",
+            details: {
+              timestamp: new Date(),
+              component: "AIAgentHub",
+              status: "initialized"
+            }
+          });
+        }
+      } catch (e) {
+        console.error("Failed to log initialization to monitor:", e);
+      }
+    }
   }, []);
 
-  const handleQuerySubmit = async (e: React.FormEvent) => {
+  const handleQuerySubmit = async (e) => {
     e.preventDefault();
     
     if (!query.trim() || !agentManager) return;
@@ -29,6 +149,23 @@ const AIAgentHub = () => {
     setIsProcessing(true);
     
     try {
+      // Log the query to monitor
+      try {
+        const monitorAgent = agentManager.getMonitorAgent();
+        monitorAgent?.recordEvent({
+          type: "query_submitted",
+          source: "ai_agent_hub",
+          details: {
+            query,
+            agent: activeAgentTab,
+            timestamp: new Date()
+          }
+        });
+      } catch (e) {
+        console.error("Monitor logging failed:", e);
+      }
+      
+      // Process query with selected agent
       let agentResponse;
       
       switch (activeAgentTab) {
@@ -56,12 +193,31 @@ const AIAgentHub = () => {
         case "monetization":
           agentResponse = await agentManager.getMonetizationAgent().processQuery(query);
           break;
+        case "monitor":
+          agentResponse = await agentManager.getMonitorAgent().processQuery(query);
+          break;
         default:
           agentResponse = '{"message": "Select an agent first", "success": false}';
       }
       
       const parsedResponse = JSON.parse(agentResponse);
       setResponse(parsedResponse);
+      
+      // Log the response to monitor
+      try {
+        const monitorAgent = agentManager.getMonitorAgent();
+        monitorAgent?.recordEvent({
+          type: "query_response",
+          source: "ai_agent_hub",
+          details: {
+            agent: activeAgentTab,
+            success: parsedResponse.success,
+            timestamp: new Date()
+          }
+        });
+      } catch (e) {
+        console.error("Monitor logging failed:", e);
+      }
       
       if (parsedResponse.success) {
         toast.success("AI Agent responded successfully");
@@ -71,6 +227,24 @@ const AIAgentHub = () => {
     } catch (error) {
       console.error("Error processing query:", error);
       toast.error("Failed to process your request");
+      
+      // Log error to monitor
+      try {
+        const monitorAgent = agentManager.getMonitorAgent();
+        monitorAgent?.recordEvent({
+          type: "query_error",
+          source: "ai_agent_hub",
+          details: {
+            agent: activeAgentTab,
+            error: error.message,
+            timestamp: new Date()
+          },
+          severity: "error"
+        });
+      } catch (e) {
+        console.error("Monitor error logging failed:", e);
+      }
+      
       setResponse({
         message: "There was an error processing your request. Please try again.",
         success: false
@@ -80,7 +254,7 @@ const AIAgentHub = () => {
     }
   };
 
-  const handleSuggestionClick = (suggestion: string) => {
+  const handleSuggestionClick = (suggestion) => {
     setQuery(suggestion);
   };
 
@@ -98,117 +272,23 @@ const AIAgentHub = () => {
       
       <CardContent>
         <Tabs value={activeAgentTab} onValueChange={setActiveAgentTab} className="w-full">
-          <TabsList className="grid grid-cols-8">
-            <TabsTrigger value="help" className="flex flex-col items-center text-xs p-2">
-              <HelpCircle className="h-4 w-4 mb-1" />
-              Help
-            </TabsTrigger>
-            <TabsTrigger value="posting" className="flex flex-col items-center text-xs p-2">
-              <FileText className="h-4 w-4 mb-1" />
-              Posts
-            </TabsTrigger>
-            <TabsTrigger value="advertising" className="flex flex-col items-center text-xs p-2">
-              <BarChart3 className="h-4 w-4 mb-1" />
-              Ads
-            </TabsTrigger>
-            <TabsTrigger value="dating" className="flex flex-col items-center text-xs p-2">
-              <Heart className="h-4 w-4 mb-1" />
-              Dating
-            </TabsTrigger>
-            <TabsTrigger value="realestate" className="flex flex-col items-center text-xs p-2">
-              <Home className="h-4 w-4 mb-1" />
-              Homes
-            </TabsTrigger>
-            <TabsTrigger value="marketplace" className="flex flex-col items-center text-xs p-2">
-              <ShoppingBag className="h-4 w-4 mb-1" />
-              Market
-            </TabsTrigger>
-            <TabsTrigger value="intelligence" className="flex flex-col items-center text-xs p-2">
-              <Brain className="h-4 w-4 mb-1" />
-              Intel
-            </TabsTrigger>
-            <TabsTrigger value="monetization" className="flex flex-col items-center text-xs p-2">
-              <DollarSign className="h-4 w-4 mb-1" />
-              Money
-            </TabsTrigger>
+          <TabsList className="grid grid-cols-9">
+            {AGENT_TABS.map(tab => (
+              <AgentTab key={tab.id} tab={tab} />
+            ))}
           </TabsList>
           
-          {["help", "posting", "advertising", "dating", "realestate", "marketplace", "intelligence", "monetization"].map((tab) => (
-            <TabsContent key={tab} value={tab} className="mt-4">
-              <Card className="border-none shadow-none">
-                <CardHeader className="p-3">
-                  <CardTitle className="text-sm">
-                    {tab === "help" && "Support Assistant"}
-                    {tab === "posting" && "Posting Assistant"}
-                    {tab === "advertising" && "Advertising Assistant"}
-                    {tab === "dating" && "Dating Assistant"}
-                    {tab === "realestate" && "Real Estate Assistant"}
-                    {tab === "marketplace" && "Marketplace Assistant"}
-                    {tab === "intelligence" && "Intelligence Network"}
-                    {tab === "monetization" && "Monetization & Revenue"}
-                  </CardTitle>
-                  <CardDescription className="text-xs">
-                    {tab === "help" && "Get help with platform features and issues"}
-                    {tab === "posting" && "Create engaging posts and optimize content"}
-                    {tab === "advertising" && "Organize and optimize your advertisements"}
-                    {tab === "dating" && "Find compatible matches and improve your dating profile"}
-                    {tab === "realestate" && "Discover and evaluate virtual properties"}
-                    {tab === "marketplace" && "Buy and sell items with AI assistance"}
-                    {tab === "intelligence" && "Access platform trends and insights"}
-                    {tab === "monetization" && "Maximize revenue streams and monetization options"}
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-              
-              <form onSubmit={handleQuerySubmit} className="space-y-4 mt-2">
-                <div className="flex gap-2">
-                  <Input
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder={`Ask the ${tab} assistant...`}
-                    className="flex-1"
-                  />
-                  <Button type="submit" disabled={isProcessing}>
-                    {isProcessing ? "Processing..." : "Send"}
-                  </Button>
-                </div>
-              </form>
-              
-              {response && (
-                <Card className="mt-4 bg-muted/50">
-                  <CardContent className="p-4">
-                    <p>{response.message}</p>
-                    
-                    {response.data && (
-                      <div className="mt-2 text-sm">
-                        <pre className="bg-black/20 p-2 rounded overflow-auto">
-                          {JSON.stringify(response.data, null, 2)}
-                        </pre>
-                      </div>
-                    )}
-                    
-                    {response.suggestions && response.suggestions.length > 0 && (
-                      <div className="mt-4">
-                        <p className="text-sm font-medium mb-2">Suggestions:</p>
-                        <div className="flex flex-wrap gap-2">
-                          {response.suggestions.map((suggestion: string, index: number) => (
-                            <Button
-                              key={index}
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleSuggestionClick(suggestion)}
-                              className="text-xs"
-                            >
-                              {suggestion}
-                            </Button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              )}
-            </TabsContent>
+          {AGENT_TABS.map(tab => (
+            <AgentContent 
+              key={tab.id}
+              tab={tab} 
+              query={query} 
+              setQuery={setQuery}
+              handleQuerySubmit={handleQuerySubmit}
+              isProcessing={isProcessing}
+              response={response}
+              handleSuggestionClick={handleSuggestionClick}
+            />
           ))}
         </Tabs>
       </CardContent>

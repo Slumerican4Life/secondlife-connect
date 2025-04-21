@@ -9,7 +9,8 @@ import { AIMonetizationAgent } from "./AIMonetizationAgent";
 import { AIContentAgent } from "./AIContentAgent";  
 import { AINewsAgent } from "./AINewsAgent";        
 import { AIResearchAgent } from "./AIResearchAgent"; 
-import { AILindenAgent } from "./AILindenAgent";  // Add import for the new agent
+import { AILindenAgent } from "./AILindenAgent";  
+import { AIMonitorAgent } from "./AIMonitorAgent";  // Added import
 
 /**
  * Central manager for all AI agents in the system.
@@ -29,7 +30,8 @@ export class AgentManager {
   private contentAgent: AIContentAgent;
   private newsAgent: AINewsAgent;
   private researchAgent: AIResearchAgent;
-  private lindenAgent: AILindenAgent; // Add the new agent
+  private lindenAgent: AILindenAgent;
+  private monitorAgent: AIMonitorAgent;  // Added property
 
   private constructor() {
     // Initialize all agents
@@ -44,7 +46,8 @@ export class AgentManager {
     this.contentAgent = new AIContentAgent();
     this.newsAgent = new AINewsAgent();
     this.researchAgent = new AIResearchAgent();
-    this.lindenAgent = new AILindenAgent(); // Initialize the new agent
+    this.lindenAgent = new AILindenAgent();
+    this.monitorAgent = new AIMonitorAgent(this);  // Initialize monitor agent
   }
 
   public static getInstance(): AgentManager {
@@ -102,6 +105,10 @@ export class AgentManager {
     return this.lindenAgent;
   }
 
+  public getMonitorAgent(): AIMonitorAgent {
+    return this.monitorAgent;
+  }
+
   public shareIntelligence(data: any, targetAgents: string[]): void {
     // Implementation for sharing intelligence data between agents
     console.log(`Sharing intelligence data with ${targetAgents.join(', ')}`);
@@ -142,6 +149,23 @@ export class AgentManager {
         case 'linden':
           this.lindenAgent.receiveIntelligence(data);
           break;
+        case 'intelligence':
+          this.intelligenceAgent.receiveIntelligence(data);
+          break;
+        case 'monitor':
+          this.monitorAgent.receiveIntelligence(data);
+          break;
+      }
+    });
+    
+    // Also record this sharing as an event
+    this.monitorAgent.recordEvent({
+      type: "intel_share",
+      source: "agent_manager",
+      details: {
+        targets: targetAgents,
+        dataType: data.type,
+        timestamp: new Date()
       }
     });
   }

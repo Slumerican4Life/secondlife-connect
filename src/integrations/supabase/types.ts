@@ -9,7 +9,90 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      auth_logs: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          metadata: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      "ufo sightings": {
+        Row: {
+          created_at: string
+          Description: string | null
+          id: number
+          Is_Verified: boolean | null
+          Location: string | null
+          Name: string | null
+          Photo_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          Description?: string | null
+          id?: number
+          Is_Verified?: boolean | null
+          Location?: string | null
+          Name?: string | null
+          Photo_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          Description?: string | null
+          id?: number
+          Is_Verified?: boolean | null
+          Location?: string | null
+          Name?: string | null
+          Photo_url?: string | null
+        }
+        Relationships: []
+      }
+      user_phone_numbers: {
+        Row: {
+          created_at: string
+          id: string
+          phone_number: string
+          primary_number: boolean | null
+          updated_at: string
+          user_id: string
+          verified: boolean | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          phone_number: string
+          primary_number?: boolean | null
+          updated_at?: string
+          user_id: string
+          verified?: boolean | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          phone_number?: string
+          primary_number?: boolean | null
+          updated_at?: string
+          user_id?: string
+          verified?: boolean | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
