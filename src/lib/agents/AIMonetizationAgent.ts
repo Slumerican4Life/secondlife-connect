@@ -152,7 +152,11 @@ export class AIMonetizationAgent extends BaseAIAgent {
     
     if (normalizedQuery.includes("automated") || normalizedQuery.includes("automatic") || 
         normalizedQuery.includes("optimize") || normalizedQuery.includes("quantum")) {
-      return this.handleAutomatedRevenueRequest();
+      return this.formatResponse({
+        message: "Automated revenue optimization initiated.",
+        success: true,
+        data: await this.handleAutomatedRevenueRequest()
+      });
     }
     
     if (normalizedQuery.includes("revenue") || normalizedQuery.includes("money") || normalizedQuery.includes("monetiz")) {
@@ -245,7 +249,7 @@ export class AIMonetizationAgent extends BaseAIAgent {
   /**
    * Handle requests for automated revenue optimization
    */
-  private handleAutomatedRevenueRequest(): string {
+  private async handleAutomatedRevenueRequest(): Promise<any> {
     // Toggle automated revenue optimization
     this.automatedRevenueEnabled = !this.automatedRevenueEnabled;
     
@@ -254,40 +258,20 @@ export class AIMonetizationAgent extends BaseAIAgent {
       const result = this.runRevenueOptimization();
       this.lastOptimizationDate = new Date();
       
-      return this.formatResponse({
-        message: "Automated revenue optimization has been enabled using quantum-inspired algorithms.",
-        success: true,
-        data: {
-          optimizationResult: result,
-          status: "ENABLED",
-          nextOptimizationTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-          projectedMonthlyRevenue: `$${result.estimatedTotalRevenue.toFixed(2)}`,
-          confidenceScore: `${(result.confidenceScore * 100).toFixed(1)}%`,
-          implementationTimeline: `${result.timelineEstimate} days`
-        },
-        suggestions: [
-          "Show optimization details",
-          "Adjust risk tolerance",
-          "View top recommended revenue streams",
-          "Disable automated optimization"
-        ]
-      });
+      return {
+        optimizationResult: result,
+        status: "ENABLED",
+        nextOptimizationTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        projectedMonthlyRevenue: `$${result.estimatedTotalRevenue.toFixed(2)}`,
+        confidenceScore: `${(result.confidenceScore * 100).toFixed(1)}%`,
+        implementationTimeline: `${result.timelineEstimate} days`
+      };
     } else {
-      return this.formatResponse({
-        message: "Automated revenue optimization has been disabled.",
-        success: true,
-        data: {
-          status: "DISABLED",
-          lastOptimizationDate: this.lastOptimizationDate?.toISOString(),
-          previousResults: this.revenueOptimizer.getLastOptimizationResult()
-        },
-        suggestions: [
-          "Enable automated optimization",
-          "Show manual monetization options",
-          "Calculate potential revenue",
-          "View previous optimization results"
-        ]
-      });
+      return {
+        status: "DISABLED",
+        lastOptimizationDate: this.lastOptimizationDate?.toISOString(),
+        previousResults: this.revenueOptimizer.getLastOptimizationResult()
+      };
     }
   }
   
