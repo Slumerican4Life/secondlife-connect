@@ -1,4 +1,3 @@
-
 /**
  * ShorthandLogger - Compact logging system with abbreviation dictionary
  * Used by AI agents for efficient logging with decoding capability
@@ -58,7 +57,7 @@ export const shorthandDict: Record<string, string> = {
   "OPT": "optimize",
   "LOAD": "loading",
   "CPU": "processor usage",
-  "MEM": "memory",
+  "MEM": "memory usage",
   "BW": "bandwidth",
   
   // Status
@@ -94,7 +93,7 @@ export const shorthandDict: Record<string, string> = {
   // Psychological states - for Lyra thought patterns
   "COG": "cognitive process",
   "EMO": "emotional state",
-  "MEM": "memory retrieval",
+  "MEMR": "memory retrieval",
   "DREAM": "dream state",
   "SUBC": "subconscious",
   "CONS": "conscious thought",
