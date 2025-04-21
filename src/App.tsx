@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -21,6 +22,7 @@ import AIAssistant from "./components/AIAssistant";
 import SlumericanCorner from "./pages/SlumericanCorner";
 import MonetizationDashboard from "./pages/MonetizationDashboard";
 import LindenExchange from "./pages/LindenExchange";
+import Sponsorship from "./pages/Sponsorship";
 import Login from "./pages/Login";
 import { useAuth } from "@/contexts/AuthContext";
 
