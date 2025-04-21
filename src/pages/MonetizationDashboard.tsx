@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -39,11 +39,16 @@ import {
   Gift,
   ShoppingBag,
   Award,
-  Building
+  Building,
+  Brain,
+  Zap
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import AIAgentHub from "@/components/AIAgentHub";
 import SecureFinancePanel from "@/components/SecureFinancePanel";
+import AutomatedRevenuePanel from "@/components/AutomatedRevenuePanel";
+import { useToast } from "@/components/ui/use-toast";
+import { AgentManager } from "@/lib/agents/AgentManager";
 
 const revenueData = [
   { name: 'Jan', premium: 4000, advertising: 2400, marketplace: 1800, virtual: 1200 },
@@ -75,6 +80,28 @@ const MonetizationDashboard = () => {
   const isMobile = useIsMobile();
   const [showAgentHub, setShowAgentHub] = useState(false);
   const [currentTab, setCurrentTab] = useState("revenue");
+  const { toast } = useToast();
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const agentManager = AgentManager.getInstance();
+  
+  useEffect(() => {
+    const monetizationAgent = agentManager.getMonetizationAgent();
+    console.log("Monetization Dashboard: Initialized monetization agent");
+  }, []);
+  
+  const handleEnableQuantumOptimization = () => {
+    setIsOptimizing(true);
+    
+    setTimeout(() => {
+      setIsOptimizing(false);
+      setCurrentTab("automated");
+      
+      toast({
+        title: "Quantum Optimization Enabled",
+        description: "Automated revenue system is now active and generating initial projections.",
+      });
+    }, 2000);
+  };
   
   return (
     <div className="min-h-screen flex flex-col">
@@ -113,7 +140,7 @@ const MonetizationDashboard = () => {
                   onClick={() => setShowAgentHub(true)}
                 >
                   <Gift className="mr-2 h-4 w-4" />
-                  Monetization Assistant
+                  <span className="hidden sm:inline">Monetization Assistant</span>
                 </Button>
               </div>
             </div>
@@ -177,7 +204,7 @@ const MonetizationDashboard = () => {
             </div>
             
             <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
-              <TabsList className="grid grid-cols-5 mb-6">
+              <TabsList className="grid grid-cols-6 mb-6">
                 <TabsTrigger value="revenue" className="flex items-center gap-2">
                   <BarChart2 className="h-4 w-4" />
                   <span className="hidden sm:inline">Revenue</span>
@@ -197,6 +224,10 @@ const MonetizationDashboard = () => {
                 <TabsTrigger value="banking" className="flex items-center gap-2">
                   <Building className="h-4 w-4" />
                   <span className="hidden sm:inline">Banking</span>
+                </TabsTrigger>
+                <TabsTrigger value="automated" className="flex items-center gap-2">
+                  <Brain className="h-4 w-4" />
+                  <span className="hidden sm:inline">Automated</span>
                 </TabsTrigger>
               </TabsList>
               
@@ -259,42 +290,42 @@ const MonetizationDashboard = () => {
                   
                   <Card>
                     <CardHeader>
-                      <CardTitle>Growth Opportunities</CardTitle>
-                      <CardDescription>Recommended actions</CardDescription>
+                      <div className="flex justify-between items-center">
+                        <CardTitle>Quantum Enhancement</CardTitle>
+                        <Badge className="bg-virtual-600">NEW</Badge>
+                      </div>
+                      <CardDescription>AI-powered revenue generation</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <ul className="space-y-4">
-                        <li className="flex items-start gap-3">
-                          <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-full">
-                            <Percent className="h-4 w-4 text-green-600" />
-                          </div>
+                      <div className="space-y-4">
+                        <p className="text-sm text-muted-foreground">
+                          Activate quantum-inspired revenue optimization algorithms to maximize your monetization potential automatically.
+                        </p>
+                        <div className="flex items-center p-3 bg-virtual-50 dark:bg-virtual-900/20 rounded-md">
+                          <Brain className="h-10 w-10 text-virtual-600 mr-3" />
                           <div>
-                            <p className="text-sm font-medium">Increase premium tier pricing by 5%</p>
-                            <p className="text-xs text-muted-foreground">Estimated impact: +$2,300/mo</p>
+                            <p className="text-sm font-medium">Automated Revenue System</p>
+                            <p className="text-xs text-muted-foreground">AI-driven revenue generation using quantum algorithms</p>
                           </div>
-                        </li>
-                        <li className="flex items-start gap-3">
-                          <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-full">
-                            <Award className="h-4 w-4 text-green-600" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium">Add exclusive premium content</p>
-                            <p className="text-xs text-muted-foreground">Estimated impact: +$1,800/mo</p>
-                          </div>
-                        </li>
-                        <li className="flex items-start gap-3">
-                          <div className="bg-green-100 dark:bg-green-900/30 p-2 rounded-full">
-                            <CreditCard className="h-4 w-4 text-green-600" />
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium">Optimize ad placements</p>
-                            <p className="text-xs text-muted-foreground">Estimated impact: +$1,200/mo</p>
-                          </div>
-                        </li>
-                      </ul>
+                        </div>
+                      </div>
                     </CardContent>
                     <CardFooter>
-                      <Button variant="ghost" className="w-full text-sm">View All Opportunities</Button>
+                      <Button 
+                        className="w-full bg-virtual-600 hover:bg-virtual-700" 
+                        onClick={handleEnableQuantumOptimization}
+                        disabled={isOptimizing}
+                      >
+                        {isOptimizing ? (
+                          <>
+                            <Zap className="mr-2 h-4 w-4 animate-pulse" /> Initializing...
+                          </>
+                        ) : (
+                          <>
+                            <Zap className="mr-2 h-4 w-4" /> Enable Quantum Optimization
+                          </>
+                        )}
+                      </Button>
                     </CardFooter>
                   </Card>
                 </div>
@@ -342,6 +373,59 @@ const MonetizationDashboard = () => {
               <TabsContent value="banking" className="space-y-6">
                 <SecureFinancePanel userId="user-123" />
               </TabsContent>
+              
+              <TabsContent value="automated" className="space-y-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <AutomatedRevenuePanel />
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>How It Works</CardTitle>
+                      <CardDescription>Quantum-inspired automated revenue generation</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <p className="text-sm">
+                        The Automated Revenue System uses advanced quantum-inspired algorithms to analyze multiple revenue streams and provide optimized monetization strategies for your platform.
+                      </p>
+                      
+                      <div className="space-y-3">
+                        <div className="flex items-start gap-3">
+                          <div className="bg-virtual-100 dark:bg-virtual-900/30 p-2 rounded-full">
+                            <Brain className="h-4 w-4 text-virtual-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">Quantum-Inspired Optimization</p>
+                            <p className="text-xs text-muted-foreground">Analyzes thousands of potential revenue combinations</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-start gap-3">
+                          <div className="bg-virtual-100 dark:bg-virtual-900/30 p-2 rounded-full">
+                            <TrendingUp className="h-4 w-4 text-virtual-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">Automated Implementation</p>
+                            <p className="text-xs text-muted-foreground">Implements strategies with minimal human intervention</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-start gap-3">
+                          <div className="bg-virtual-100 dark:bg-virtual-900/30 p-2 rounded-full">
+                            <DollarSign className="h-4 w-4 text-virtual-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">Continuous Optimization</p>
+                            <p className="text-xs text-muted-foreground">Learns and adapts revenue strategies in real-time</p>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                    <CardFooter>
+                      <p className="text-xs text-muted-foreground">The automated system evaluates market conditions, user behavior, and competitive analysis to generate optimal revenue strategies.</p>
+                    </CardFooter>
+                  </Card>
+                </div>
+              </TabsContent>
             </Tabs>
           </div>
         </main>
@@ -365,6 +449,10 @@ const MonetizationDashboard = () => {
                   <Button variant="outline" className="w-full justify-start">
                     <ShoppingBag className="mr-2 h-4 w-4" />
                     Marketplace Settings
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start" onClick={() => setCurrentTab("automated")}>
+                    <Brain className="mr-2 h-4 w-4 text-virtual-600" />
+                    Automated Revenue
                   </Button>
                 </CardContent>
               </Card>
