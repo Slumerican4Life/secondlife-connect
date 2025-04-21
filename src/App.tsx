@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -69,6 +68,7 @@ const AppRoutes = () => {
       <Route path="/slumerican" element={<ProtectedRoute><SlumericanCorner /></ProtectedRoute>} />
       <Route path="/monetization" element={<ProtectedRoute><MonetizationDashboard /></ProtectedRoute>} />
       <Route path="/linden-exchange" element={<ProtectedRoute><LindenExchange /></ProtectedRoute>} />
+      <Route path="/sponsorship" element={<ProtectedRoute><Sponsorship /></ProtectedRoute>} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
