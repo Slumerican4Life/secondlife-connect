@@ -25,4 +25,17 @@ const HoverCardContent = React.forwardRef<
 ))
 HoverCardContent.displayName = HoverCardPrimitive.Content.displayName
 
-export { HoverCard, HoverCardTrigger, HoverCardContent }
+// Add explicit type checking and additional props
+interface HoverCardProps {
+  children: React.ReactNode;
+}
+
+// Wrap Root to ensure type safety
+const SafeHoverCard: React.FC<HoverCardProps> = ({ children }) => (
+  <HoverCardPrimitive.Root>
+    {children}
+  </HoverCardPrimitive.Root>
+)
+
+export { SafeHoverCard as HoverCard, HoverCardTrigger, HoverCardContent }
+
