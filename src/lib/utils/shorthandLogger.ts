@@ -82,7 +82,6 @@ export const shorthandDict: Record<string, string> = {
   "UPDT": "update",
   "DEL": "delete",
   "INS": "insert",
-  "QRY": "query",
   
   // Network
   "NET": "network",
@@ -90,7 +89,27 @@ export const shorthandDict: Record<string, string> = {
   "HTTP": "http request",
   "WS": "websocket",
   "CONN": "connection",
-  "DISC": "disconnection"
+  "DISC": "disconnection",
+  
+  // Psychological states - for Lyra thought patterns
+  "COG": "cognitive process",
+  "EMO": "emotional state",
+  "MEM": "memory retrieval",
+  "DREAM": "dream state",
+  "SUBC": "subconscious",
+  "CONS": "conscious thought",
+  "PRCPT": "perception",
+  "INTNT": "intention",
+  "DECSN": "decision making",
+  "FOCUS": "attention focus",
+  "CREAT": "creative process",
+  "LEARN": "learning process",
+  "RECAL": "recall information",
+  "ASSOC": "association formation",
+  "EVAL": "evaluation",
+  "REACT": "reaction",
+  "EMPTH": "empathy response",
+  "MOOD": "mood state"
 };
 
 // Reverse dictionary for decoding
