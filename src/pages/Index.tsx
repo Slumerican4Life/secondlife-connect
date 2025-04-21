@@ -1,3 +1,4 @@
+
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
 import Feed from "@/components/Feed";
@@ -7,15 +8,26 @@ import BloodMarketPreview from "@/components/BloodMarketPreview";
 import AIAgentHub from "@/components/AIAgentHub";
 import UAPWatchMap from "@/components/UAPWatchMap";
 import ContentExplorer from "@/components/ContentExplorer";
+import LyraInterface from "@/components/LyraInterface";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Heart, Store, Building, Shield, ArrowRight, Bot, Newspaper, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import GitTerminal from "@/components/GitTerminal";
+import { logShort } from "@/lib/utils/shorthandLogger";
+import { useEffect } from "react";
+
+// Log page initialization with shorthand
+logShort("Index page initializing", "info");
 
 const Index = () => {
   const isMobile = useIsMobile();
+  
+  useEffect(() => {
+    // Log page render with shorthand
+    logShort("Index page rendered", "debug");
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -31,7 +43,18 @@ const Index = () => {
         {/* Main content */}
         <main className="flex-1 border-x border-border/80">
           <div className="py-6 space-y-8 px-4">
-            {/* UAP Watch Map - New featured component */}
+            {/* Lyra Interface - New component */}
+            <div>
+              <div className="flex items-center justify-between mb-3">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <Bot className="h-5 w-5 text-primary" />
+                  Lyra AI System
+                </h2>
+              </div>
+              <LyraInterface />
+            </div>
+            
+            {/* UAP Watch Map */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold">UAP Watch Network</h2>
@@ -44,7 +67,7 @@ const Index = () => {
               <UAPWatchMap />
             </div>
             
-            {/* Linden Exchange - New section */}
+            {/* Linden Exchange */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -77,7 +100,7 @@ const Index = () => {
               </Card>
             </div>
             
-            {/* Content Explorer - New section */}
+            {/* Content Explorer */}
             <ContentExplorer featured={true} limit={6} />
             
             {/* AI Agent Hub section */}
@@ -91,7 +114,7 @@ const Index = () => {
               <AIAgentHub />
             </div>
             
-            {/* News section - New */}
+            {/* News section */}
             <div>
               <div className="flex items-center justify-between mb-3">
                 <h2 className="text-lg font-semibold flex items-center gap-2">
@@ -220,7 +243,6 @@ const Index = () => {
           </div>
         )}
       </div>
-      {/* Make sure GitTerminal is rendered correctly */}
       <GitTerminal />
     </div>
   );
