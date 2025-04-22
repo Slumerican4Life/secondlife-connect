@@ -48,10 +48,10 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/showcase" element={<Showcase />} />
       
       {/* Protected routes */}
       <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-      <Route path="/showcase" element={<ProtectedRoute><Showcase /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/profile/:id" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/blood-bank" element={<ProtectedRoute><BloodBank /></ProtectedRoute>} />
