@@ -10,7 +10,7 @@ import LyraThoughtViewer from "@/components/LyraThoughtViewer";
 import LyraInitializer from "@/components/LyraInitializer";
 import { logShort } from "@/lib/utils/shorthandLogger";
 import { HoverTitle } from "@/components/ui/hover-title";
-import { Info, LogIn } from "lucide-react";
+import { Info, LogIn, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -41,6 +41,36 @@ const Index = () => {
       <div className="flex flex-1 pt-16">
         <Sidebar />
         <main className="flex-1 px-4 md:px-6 py-6 max-w-7xl mx-auto">
+          {/* Sponsorship Call to Action Banner */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-virtual-900 to-virtual-800 rounded-lg border border-virtual-700">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+              <div className="mb-4 md:mb-0">
+                <h2 className="text-xl font-bold text-white">Interested in Sponsorship?</h2>
+                <p className="text-virtual-300">Learn more about partnership opportunities</p>
+              </div>
+              <Link to="/sponsorship">
+                <Button className="bg-virtual-500 hover:bg-virtual-600 flex items-center gap-2">
+                  View Packages <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+          
+          {/* Showcase Page Promotion */}
+          <div className="mb-8 p-4 bg-gradient-to-r from-virtual-800/50 to-transparent rounded-lg border border-virtual-700/50">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+              <div className="mb-4 md:mb-0">
+                <h2 className="text-lg font-semibold">New to SecondLife Connect?</h2>
+                <p className="text-muted-foreground">Visit our showcase to see what we offer</p>
+              </div>
+              <Link to="/showcase">
+                <Button variant="outline" className="border-virtual-500 text-virtual-400 hover:bg-virtual-900/50">
+                  View Showcase
+                </Button>
+              </Link>
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-6">
               <Feed />

@@ -31,9 +31,16 @@ function App() {
       <ThemeProvider>
         <AuthProvider>
           <Routes>
+            {/* Public routes that don't require authentication */}
             <Route path="/" element={<Index />} />
             <Route path="/login" element={<Login />} />
             <Route path="/showcase" element={<Showcase />} />
+            <Route path="/sponsorship" element={<Sponsorship />} />
+            <Route path="/slumerican-corner" element={<SlumericanCorner />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/uap-watch" element={<UAPWatch />} />
+            
+            {/* These routes will still be accessible but may have limited functionality for non-authenticated users */}
             <Route path="/profile" element={<Profile />} />
             <Route path="/explore" element={<ContentExplore />} />
             <Route path="/bloodbank" element={<BloodBank />} />
@@ -43,12 +50,9 @@ function App() {
             <Route path="/linden-exchange" element={<LindenExchange />} />
             <Route path="/marketplace" element={<Marketplace />} />
             <Route path="/monetization" element={<MonetizationDashboard />} />
-            <Route path="/news" element={<News />} />
             <Route path="/real-estate" element={<RealEstate />} />
             <Route path="/royal-portal" element={<RoyalPortal />} />
-            <Route path="/slumerican-corner" element={<SlumericanCorner />} />
-            <Route path="/sponsorship" element={<Sponsorship />} />
-            <Route path="/uap-watch" element={<UAPWatch />} />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
           

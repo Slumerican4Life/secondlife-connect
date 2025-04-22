@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import LyraInterface from "@/components/LyraInterface";
 import LyraThoughtViewer from "@/components/LyraThoughtViewer";
+import LyraInitializer from "@/components/LyraInitializer";
 import ShowcaseHero from "@/components/ShowcaseHero";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -87,6 +88,7 @@ const Showcase = () => {
   return (
     <div className="flex flex-col min-h-screen bg-virtual-900">
       <Navbar />
+      <LyraInitializer />
       
       {/* Login/Signup button at top of page */}
       {!user && (
@@ -103,18 +105,23 @@ const Showcase = () => {
       <main className="flex-1 container mx-auto px-4 py-8">
         <ShowcaseHero />
         
-        {/* Add prominent login button for non-authenticated users */}
-        {!user && (
-          <div className="w-full max-w-md mx-auto mb-12 bg-gradient-to-br from-black/70 to-virtual-900/70 rounded-lg p-6 border border-virtual-700 backdrop-blur-md">
-            <h3 className="text-xl font-bold mb-3 text-virtual-300 text-center">Join SecondLife Connect</h3>
-            <p className="text-virtual-300 mb-4 text-center">Create your account to access all features</p>
-            <Link to="/login">
+        {/* Add sponsorship opportunity call-to-action */}
+        <div className="w-full max-w-3xl mx-auto mb-12 bg-gradient-to-br from-black/70 to-virtual-900/70 rounded-lg p-6 border border-virtual-700 backdrop-blur-md">
+          <h3 className="text-xl font-bold mb-3 text-virtual-300 text-center">Become a Sponsor</h3>
+          <p className="text-virtual-300 mb-4 text-center">Partner with SecondLife Connect and reach our growing community of virtual world enthusiasts</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link to="/sponsorship">
               <Button className="w-full bg-virtual-500 hover:bg-virtual-600 mb-2">
-                Sign Up Now
+                View Sponsorship Packages
+              </Button>
+            </Link>
+            <Link to="/login">
+              <Button variant="outline" className="w-full border-virtual-500 text-virtual-400 hover:bg-virtual-900">
+                Create Account
               </Button>
             </Link>
           </div>
-        )}
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           <Card className="bg-gradient-to-br from-virtual-950 to-virtual-900 text-white">
@@ -177,7 +184,7 @@ const Showcase = () => {
                       Connect with fellow Slumericans
                     </li>
                   </ul>
-                  <Link to="/slumerican" className="inline-block mt-4">
+                  <Link to="/slumerican-corner" className="inline-block mt-4">
                     <Badge className="hover:bg-red-600 transition-colors cursor-pointer">
                       Visit Slumerican Corner →
                     </Badge>
