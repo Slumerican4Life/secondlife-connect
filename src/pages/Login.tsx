@@ -7,6 +7,11 @@ import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { Eye, EyeOff, Lock, Mail, UserPlus, AlertCircle } from "lucide-react";
+import LoginAssistance from "@/components/LoginAssistance";
+import LyraAssistButton from "@/components/LyraAssistButton";
+import { AIAuthAgent } from "@/lib/agents/AIAuthAgent";
+
+const authAgent = new AIAuthAgent();
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -15,19 +20,18 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showAssistance, setShowAssistance] = useState(false);
+  const [attempts, setAttempts] = useState(0);
   const { user, signIn, signUp } = useAuth();
   const location = useLocation();
   
   useEffect(() => {
-    // Unified redirect handling logic for both development and production
     const handleShowcaseRedirect = () => {
       try {
-        // Get information about environment and user's history
         const hostname = window.location.hostname;
         const params = new URLSearchParams(window.location.search);
         const isShowcaseRedirect = params.get('from') === 'showcase';
         
-        // Use the same environment detection logic as LyraInitializer
         const isProduction = hostname.includes('.lovable.app') || 
                            hostname.includes('.dev') || 
                            (!hostname.includes('localhost') && !hostname.includes('127.0.0.1'));
@@ -36,15 +40,10 @@ const LoginPage = () => {
         
         console.log(`Login page loaded. Production: ${isProduction}, First visit: ${isFirstVisit}, Showcase redirect: ${isShowcaseRedirect}, Hostname: ${hostname}`);
         
-        // Redirect to showcase in these scenarios:
-        // 1. Explicit showcase redirect parameter
-        // 2. First-time visitor to the production site
         if (isShowcaseRedirect || (isProduction && isFirstVisit)) {
-          // Mark that the user has visited before (to prevent redirect loops)
           sessionStorage.setItem('visited', 'true');
           console.log("Redirecting to showcase page");
           
-          // Redirect with a slight delay to ensure session storage is set
           setTimeout(() => {
             window.location.href = '/showcase';
           }, 100);
@@ -54,11 +53,9 @@ const LoginPage = () => {
       }
     };
     
-    // Run redirect logic immediately
     handleShowcaseRedirect();
   }, [location]);
   
-  // If already logged in, redirect to home
   if (user) {
     return <Navigate to="/" replace />;
   }
@@ -70,14 +67,36 @@ const LoginPage = () => {
     
     try {
       if (isLogin) {
-        await signIn(email, password);
+        try {
+          await signIn(email, password);
+          authAgent.resetAttempts(email);
+        } catch (error: any) {
+          console.error("Authentication error:", error);
+          
+          const maxAttemptsReached = authAgent.trackLoginAttempt(email, false);
+          const currentAttempts = authAgent.getAttemptCount(email);
+          setAttempts(currentAttempts);
+          
+          if (maxAttemptsReached) {
+            setShowAssistance(true);
+            toast.warning(`Multiple login failures detected`, {
+              description: "Lyra Assistant has been activated to help you"
+            });
+          }
+          
+          if (error.message === 'Failed to fetch') {
+            setErrorMessage("Network error. Please check your internet connection and try again.");
+            toast.error("Network error connecting to authentication service");
+          } else {
+            setErrorMessage(error.message || "Authentication failed. Please try again.");
+          }
+        }
       } else {
         await signUp(email, password);
       }
     } catch (error: any) {
       console.error("Authentication error:", error);
       
-      // Display user-friendly error message
       if (error.message === 'Failed to fetch') {
         setErrorMessage("Network error. Please check your internet connection and try again.");
         toast.error("Network error connecting to authentication service");
@@ -89,10 +108,13 @@ const LoginPage = () => {
     }
   };
   
+  const returnToLogin = () => {
+    setShowAssistance(false);
+  };
+  
   return (
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-virtual-900 via-virtual-800 to-virtual-700 p-4">
       <div className="w-full max-w-md">
-        {/* Logo and branding */}
         <div className="mb-8 text-center">
           <div className="flex justify-center mb-4">
             <div className="relative w-24 h-24">
@@ -119,125 +141,132 @@ const LoginPage = () => {
           <p className="mt-2 text-virtual-300">Powered by Lyra AI</p>
         </div>
         
-        {/* Login/Signup card */}
-        <Card className="border-none bg-black/60 backdrop-blur-xl">
-          <CardHeader>
-            <CardTitle className="text-2xl text-white">
-              {isLogin ? "Welcome Back" : "Join SecondLife Connect"}
-            </CardTitle>
-            <CardDescription className="text-virtual-300">
-              {isLogin 
-                ? "Sign in to continue your journey" 
-                : "Create an account to start your adventure"}
-            </CardDescription>
-          </CardHeader>
-          
-          <CardContent>
-            {errorMessage && (
-              <div className="mb-4 p-3 bg-red-900/40 border border-red-700 rounded-md flex items-start gap-2">
-                <AlertCircle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
-                <span className="text-sm text-red-200">{errorMessage}</span>
-              </div>
-            )}
+        {showAssistance ? (
+          <LoginAssistance 
+            email={email} 
+            password={password} 
+            onReturn={returnToLogin}
+            attemptCount={attempts}
+          />
+        ) : (
+          <Card className="border-none bg-black/60 backdrop-blur-xl">
+            <CardHeader>
+              <CardTitle className="text-2xl text-white">
+                {isLogin ? "Welcome Back" : "Join SecondLife Connect"}
+              </CardTitle>
+              <CardDescription className="text-virtual-300">
+                {isLogin 
+                  ? "Sign in to continue your journey" 
+                  : "Create an account to start your adventure"}
+              </CardDescription>
+            </CardHeader>
             
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-virtual-400" />
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-virtual-900/50 border-virtual-700 text-white placeholder:text-virtual-500"
-                    required
-                  />
+            <CardContent>
+              {errorMessage && (
+                <div className="mb-4 p-3 bg-red-900/40 border border-red-700 rounded-md flex items-start gap-2">
+                  <AlertCircle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
+                  <span className="text-sm text-red-200">{errorMessage}</span>
                 </div>
-              </div>
-              
-              <div className="space-y-2">
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10 bg-virtual-900/50 border-virtual-700 text-white placeholder:text-virtual-500"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-virtual-400"
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-              
-              <Button 
-                type="submit" 
-                className="w-full bg-virtual-500 hover:bg-virtual-600 text-white" 
-                disabled={loading}
-              >
-                {loading ? (
-                  "Processing..."
-                ) : isLogin ? (
-                  "Sign In"
-                ) : (
-                  <div className="flex items-center">
-                    <UserPlus className="mr-2 h-4 w-4" />
-                    Create Account
-                  </div>
-                )}
-              </Button>
-            </form>
-          </CardContent>
-          
-          <CardFooter className="flex flex-col space-y-4">
-            <div className="text-sm text-center">
-              {isLogin ? (
-                <p className="text-virtual-300">
-                  Don't have an account?{" "}
-                  <button
-                    onClick={() => setIsLogin(false)}
-                    className="text-virtual-400 hover:underline"
-                  >
-                    Sign up
-                  </button>
-                </p>
-              ) : (
-                <p className="text-virtual-300">
-                  Already have an account?{" "}
-                  <button
-                    onClick={() => setIsLogin(true)}
-                    className="text-virtual-400 hover:underline"
-                  >
-                    Sign in
-                  </button>
-                </p>
               )}
-            </div>
+              
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-virtual-400" />
+                    <Input
+                      type="email"
+                      placeholder="Email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="pl-10 bg-virtual-900/50 border-virtual-700 text-white placeholder:text-virtual-500"
+                      required
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="pl-10 pr-10 bg-virtual-900/50 border-virtual-700 text-white placeholder:text-virtual-500"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-3 text-virtual-400"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+                
+                <Button 
+                  type="submit" 
+                  className="w-full bg-virtual-500 hover:bg-virtual-600 text-white" 
+                  disabled={loading}
+                >
+                  {loading ? (
+                    "Processing..."
+                  ) : isLogin ? (
+                    "Sign In"
+                  ) : (
+                    <div className="flex items-center">
+                      <UserPlus className="mr-2 h-4 w-4" />
+                      Create Account
+                    </div>
+                  )}
+                </Button>
+              </form>
+            </CardContent>
             
-            <div className="text-xs text-center text-virtual-400">
-              By continuing, you agree to our{" "}
-              <Link to="/terms" className="hover:underline">
-                Terms of Service
-              </Link>{" "}
-              and{" "}
-              <Link to="/privacy" className="hover:underline">
-                Privacy Policy
-              </Link>
-            </div>
-          </CardFooter>
-        </Card>
+            <CardFooter className="flex flex-col space-y-4">
+              <div className="text-sm text-center">
+                {isLogin ? (
+                  <p className="text-virtual-300">
+                    Don't have an account?{" "}
+                    <button
+                      onClick={() => setIsLogin(false)}
+                      className="text-virtual-400 hover:underline"
+                    >
+                      Sign up
+                    </button>
+                  </p>
+                ) : (
+                  <p className="text-virtual-300">
+                    Already have an account?{" "}
+                    <button
+                      onClick={() => setIsLogin(true)}
+                      className="text-virtual-400 hover:underline"
+                    >
+                      Sign in
+                    </button>
+                  </p>
+                )}
+              </div>
+              
+              <div className="text-xs text-center text-virtual-400">
+                By continuing, you agree to our{" "}
+                <Link to="/terms" className="hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link to="/privacy" className="hover:underline">
+                  Privacy Policy
+                </Link>
+              </div>
+            </CardFooter>
+          </Card>
+        )}
         
-        {/* Feature highlight */}
         <div className="mt-8 grid grid-cols-3 gap-4">
           <div className="rounded-lg bg-black/40 p-4 text-center backdrop-blur-sm">
             <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-virtual-900/50">
@@ -294,6 +323,8 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
+      
+      <LyraAssistButton />
     </div>
   );
 };
