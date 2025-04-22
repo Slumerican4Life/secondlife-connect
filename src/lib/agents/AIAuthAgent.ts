@@ -66,7 +66,7 @@ export class AIAuthAgent extends BaseAIAgent {
    */
   private async logFailedAttempt(email: string, attemptCount: number): Promise<void> {
     try {
-      logShort(`Failed login attempt ${attemptCount} for ${email}`, "warning");
+      logShort(`Failed login attempt ${attemptCount} for ${email}`, "warn");
       
       // Store in Supabase auth_logs table if available
       try {

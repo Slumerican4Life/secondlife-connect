@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -86,13 +87,23 @@ const LoginPage = () => {
           
           if (error.message === 'Failed to fetch') {
             setErrorMessage("Network error. Please check your internet connection and try again.");
-            toast.error("Network error connecting to authentication service");
           } else {
             setErrorMessage(error.message || "Authentication failed. Please try again.");
           }
+          toast.error("Login failed - " + (error.message || "Authentication error"));
         }
       } else {
-        await signUp(email, password);
+        // This is signup mode
+        try {
+          console.log("Attempting to sign up with:", email, password);
+          await signUp(email, password);
+          toast.success("Account created! You can now log in.");
+          setIsLogin(true); // Switch to login view after successful signup
+        } catch (error: any) {
+          console.error("Signup error:", error);
+          toast.error("Signup failed - " + (error.message || "Registration error"));
+          setErrorMessage(error.message || "Failed to create account. Please try again.");
+        }
       }
     } catch (error: any) {
       console.error("Authentication error:", error);
@@ -194,6 +205,7 @@ const LoginPage = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       className="pl-10 pr-10 bg-virtual-900/50 border-virtual-700 text-white placeholder:text-virtual-500"
                       required
+                      minLength={6}
                     />
                     <button
                       type="button"
@@ -207,6 +219,9 @@ const LoginPage = () => {
                       )}
                     </button>
                   </div>
+                  <p className="text-xs text-virtual-400">
+                    {isLogin ? "" : "Password must be at least 6 characters"}
+                  </p>
                 </div>
                 
                 <Button 
@@ -323,8 +338,6 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-      
-      <LyraAssistButton />
     </div>
   );
 };
