@@ -113,6 +113,23 @@ const Index = () => {
                 </div>
               )}
               
+              {/* Add a prominent sponsorship card */}
+              <Card className="mb-6 border-virtual-700">
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-lg">Become a Sponsor</CardTitle>
+                </CardHeader>
+                <CardContent className="pb-3">
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Partner with us and reach our growing virtual community
+                  </p>
+                  <Link to="/sponsorship">
+                    <Button className="w-full bg-virtual-500 hover:bg-virtual-600">
+                      View Sponsorship Options
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+              
               <SuggestedUsers />
               <WorldsWidget />
             </div>
@@ -121,6 +138,6 @@ const Index = () => {
       </div>
     </div>
   );
-};
+}
 
 export default Index;
