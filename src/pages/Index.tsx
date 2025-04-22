@@ -10,7 +10,7 @@ import LyraThoughtViewer from "@/components/LyraThoughtViewer";
 import LyraInitializer from "@/components/LyraInitializer";
 import { logShort } from "@/lib/utils/shorthandLogger";
 import { HoverTitle } from "@/components/ui/hover-title";
-import { Info, LogIn, ArrowRight } from "lucide-react";
+import { Info, LogIn, ArrowRight, DollarSign } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
@@ -42,6 +42,24 @@ const Index = () => {
       <div className="flex flex-1 pt-16">
         <Sidebar />
         <main className="flex-1 px-4 md:px-6 py-6 max-w-7xl mx-auto">
+          {/* Top Sponsorship Banner - Very prominent */}
+          <div className="mb-8 p-6 bg-gradient-to-r from-green-700 to-green-900 rounded-lg border border-green-600 shadow-lg animate-pulse-slow">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+              <div className="mb-4 md:mb-0 flex items-center">
+                <DollarSign className="h-10 w-10 text-green-300 mr-3" />
+                <div>
+                  <h2 className="text-2xl font-bold text-white">Become a Sponsor Today!</h2>
+                  <p className="text-green-200">Connect with our growing community and boost your brand visibility</p>
+                </div>
+              </div>
+              <Link to="/sponsorship">
+                <Button className="bg-green-500 hover:bg-green-600 text-white font-bold px-6 py-2 flex items-center gap-2 shadow-lg">
+                  View Sponsorship Options <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+          
           {/* Sponsorship Call to Action Banner */}
           <div className="mb-8 p-4 bg-gradient-to-r from-virtual-900 to-virtual-800 rounded-lg border border-virtual-700">
             <div className="flex flex-col md:flex-row items-center justify-between">
@@ -115,16 +133,19 @@ const Index = () => {
               )}
               
               {/* Add a prominent sponsorship card */}
-              <Card className="mb-6 border-virtual-700">
+              <Card className="mb-6 border-green-700 bg-gradient-to-br from-green-900/70 to-green-950/70">
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Become a Sponsor</CardTitle>
+                  <CardTitle className="text-lg text-green-300 flex items-center">
+                    <DollarSign className="h-5 w-5 mr-2 text-green-400" />
+                    Become a Sponsor
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="pb-3">
-                  <p className="text-sm text-muted-foreground mb-4">
+                  <p className="text-sm text-green-400 mb-4">
                     Partner with us and reach our growing virtual community
                   </p>
                   <Link to="/sponsorship">
-                    <Button className="w-full bg-virtual-500 hover:bg-virtual-600">
+                    <Button className="w-full bg-green-600 hover:bg-green-700 text-white">
                       View Sponsorship Options
                     </Button>
                   </Link>

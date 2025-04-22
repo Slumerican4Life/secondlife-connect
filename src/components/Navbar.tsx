@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Bell, Globe, Home, MessageSquare, Search, Store, User, Droplet, Heart, Building, Shield, Crown, Navigation, DollarSign, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -120,11 +121,14 @@ const Navbar = () => {
             </DropdownMenuContent>
           </DropdownMenu>
           
-          <Button variant="ghost" size="icon" className="rounded-full" asChild>
+          {/* Make the sponsorship button more prominent */}
+          <Button variant="ghost" size="icon" className="rounded-full relative" asChild>
             <Link to="/sponsorship">
-              <DollarSign className="h-5 w-5" />
+              <DollarSign className="h-5 w-5 text-green-500" />
+              <span className="absolute -top-1 -right-1 bg-green-500 w-2 h-2 rounded-full animate-pulse"></span>
             </Link>
           </Button>
+          
           <Button variant="ghost" size="icon" className="rounded-full">
             <MessageSquare className="h-5 w-5" />
           </Button>
