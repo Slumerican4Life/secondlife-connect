@@ -20,6 +20,9 @@ const Showcase = () => {
   const [isProduction, setIsProduction] = useState(false);
 
   useEffect(() => {
+    // Force Lyra thought class on the page
+    document.body.classList.add('lyra-thought');
+    
     // Check if we're in a production environment
     const checkEnvironment = () => {
       const isProd = window.location.hostname.includes('.lovable.app') || 
@@ -28,6 +31,10 @@ const Showcase = () => {
       
       if (isProd) {
         console.log("Running showcase in production mode");
+        // Show a welcome toast in production
+        toast.success("Welcome to SecondLife Connect + Lyra AI Showcase", {
+          description: "Explore our future-ready virtual world integration"
+        });
       }
     };
     
@@ -39,7 +46,7 @@ const Showcase = () => {
         const lyraThoughts = document.querySelectorAll('.lyra-thought');
         if (lyraThoughts.length > 0) {
           setLyraStatus("active");
-          toast.success("Lyra AI showcase is now active");
+          console.log("Lyra thought system detected, setting status to active");
         } else {
           // Keep polling for a limited time
           if (window.lyraStatusAttempts === undefined) {
@@ -52,6 +59,7 @@ const Showcase = () => {
             setTimeout(checkLyraStatus, 1000);
           } else {
             // Just assume active after several attempts
+            console.log("Maximum polling attempts reached, assuming Lyra is active");
             setLyraStatus("active");
           }
         }

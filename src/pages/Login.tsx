@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -222,3 +221,16 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+const Login = () => {
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('from') === 'showcase') {
+      window.location.href = '/showcase';
+    }
+  }, []);
+  
+  return <LoginPage />;
+};
+
+export default Login;

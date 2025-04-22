@@ -46,13 +46,15 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// App Routes component
 const AppRoutes = () => {
   return (
     <Routes>
+      {/* Public routes - accessible without authentication */}
       <Route path="/login" element={<Login />} />
-      <Route path="/showcase" element={<Showcase />} /> {/* Showcase page unprotected */}
+      <Route path="/showcase" element={<Showcase />} />
       
-      {/* Protected routes */}
+      {/* Protected routes - require authentication */}
       <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/profile/:id" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

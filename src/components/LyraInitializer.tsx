@@ -22,10 +22,21 @@ const LyraInitializer = () => {
           
           // Add Lyra thought element for Showcase detection - ensure this happens regardless of errors
           setTimeout(() => {
+            // Add classes to both body and thoughts container for maximum detection capability
             document.body.classList.add('lyra-thought');
+            document.documentElement.classList.add('lyra-thought'); // Add to HTML element as well
+            
             const thoughtContainer = document.querySelector('.thoughts-container');
             if (thoughtContainer) {
               thoughtContainer.classList.add('lyra-thought');
+            } else {
+              // If thoughts container doesn't exist yet, retry after a longer delay
+              setTimeout(() => {
+                const retryContainer = document.querySelector('.thoughts-container');
+                if (retryContainer) {
+                  retryContainer.classList.add('lyra-thought');
+                }
+              }, 3000);
             }
           }, 1000);
           
