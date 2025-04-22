@@ -18,11 +18,18 @@ const LoginPage = () => {
   const { user, signIn, signUp } = useAuth();
   const location = useLocation();
   
-  // Check for showcase redirect
   useEffect(() => {
-    // Check URL parameters for showcase redirection
+    // Enhanced showcase redirect handling
+    // Check if we're on the login page with showcase parameter or on the login page in production
     const params = new URLSearchParams(window.location.search);
-    if (params.get('from') === 'showcase') {
+    const isShowcaseRedirect = params.get('from') === 'showcase';
+    const isProduction = window.location.hostname.includes('.lovable.app');
+    
+    // For first-time visitors to the public site, we want to show the showcase
+    if (isShowcaseRedirect || (isProduction && !sessionStorage.getItem('visited'))) {
+      // Mark that the user has visited the site before
+      sessionStorage.setItem('visited', 'true');
+      
       // Use window.location for complete page refresh to ensure showcase loads correctly
       window.location.href = '/showcase';
     }

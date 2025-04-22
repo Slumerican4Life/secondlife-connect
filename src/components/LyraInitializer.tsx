@@ -12,39 +12,40 @@ const LyraInitializer = () => {
   useEffect(() => {
     const initializeLyra = async () => {
       try {
-        // Check if we're in a production environment
-        const isProduction = window.location.hostname.includes('.lovable.app') || 
-                          !window.location.hostname.includes('localhost');
+        // Enhanced production environment detection
+        const isProduction = 
+          window.location.hostname.includes('.lovable.app') || 
+          !window.location.hostname.includes('localhost');
+        
+        // Check if we're on the showcase page
+        const isShowcasePage = window.location.pathname === '/showcase';
 
-        // In production, handle initialization differently
-        if (isProduction) {
-          console.log("Running in production mode, Lyra will operate in showcase mode");
+        // In production or showcase page, handle initialization differently
+        if (isProduction || isShowcasePage) {
+          console.log("Running in production mode or showcase page, Lyra will operate in showcase mode");
           
-          // Add Lyra thought element for Showcase detection - ensure this happens regardless of errors
+          // Add Lyra thought element for Showcase detection
           setTimeout(() => {
-            // Add classes to both body and thoughts container for maximum detection capability
+            // Add classes to multiple elements for maximum detection capability
             document.body.classList.add('lyra-thought');
-            document.documentElement.classList.add('lyra-thought'); // Add to HTML element as well
+            document.documentElement.classList.add('lyra-thought');
             
+            // Create and add multiple Lyra thought markers for redundancy
             const thoughtContainer = document.querySelector('.thoughts-container');
             if (thoughtContainer) {
               thoughtContainer.classList.add('lyra-thought');
-            } else {
-              // If thoughts container doesn't exist yet, retry after a longer delay
-              setTimeout(() => {
-                const retryContainer = document.querySelector('.thoughts-container');
-                if (retryContainer) {
-                  retryContainer.classList.add('lyra-thought');
-                }
-
-                // Add additional element for Lyra detection
-                const lyraElement = document.createElement('div');
-                lyraElement.id = 'lyra-thought-element';
-                lyraElement.className = 'lyra-thought';
-                lyraElement.style.display = 'none';
-                document.body.appendChild(lyraElement);
-              }, 3000);
             }
+            
+            // Always create a dedicated Lyra thought element
+            const lyraElement = document.createElement('div');
+            lyraElement.id = 'lyra-thought-element';
+            lyraElement.className = 'lyra-thought lyra-active';
+            lyraElement.setAttribute('data-lyra-state', 'active');
+            lyraElement.style.display = 'none';
+            document.body.appendChild(lyraElement);
+            
+            // Add a data attribute to the body for easier detection
+            document.body.setAttribute('data-lyra-initialized', 'true');
           }, 1000);
           
           setInitialized(true);
