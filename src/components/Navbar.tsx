@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Bell, Globe, Home, MessageSquare, Search, Store, User, Droplet, Heart, Building, Shield, Crown, Navigation, DollarSign } from "lucide-react";
+import { Bell, Globe, Home, MessageSquare, Search, Store, User, Droplet, Heart, Building, Shield, Crown, Navigation, DollarSign, Brain } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -16,6 +16,7 @@ import {
 const Navbar = () => {
   return (
     <nav className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b px-4 py-3">
+      {/* Logo */}
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2">
@@ -41,6 +42,11 @@ const Navbar = () => {
           <Button variant="ghost" size="icon" className="rounded-full" asChild>
             <Link to="/">
               <Home className="h-5 w-5" />
+            </Link>
+          </Button>
+          <Button variant="ghost" size="icon" className="rounded-full" asChild>
+            <Link to="/showcase">
+              <Brain className="h-5 w-5" />
             </Link>
           </Button>
           <Button variant="ghost" size="icon" className="rounded-full" asChild>

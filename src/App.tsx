@@ -23,6 +23,7 @@ import MonetizationDashboard from "./pages/MonetizationDashboard";
 import LindenExchange from "./pages/LindenExchange";
 import Sponsorship from "./pages/Sponsorship";
 import Login from "./pages/Login";
+import Showcase from "./pages/Showcase";
 import { useAuth } from "@/contexts/AuthContext";
 import GitTerminal from "./components/GitTerminal";
 
@@ -50,6 +51,7 @@ const AppRoutes = () => {
       
       {/* Protected routes */}
       <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
+      <Route path="/showcase" element={<ProtectedRoute><Showcase /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/profile/:id" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/blood-bank" element={<ProtectedRoute><BloodBank /></ProtectedRoute>} />
