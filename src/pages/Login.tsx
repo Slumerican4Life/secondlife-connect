@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -91,23 +90,44 @@ const LoginPage = () => {
   };
   
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-black to-gray-900 p-4">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-virtual-900 via-virtual-800 to-virtual-700 p-4">
       <div className="w-full max-w-md">
         {/* Logo and branding */}
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-white">SecondLife Connect</h1>
-          <p className="mt-2 text-gray-300">Unleash your virtual existence</p>
+          <div className="flex justify-center mb-4">
+            <div className="relative w-24 h-24">
+              <div className="absolute inset-0 bg-purple-500/20 rounded-full animate-pulse" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className="w-12 h-12 text-virtual-300 animate-float"
+                >
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+                  <circle cx="10" cy="13" r="2" />
+                  <path d="m20 17-1.09-1.09a2 2 0 0 0-2.82 0L10 22" />
+                </svg>
+              </div>
+              <div className="absolute -inset-4 border-2 border-virtual-400/30 rounded-full animate-spin-slow" />
+            </div>
+          </div>
+          <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-virtual-300 to-virtual-400">
+            SecondLife Connect
+          </h1>
+          <p className="mt-2 text-virtual-300">Powered by Lyra AI</p>
         </div>
         
         {/* Login/Signup card */}
         <Card className="border-none bg-black/60 backdrop-blur-xl">
           <CardHeader>
             <CardTitle className="text-2xl text-white">
-              {isLogin ? "Welcome Back" : "Join the Community"}
+              {isLogin ? "Welcome Back" : "Join SecondLife Connect"}
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-virtual-300">
               {isLogin 
-                ? "Sign in to continue your virtual journey" 
+                ? "Sign in to continue your journey" 
                 : "Create an account to start your adventure"}
             </CardDescription>
           </CardHeader>
@@ -123,13 +143,13 @@ const LoginPage = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-virtual-400" />
                   <Input
                     type="email"
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 bg-virtual-900/50 border-virtual-700 text-white placeholder:text-virtual-500"
                     required
                   />
                 </div>
@@ -143,13 +163,13 @@ const LoginPage = () => {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 pr-10"
+                    className="pl-10 pr-10 bg-virtual-900/50 border-virtual-700 text-white placeholder:text-virtual-500"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-muted-foreground"
+                    className="absolute right-3 top-3 text-virtual-400"
                   >
                     {showPassword ? (
                       <EyeOff className="h-4 w-4" />
@@ -162,7 +182,7 @@ const LoginPage = () => {
               
               <Button 
                 type="submit" 
-                className="w-full bg-virtual-500 hover:bg-virtual-600" 
+                className="w-full bg-virtual-500 hover:bg-virtual-600 text-white" 
                 disabled={loading}
               >
                 {loading ? (
@@ -182,7 +202,7 @@ const LoginPage = () => {
           <CardFooter className="flex flex-col space-y-4">
             <div className="text-sm text-center">
               {isLogin ? (
-                <p>
+                <p className="text-virtual-300">
                   Don't have an account?{" "}
                   <button
                     onClick={() => setIsLogin(false)}
@@ -192,7 +212,7 @@ const LoginPage = () => {
                   </button>
                 </p>
               ) : (
-                <p>
+                <p className="text-virtual-300">
                   Already have an account?{" "}
                   <button
                     onClick={() => setIsLogin(true)}
@@ -204,7 +224,7 @@ const LoginPage = () => {
               )}
             </div>
             
-            <div className="text-xs text-center text-muted-foreground">
+            <div className="text-xs text-center text-virtual-400">
               By continuing, you agree to our{" "}
               <Link to="/terms" className="hover:underline">
                 Terms of Service
@@ -213,7 +233,6 @@ const LoginPage = () => {
               <Link to="/privacy" className="hover:underline">
                 Privacy Policy
               </Link>
-              .
             </div>
           </CardFooter>
         </Card>
