@@ -36,6 +36,13 @@ const LyraInitializer = () => {
                 if (retryContainer) {
                   retryContainer.classList.add('lyra-thought');
                 }
+
+                // Add additional element for Lyra detection
+                const lyraElement = document.createElement('div');
+                lyraElement.id = 'lyra-thought-element';
+                lyraElement.className = 'lyra-thought';
+                lyraElement.style.display = 'none';
+                document.body.appendChild(lyraElement);
               }, 3000);
             }
           }, 1000);

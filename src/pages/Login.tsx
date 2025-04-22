@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,14 +16,17 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const { user, signIn, signUp } = useAuth();
+  const location = useLocation();
   
   // Check for showcase redirect
   useEffect(() => {
+    // Check URL parameters for showcase redirection
     const params = new URLSearchParams(window.location.search);
     if (params.get('from') === 'showcase') {
+      // Use window.location for complete page refresh to ensure showcase loads correctly
       window.location.href = '/showcase';
     }
-  }, []);
+  }, [location]);
   
   // If already logged in, redirect to home
   if (user) {
