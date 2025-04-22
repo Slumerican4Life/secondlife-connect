@@ -50,7 +50,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
-      <Route path="/showcase" element={<Showcase />} />
+      <Route path="/showcase" element={<Showcase />} /> {/* Showcase page unprotected */}
       
       {/* Protected routes */}
       <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
@@ -90,8 +90,13 @@ const App = () => (
             <Sonner />
             <LyraInitializer />
             <AppRoutes />
-            <AIAssistant />
-            <GitTerminal />
+            {/* Only show these components on non-showcase pages */}
+            {window.location.pathname !== "/showcase" && (
+              <>
+                <AIAssistant />
+                <GitTerminal />
+              </>
+            )}
           </AuthProvider>
         </BrowserRouter>
       </ThemeProvider>
