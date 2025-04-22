@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, Navigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -163,12 +162,12 @@ const LoginPage = () => {
           <Card className="border-none bg-black/60 backdrop-blur-xl">
             <CardHeader>
               <CardTitle className="text-2xl text-white">
-                {isLogin ? "Welcome Back" : "Join SecondLife Connect"}
+                {isLogin ? "Welcome Back" : "Create Your Account"}
               </CardTitle>
               <CardDescription className="text-virtual-300">
                 {isLogin 
                   ? "Sign in to continue your journey" 
-                  : "Create an account to start your adventure"}
+                  : "Join SecondLife Connect today"}
               </CardDescription>
             </CardHeader>
             
@@ -179,6 +178,31 @@ const LoginPage = () => {
                   <span className="text-sm text-red-200">{errorMessage}</span>
                 </div>
               )}
+              
+              <div className="flex justify-center space-x-4 mb-6">
+                <Button
+                  type="button"
+                  variant={isLogin ? "default" : "ghost"}
+                  onClick={() => {
+                    setIsLogin(true);
+                    setErrorMessage("");
+                  }}
+                  className="flex-1"
+                >
+                  Login
+                </Button>
+                <Button
+                  type="button"
+                  variant={!isLogin ? "default" : "ghost"}
+                  onClick={() => {
+                    setIsLogin(false);
+                    setErrorMessage("");
+                  }}
+                  className="flex-1"
+                >
+                  Sign Up
+                </Button>
+              </div>
               
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="space-y-2">
@@ -247,22 +271,28 @@ const LoginPage = () => {
               <div className="text-sm text-center">
                 {isLogin ? (
                   <p className="text-virtual-300">
-                    Don't have an account?{" "}
+                    New to SecondLife Connect?{" "}
                     <button
-                      onClick={() => setIsLogin(false)}
-                      className="text-virtual-400 hover:underline"
+                      onClick={() => {
+                        setIsLogin(false);
+                        setErrorMessage("");
+                      }}
+                      className="text-virtual-400 hover:underline font-semibold"
                     >
-                      Sign up
+                      Create an account
                     </button>
                   </p>
                 ) : (
                   <p className="text-virtual-300">
                     Already have an account?{" "}
                     <button
-                      onClick={() => setIsLogin(true)}
-                      className="text-virtual-400 hover:underline"
+                      onClick={() => {
+                        setIsLogin(true);
+                        setErrorMessage("");
+                      }}
+                      className="text-virtual-400 hover:underline font-semibold"
                     >
-                      Sign in
+                      Sign in here
                     </button>
                   </p>
                 )}
