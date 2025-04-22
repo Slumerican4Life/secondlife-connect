@@ -20,8 +20,9 @@ const LyraInitializer = () => {
         if (isProduction) {
           console.log("Running in production mode, Lyra will operate in showcase mode");
           
+          // Add Lyra thought element for Showcase detection - ensure this happens regardless of errors
           setTimeout(() => {
-            // Add a class that other components can detect
+            document.body.classList.add('lyra-thought');
             const thoughtContainer = document.querySelector('.thoughts-container');
             if (thoughtContainer) {
               thoughtContainer.classList.add('lyra-thought');

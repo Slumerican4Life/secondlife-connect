@@ -9,6 +9,12 @@ import { Bot, Brain, Network, Globe, Star, Newspaper, CheckCircle2 } from "lucid
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
+declare global {
+  interface Window {
+    lyraStatusAttempts?: number;
+  }
+}
+
 const Showcase = () => {
   const [lyraStatus, setLyraStatus] = useState("initializing");
   const [isProduction, setIsProduction] = useState(false);
@@ -61,6 +67,7 @@ const Showcase = () => {
     
     return () => {
       // Cleanup if needed
+      window.lyraStatusAttempts = undefined;
     };
   }, []);
 
@@ -167,7 +174,7 @@ const Showcase = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold">Lyra AI System</h2>
           <div className="flex items-center gap-2">
-            <Badge variant={lyraStatus === "active" ? "success" : "default"} className="flex items-center gap-1">
+            <Badge variant={lyraStatus === "active" ? "default" : "default"} className="flex items-center gap-1">
               {lyraStatus === "active" ? (
                 <>
                   <CheckCircle2 className="h-3 w-3" />
