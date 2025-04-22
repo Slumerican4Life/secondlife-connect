@@ -12,17 +12,18 @@ const LyraInitializer = () => {
   useEffect(() => {
     const initializeLyra = async () => {
       try {
-        // Robust environment detection - check both hostname and if we're on the showcase page
+        // Unified environment detection logic
         const hostname = window.location.hostname;
         const currentPath = window.location.pathname;
         
+        // Consider .lovable.app as a production domain
         const isProduction = hostname.includes('.lovable.app') || 
-                           hostname.includes('.dev') || 
-                           (!hostname.includes('localhost') && !hostname.includes('127.0.0.1'));
+                            hostname.includes('.dev') || 
+                            (!hostname.includes('localhost') && !hostname.includes('127.0.0.1'));
         
         const isShowcasePage = currentPath === '/showcase';
         
-        console.log(`Environment: ${isProduction ? 'Production' : 'Development'}, Path: ${currentPath}`);
+        console.log(`Environment: ${isProduction ? 'Production' : 'Development'}, Path: ${currentPath}, Hostname: ${hostname}`);
 
         // In production or on showcase page, handle initialization differently
         if (isProduction || isShowcasePage) {

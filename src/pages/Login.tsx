@@ -19,17 +19,22 @@ const LoginPage = () => {
   const location = useLocation();
   
   useEffect(() => {
-    // Robust showcase redirect handling for both development and production
+    // Unified redirect handling logic for both development and production
     const handleShowcaseRedirect = () => {
       try {
         // Get information about environment and user's history
         const hostname = window.location.hostname;
         const params = new URLSearchParams(window.location.search);
         const isShowcaseRedirect = params.get('from') === 'showcase';
-        const isProduction = hostname.includes('.lovable.app') || hostname.includes('.dev');
+        
+        // Use the same environment detection logic as LyraInitializer
+        const isProduction = hostname.includes('.lovable.app') || 
+                           hostname.includes('.dev') || 
+                           (!hostname.includes('localhost') && !hostname.includes('127.0.0.1'));
+                           
         const isFirstVisit = !sessionStorage.getItem('visited');
         
-        console.log(`Login page loaded. Production: ${isProduction}, First visit: ${isFirstVisit}, Showcase redirect: ${isShowcaseRedirect}`);
+        console.log(`Login page loaded. Production: ${isProduction}, First visit: ${isFirstVisit}, Showcase redirect: ${isShowcaseRedirect}, Hostname: ${hostname}`);
         
         // Redirect to showcase in these scenarios:
         // 1. Explicit showcase redirect parameter
