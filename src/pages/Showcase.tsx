@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Bot, Brain, Network, Globe, Star, Newspaper, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import { HoverTitle } from "@/components/ui/hover-title";
 
 declare global {
   interface Window {
@@ -104,10 +105,18 @@ const Showcase = () => {
                     Connected Systems
                   </h3>
                   <div className="space-y-2">
-                    <Badge variant="secondary" className="mr-2">Blood Bank</Badge>
-                    <Badge variant="secondary" className="mr-2">Marketplace</Badge>
-                    <Badge variant="secondary" className="mr-2">Dating</Badge>
-                    <Badge variant="secondary">Real Estate</Badge>
+                    <HoverTitle title="Blood Bank System" description="Manage and track virtual blood donations">
+                      <Badge variant="secondary" className="mr-2">Blood Bank</Badge>
+                    </HoverTitle>
+                    <HoverTitle title="Virtual Marketplace" description="Trade virtual goods and services">
+                      <Badge variant="secondary" className="mr-2">Marketplace</Badge>
+                    </HoverTitle>
+                    <HoverTitle title="Dating Platform" description="Connect with other virtual residents">
+                      <Badge variant="secondary" className="mr-2">Dating</Badge>
+                    </HoverTitle>
+                    <HoverTitle title="Virtual Real Estate" description="Buy, sell, and rent virtual properties">
+                      <Badge variant="secondary">Real Estate</Badge>
+                    </HoverTitle>
                   </div>
                 </div>
               </div>
@@ -182,19 +191,24 @@ const Showcase = () => {
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold">Lyra AI System</h2>
           <div className="flex items-center gap-2">
-            <Badge variant={lyraStatus === "active" ? "default" : "default"} className="flex items-center gap-1">
-              {lyraStatus === "active" ? (
-                <>
-                  <CheckCircle2 className="h-3 w-3" />
-                  <span>Online</span>
-                </>
-              ) : (
-                <>
-                  <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
-                  <span>Initializing...</span>
-                </>
-              )}
-            </Badge>
+            <HoverTitle 
+              title="Lyra System Status" 
+              description={lyraStatus === "active" ? "Lyra AI is fully operational" : "Lyra AI is initializing"}
+            >
+              <Badge variant={lyraStatus === "active" ? "default" : "default"} className="flex items-center gap-1">
+                {lyraStatus === "active" ? (
+                  <>
+                    <CheckCircle2 className="h-3 w-3" />
+                    <span>Online</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    <span>Initializing...</span>
+                  </>
+                )}
+              </Badge>
+            </HoverTitle>
           </div>
         </div>
 
