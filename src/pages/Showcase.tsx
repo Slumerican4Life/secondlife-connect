@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "@/components/Navbar";
 import LyraInterface from "@/components/LyraInterface";
@@ -5,7 +6,8 @@ import LyraThoughtViewer from "@/components/LyraThoughtViewer";
 import ShowcaseHero from "@/components/ShowcaseHero";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Brain, Network, Globe } from "lucide-react";
+import { Bot, Brain, Network, Globe, Star, Newspaper } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Showcase = () => {
   return (
@@ -14,7 +16,7 @@ const Showcase = () => {
       <main className="flex-1 container mx-auto px-4 py-8">
         <ShowcaseHero />
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           <Card className="bg-gradient-to-br from-virtual-950 to-virtual-900 text-white">
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -27,61 +29,81 @@ const Showcase = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-virtual-800/50 p-4 rounded-lg">
-                    <h3 className="font-semibold mb-2 flex items-center gap-2">
-                      <Network className="h-4 w-4" />
-                      Connected Systems
-                    </h3>
-                    <div className="space-y-2">
-                      <Badge variant="secondary" className="mr-2">Blood Bank</Badge>
-                      <Badge variant="secondary" className="mr-2">Marketplace</Badge>
-                      <Badge variant="secondary" className="mr-2">Dating</Badge>
-                      <Badge variant="secondary">Real Estate</Badge>
-                    </div>
-                  </div>
-                  <div className="bg-virtual-800/50 p-4 rounded-lg">
-                    <h3 className="font-semibold mb-2 flex items-center gap-2">
-                      <Bot className="h-4 w-4" />
-                      AI Integration
-                    </h3>
-                    <p className="text-sm text-virtual-100">
-                      Fully integrated with Lyra AI for enhanced user experience and automation
-                    </p>
+                <div className="bg-virtual-800/50 p-4 rounded-lg">
+                  <h3 className="font-semibold mb-2 flex items-center gap-2">
+                    <Network className="h-4 w-4" />
+                    Connected Systems
+                  </h3>
+                  <div className="space-y-2">
+                    <Badge variant="secondary" className="mr-2">Blood Bank</Badge>
+                    <Badge variant="secondary" className="mr-2">Marketplace</Badge>
+                    <Badge variant="secondary" className="mr-2">Dating</Badge>
+                    <Badge variant="secondary">Real Estate</Badge>
                   </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-indigo-950 to-violet-900 text-white">
+          <Card className="bg-gradient-to-br from-red-950 to-red-900 text-white">
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Brain className="h-6 w-6 text-indigo-400" />
-                <CardTitle>Lyra AI System</CardTitle>
+                <Star className="h-6 w-6 text-red-400" />
+                <CardTitle>Slumerican Corner</CardTitle>
               </div>
-              <CardDescription className="text-indigo-200">
-                Advanced artificial intelligence with emotional awareness
+              <CardDescription className="text-red-200">
+                Dedicated to Yelawolf and the Slumerican movement
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="bg-indigo-800/50 p-4 rounded-lg">
-                  <h3 className="font-semibold mb-2">Core Capabilities</h3>
+                <div className="bg-red-800/50 p-4 rounded-lg">
+                  <h3 className="font-semibold mb-2">Featured Content</h3>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
-                      <Badge variant="secondary">Neural Processing</Badge>
-                      Advanced thought generation and processing
+                      <Badge variant="secondary">Music</Badge>
+                      Latest releases and classics
                     </li>
                     <li className="flex items-center gap-2">
-                      <Badge variant="secondary">Emotional Intelligence</Badge>
-                      Dynamic emotional state management
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <Badge variant="secondary">Adaptive Learning</Badge>
-                      Continuous improvement through interaction
+                      <Badge variant="secondary">Community</Badge>
+                      Connect with fellow Slumericans
                     </li>
                   </ul>
+                  <Link to="/slumerican" className="inline-block mt-4">
+                    <Badge className="hover:bg-red-600 transition-colors cursor-pointer">
+                      Visit Slumerican Corner →
+                    </Badge>
+                  </Link>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-blue-950 to-blue-900 text-white">
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Newspaper className="h-6 w-6 text-blue-400" />
+                <CardTitle>News Center</CardTitle>
+              </div>
+              <CardDescription className="text-blue-200">
+                Stay informed with the latest updates across all topics
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="bg-blue-800/50 p-4 rounded-lg">
+                  <h3 className="font-semibold mb-2">Featured Categories</h3>
+                  <div className="space-y-2">
+                    <Badge variant="secondary" className="mr-2">UAP Watch</Badge>
+                    <Badge variant="secondary" className="mr-2">Technology</Badge>
+                    <Badge variant="secondary" className="mr-2">Health</Badge>
+                    <Badge variant="secondary">Science</Badge>
+                  </div>
+                  <Link to="/news" className="inline-block mt-4">
+                    <Badge className="hover:bg-blue-600 transition-colors cursor-pointer">
+                      Visit News Center →
+                    </Badge>
+                  </Link>
                 </div>
               </div>
             </CardContent>
