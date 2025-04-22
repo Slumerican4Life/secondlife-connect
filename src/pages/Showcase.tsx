@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import LyraInterface from "@/components/LyraInterface";
@@ -5,10 +6,12 @@ import LyraThoughtViewer from "@/components/LyraThoughtViewer";
 import ShowcaseHero from "@/components/ShowcaseHero";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Brain, Network, Globe, Star, Newspaper, CheckCircle2 } from "lucide-react";
+import { Bot, Brain, Network, Globe, Star, Newspaper, CheckCircle2, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { HoverTitle } from "@/components/ui/hover-title";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 declare global {
   interface Window {
@@ -19,6 +22,7 @@ declare global {
 const Showcase = () => {
   const [lyraStatus, setLyraStatus] = useState("initializing");
   const [isProduction, setIsProduction] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     // Force Lyra thought class on the page
@@ -83,8 +87,34 @@ const Showcase = () => {
   return (
     <div className="flex flex-col min-h-screen bg-virtual-900">
       <Navbar />
+      
+      {/* Login/Signup button at top of page */}
+      {!user && (
+        <div className="fixed top-20 right-6 z-50">
+          <Link to="/login">
+            <Button className="bg-virtual-500 hover:bg-virtual-600 flex gap-2 items-center">
+              <LogIn className="h-4 w-4" />
+              Login / Sign Up
+            </Button>
+          </Link>
+        </div>
+      )}
+      
       <main className="flex-1 container mx-auto px-4 py-8">
         <ShowcaseHero />
+        
+        {/* Add prominent login button for non-authenticated users */}
+        {!user && (
+          <div className="w-full max-w-md mx-auto mb-12 bg-gradient-to-br from-black/70 to-virtual-900/70 rounded-lg p-6 border border-virtual-700 backdrop-blur-md">
+            <h3 className="text-xl font-bold mb-3 text-virtual-300 text-center">Join SecondLife Connect</h3>
+            <p className="text-virtual-300 mb-4 text-center">Create your account to access all features</p>
+            <Link to="/login">
+              <Button className="w-full bg-virtual-500 hover:bg-virtual-600 mb-2">
+                Sign Up Now
+              </Button>
+            </Link>
+          </div>
+        )}
         
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
           <Card className="bg-gradient-to-br from-virtual-950 to-virtual-900 text-white">
