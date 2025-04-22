@@ -1,7 +1,7 @@
 
 import { BaseAIAgent, AgentResponse } from "./AIAgent";
 import { supabase } from "@/lib/supabase";
-import { logShort } from "@/utils/shorthandLogger";
+import { logShort } from "@/lib/utils/shorthandLogger";
 
 /**
  * AI agent dedicated to monitoring and managing authentication
