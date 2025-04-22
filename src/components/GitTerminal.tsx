@@ -35,11 +35,11 @@ const GitTerminal = () => {
 
   const detectRepository = async () => {
     try {
-      const projectRoot = process.cwd();
+      // Browser-safe implementation - simulate detection
+      const mockProjectRoot = "/user/project/secondlife-connect";
       
-      // Mock detection (since fs is not available in browser)
-      setCurrentRepoPath(projectRoot);
-      setOutput(prev => `${prev}\n> Auto-detected repository at: ${projectRoot}`);
+      setCurrentRepoPath(mockProjectRoot);
+      setOutput(prev => `${prev}\n> Auto-detected repository at: ${mockProjectRoot}`);
     } catch (error) {
       console.error('Repository detection failed:', error);
       toast.error('Failed to detect repository');
@@ -53,8 +53,13 @@ const GitTerminal = () => {
   }, [selectedRepo]);
 
   useEffect(() => {
-    const audio = new Audio('data:audio/mp3;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTguNDUuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/81DEFgAKuX1X7DEAAXc0an2GIABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
-    successAudioRef.current = audio;
+    // Create audio element safely for browser environment
+    try {
+      const audio = new Audio('data:audio/mp3;base64,SUQzBAAAAAABEVRYWFgAAAAtAAADY29tbWVudABCaWdTb3VuZEJhbmsuY29tIC8gTGFTb25vdGhlcXVlLm9yZwBURU5DAAAAHQAAA1N3aXRjaCBQbHVzIMKpIE5DSCBTb2Z0d2FyZQBUSVQyAAAABgAAAzIyMzUAVFNTRQAAAA8AAANMYXZmNTguNDUuMTAwAAAAAAAAAAAAAAD/80DEAAAAA0gAAAAATEFNRTMuMTAwVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVX/81DEFgAKuX1X7DEAAXc0an2GIABVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+      successAudioRef.current = audio;
+    } catch (error) {
+      console.error('Audio creation failed:', error);
+    }
   }, []);
 
   const mockGitOperations = (command) => {
@@ -87,10 +92,15 @@ const GitTerminal = () => {
       
       showSuccessNotification();
       
-      const event = new CustomEvent('git-command-executed', { 
-        detail: { command, repository: repoPath } 
-      });
-      window.dispatchEvent(event);
+      try {
+        // Safely dispatch event in browser environment
+        const event = new CustomEvent('git-command-executed', { 
+          detail: { command, repository: repoPath } 
+        });
+        window.dispatchEvent(event);
+      } catch (error) {
+        console.error('Event dispatch failed:', error);
+      }
       
     } catch (error) {
       console.error('Git command failed:', error);
@@ -101,7 +111,11 @@ const GitTerminal = () => {
 
   const showSuccessNotification = () => {
     if (successAudioRef.current) {
-      successAudioRef.current.play().catch(console.error);
+      try {
+        successAudioRef.current.play().catch(console.error);
+      } catch (error) {
+        console.error('Audio playback failed:', error);
+      }
     }
     
     setShowSuccess(true);
@@ -269,7 +283,7 @@ const GitTerminal = () => {
                 <TooltipTrigger asChild>
                   <Button onClick={handlePush}>Push</Button>
                 </TooltipTrigger>
-                <TooltipContent>Push changes to remote repository</TooltipContent>
+                <TooltipContent>Push to remote repository</TooltipContent>
               </Tooltip>
             </div>
 

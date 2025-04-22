@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -26,6 +27,7 @@ import Login from "./pages/Login";
 import Showcase from "./pages/Showcase";
 import { useAuth } from "@/contexts/AuthContext";
 import GitTerminal from "./components/GitTerminal";
+import LyraInitializer from "./components/LyraInitializer";
 
 const queryClient = new QueryClient();
 
@@ -86,6 +88,7 @@ const App = () => (
           <AuthProvider>
             <Toaster />
             <Sonner />
+            <LyraInitializer />
             <AppRoutes />
             <AIAssistant />
             <GitTerminal />

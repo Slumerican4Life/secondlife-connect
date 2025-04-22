@@ -1,15 +1,37 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import LyraInterface from "@/components/LyraInterface";
 import LyraThoughtViewer from "@/components/LyraThoughtViewer";
 import ShowcaseHero from "@/components/ShowcaseHero";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Brain, Network, Globe, Star, Newspaper } from "lucide-react";
+import { Bot, Brain, Network, Globe, Star, Newspaper, CheckCircle2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 
 const Showcase = () => {
+  const [lyraStatus, setLyraStatus] = useState("initializing");
+
+  useEffect(() => {
+    // Check if Lyra is initialized by looking for thoughts
+    const checkLyraStatus = () => {
+      const lyraThoughts = document.querySelectorAll('.lyra-thought');
+      if (lyraThoughts.length > 0) {
+        setLyraStatus("active");
+        toast.success("Lyra AI is now active and connected");
+      } else {
+        setTimeout(checkLyraStatus, 2000);
+      }
+    };
+    
+    checkLyraStatus();
+    
+    return () => {
+      // Cleanup if needed
+    };
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       <Navbar />
@@ -108,6 +130,25 @@ const Showcase = () => {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold">Lyra AI System</h2>
+          <div className="flex items-center gap-2">
+            <Badge variant={lyraStatus === "active" ? "success" : "outline"} className="flex items-center gap-1">
+              {lyraStatus === "active" ? (
+                <>
+                  <CheckCircle2 className="h-3 w-3" />
+                  <span>Online</span>
+                </>
+              ) : (
+                <>
+                  <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse"></span>
+                  <span>Initializing...</span>
+                </>
+              )}
+            </Badge>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
