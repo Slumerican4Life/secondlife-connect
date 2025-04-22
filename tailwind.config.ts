@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import { Config } from 'tailwindcss'
 
 export default {
   darkMode: ["class"],
@@ -107,14 +107,31 @@ export default {
             opacity: '1',
             transform: 'translateY(0)'
           }
-        }
+        },
+        'reverse-spin': {
+          from: {
+            transform: 'rotate(360deg)'
+          },
+        },
+        float: {
+          '0%, 100%': {
+            transform: 'translateY(0)',
+          },
+          '50%': {
+            transform: 'translateY(-20px)',
+          },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'fade-in': 'fade-in 0.3s ease-out',
+        'spin-slow': 'spin 8s linear infinite',
+        'reverse-spin': 'reverse-spin 12s linear infinite',
+        'float': 'float 6s ease-in-out infinite',
+        'pulse': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       }
     }
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+} satisfies Config
