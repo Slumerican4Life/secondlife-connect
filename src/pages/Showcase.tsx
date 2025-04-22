@@ -80,7 +80,7 @@ const Showcase = () => {
   }, []);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div className="flex flex-col min-h-screen bg-virtual-900">
       <Navbar />
       <main className="flex-1 container mx-auto px-4 py-8">
         <ShowcaseHero />
