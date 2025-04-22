@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
-import { Eye, EyeOff, Lock, Mail, UserPlus } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, UserPlus, AlertCircle } from "lucide-react";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -15,6 +15,7 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { user, signIn, signUp } = useAuth();
   const location = useLocation();
   
@@ -66,6 +67,7 @@ const LoginPage = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setErrorMessage("");
     
     try {
       if (isLogin) {
@@ -73,8 +75,16 @@ const LoginPage = () => {
       } else {
         await signUp(email, password);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Authentication error:", error);
+      
+      // Display user-friendly error message
+      if (error.message === 'Failed to fetch') {
+        setErrorMessage("Network error. Please check your internet connection and try again.");
+        toast.error("Network error connecting to authentication service");
+      } else {
+        setErrorMessage(error.message || "Authentication failed. Please try again.");
+      }
     } finally {
       setLoading(false);
     }
@@ -103,6 +113,13 @@ const LoginPage = () => {
           </CardHeader>
           
           <CardContent>
+            {errorMessage && (
+              <div className="mb-4 p-3 bg-red-900/40 border border-red-700 rounded-md flex items-start gap-2">
+                <AlertCircle className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
+                <span className="text-sm text-red-200">{errorMessage}</span>
+              </div>
+            )}
+            
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <div className="relative">
