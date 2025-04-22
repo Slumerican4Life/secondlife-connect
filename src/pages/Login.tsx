@@ -19,20 +19,38 @@ const LoginPage = () => {
   const location = useLocation();
   
   useEffect(() => {
-    // Enhanced showcase redirect handling
-    // Check if we're on the login page with showcase parameter or on the login page in production
-    const params = new URLSearchParams(window.location.search);
-    const isShowcaseRedirect = params.get('from') === 'showcase';
-    const isProduction = window.location.hostname.includes('.lovable.app');
+    // Robust showcase redirect handling for both development and production
+    const handleShowcaseRedirect = () => {
+      try {
+        // Get information about environment and user's history
+        const hostname = window.location.hostname;
+        const params = new URLSearchParams(window.location.search);
+        const isShowcaseRedirect = params.get('from') === 'showcase';
+        const isProduction = hostname.includes('.lovable.app') || hostname.includes('.dev');
+        const isFirstVisit = !sessionStorage.getItem('visited');
+        
+        console.log(`Login page loaded. Production: ${isProduction}, First visit: ${isFirstVisit}, Showcase redirect: ${isShowcaseRedirect}`);
+        
+        // Redirect to showcase in these scenarios:
+        // 1. Explicit showcase redirect parameter
+        // 2. First-time visitor to the production site
+        if (isShowcaseRedirect || (isProduction && isFirstVisit)) {
+          // Mark that the user has visited before (to prevent redirect loops)
+          sessionStorage.setItem('visited', 'true');
+          console.log("Redirecting to showcase page");
+          
+          // Redirect with a slight delay to ensure session storage is set
+          setTimeout(() => {
+            window.location.href = '/showcase';
+          }, 100);
+        }
+      } catch (error) {
+        console.error("Error handling showcase redirect:", error);
+      }
+    };
     
-    // For first-time visitors to the public site, we want to show the showcase
-    if (isShowcaseRedirect || (isProduction && !sessionStorage.getItem('visited'))) {
-      // Mark that the user has visited the site before
-      sessionStorage.setItem('visited', 'true');
-      
-      // Use window.location for complete page refresh to ensure showcase loads correctly
-      window.location.href = '/showcase';
-    }
+    // Run redirect logic immediately
+    handleShowcaseRedirect();
   }, [location]);
   
   // If already logged in, redirect to home

@@ -12,41 +12,47 @@ const LyraInitializer = () => {
   useEffect(() => {
     const initializeLyra = async () => {
       try {
-        // Enhanced production environment detection
-        const isProduction = 
-          window.location.hostname.includes('.lovable.app') || 
-          !window.location.hostname.includes('localhost');
+        // Robust environment detection - check both hostname and if we're on the showcase page
+        const hostname = window.location.hostname;
+        const currentPath = window.location.pathname;
         
-        // Check if we're on the showcase page
-        const isShowcasePage = window.location.pathname === '/showcase';
+        const isProduction = hostname.includes('.lovable.app') || 
+                           hostname.includes('.dev') || 
+                           (!hostname.includes('localhost') && !hostname.includes('127.0.0.1'));
+        
+        const isShowcasePage = currentPath === '/showcase';
+        
+        console.log(`Environment: ${isProduction ? 'Production' : 'Development'}, Path: ${currentPath}`);
 
-        // In production or showcase page, handle initialization differently
+        // In production or on showcase page, handle initialization differently
         if (isProduction || isShowcasePage) {
-          console.log("Running in production mode or showcase page, Lyra will operate in showcase mode");
+          console.log("Running in production/showcase mode, initializing Lyra for showcase");
           
-          // Add Lyra thought element for Showcase detection
+          // Add Lyra thought markers with a more reliable approach
           setTimeout(() => {
-            // Add classes to multiple elements for maximum detection capability
-            document.body.classList.add('lyra-thought');
-            document.documentElement.classList.add('lyra-thought');
-            
-            // Create and add multiple Lyra thought markers for redundancy
-            const thoughtContainer = document.querySelector('.thoughts-container');
-            if (thoughtContainer) {
-              thoughtContainer.classList.add('lyra-thought');
+            try {
+              // Add classes to multiple elements for maximum detection capability
+              document.body.classList.add('lyra-thought');
+              document.documentElement.classList.add('lyra-thought');
+              
+              // Create dedicated Lyra thought element
+              const lyraElement = document.createElement('div');
+              lyraElement.id = 'lyra-thought-element';
+              lyraElement.className = 'lyra-thought lyra-active';
+              lyraElement.setAttribute('data-lyra-state', 'active');
+              lyraElement.setAttribute('data-environment', isProduction ? 'production' : 'development');
+              lyraElement.style.display = 'none';
+              document.body.appendChild(lyraElement);
+              
+              // Add a data attribute to the body for easier detection
+              document.body.setAttribute('data-lyra-initialized', 'true');
+              document.body.setAttribute('data-showcase-ready', 'true');
+              
+              console.log("Lyra thought elements initialized for showcase");
+            } catch (err) {
+              console.error("Error initializing Lyra thought elements:", err);
             }
-            
-            // Always create a dedicated Lyra thought element
-            const lyraElement = document.createElement('div');
-            lyraElement.id = 'lyra-thought-element';
-            lyraElement.className = 'lyra-thought lyra-active';
-            lyraElement.setAttribute('data-lyra-state', 'active');
-            lyraElement.style.display = 'none';
-            document.body.appendChild(lyraElement);
-            
-            // Add a data attribute to the body for easier detection
-            document.body.setAttribute('data-lyra-initialized', 'true');
-          }, 1000);
+          }, 500);
           
           setInitialized(true);
           return;
