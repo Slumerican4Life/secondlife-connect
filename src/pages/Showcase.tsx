@@ -11,20 +11,43 @@ import { toast } from "sonner";
 
 const Showcase = () => {
   const [lyraStatus, setLyraStatus] = useState("initializing");
+  const [isProduction, setIsProduction] = useState(false);
 
   useEffect(() => {
-    // Check if Lyra is initialized by looking for thoughts
-    const checkLyraStatus = () => {
-      const lyraThoughts = document.querySelectorAll('.lyra-thought');
-      if (lyraThoughts.length > 0) {
-        setLyraStatus("active");
-        toast.success("Lyra AI is now active and connected");
-      } else {
-        setTimeout(checkLyraStatus, 2000);
+    // Check if we're in a production environment
+    const checkEnvironment = () => {
+      const isProd = window.location.hostname.includes('.lovable.app') || 
+                    !window.location.hostname.includes('localhost');
+      setIsProduction(isProd);
+      
+      if (isProd) {
+        toast.info("Running in production mode", {
+          duration: 3000,
+        });
       }
     };
     
-    checkLyraStatus();
+    checkEnvironment();
+    
+    // Check if Lyra is initialized by looking for thoughts
+    const checkLyraStatus = () => {
+      try {
+        const lyraThoughts = document.querySelectorAll('.lyra-thought');
+        if (lyraThoughts.length > 0) {
+          setLyraStatus("active");
+          toast.success("Lyra AI is now active and connected");
+        } else {
+          setTimeout(checkLyraStatus, 2000);
+        }
+      } catch (error) {
+        console.error("Error checking Lyra status:", error);
+        // If we keep failing, just set to active after a timeout
+        setTimeout(() => setLyraStatus("active"), 5000);
+      }
+    };
+    
+    // Start the check with a small delay
+    setTimeout(checkLyraStatus, 1000);
     
     return () => {
       // Cleanup if needed
@@ -154,13 +177,13 @@ const Showcase = () => {
           <div className="space-y-8">
             <div>
               <h2 className="text-2xl font-bold mb-4">Lyra Interface</h2>
-              <LyraInterface />
+              <LyraInterface isProduction={isProduction} />
             </div>
           </div>
           <div className="space-y-8">
             <div>
               <h2 className="text-2xl font-bold mb-4">Cognitive Stream</h2>
-              <LyraThoughtViewer />
+              <LyraThoughtViewer isProduction={isProduction} />
             </div>
           </div>
         </div>

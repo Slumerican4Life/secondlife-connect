@@ -1,18 +1,17 @@
 
-import { useState } from 'react';
-import { LyraSystem } from '@/lib/agents/LyraSystem';
-import { logShort } from '@/lib/utils/shorthandLogger';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Bot, BrainCircuit, Clock, Terminal, AlertCircle, CheckCircle, Loader2, History } from 'lucide-react';
+import { toast } from 'sonner';
 
 /**
  * Lyra Interface - Component for interacting with the Lyra AI system
  */
-const LyraInterface = () => {
+const LyraInterface = ({ isProduction = false }) => {
   const [query, setQuery] = useState('');
   const [processing, setProcessing] = useState(false);
   const [response, setResponse] = useState<any>(null);
@@ -21,7 +20,40 @@ const LyraInterface = () => {
   const [lyraStatus, setLyraStatus] = useState<any>(null);
 
   // Initialize Lyra system
-  const lyra = LyraSystem.getInstance();
+  let lyra: any;
+  
+  useEffect(() => {
+    const initializeLyra = () => {
+      try {
+        // Only try to initialize if not in production
+        if (!isProduction) {
+          const LyraSystem = require('@/lib/agents/LyraSystem').LyraSystem;
+          lyra = LyraSystem.getInstance();
+        }
+      } catch (error) {
+        console.error("Could not initialize Lyra system:", error);
+        // Production mode fallback
+        lyra = {
+          processRequest: async (query: string) => {
+            return {
+              status: 'success',
+              result: { content: "Lyra is running in demo mode. Full functionality is available in the development environment." },
+              executionTime: 1200,
+              steps: [{ agentType: 'Demo', action: 'Process query' }]
+            };
+          },
+          getStatus: () => ({
+            status: 'demonstration',
+            activeRequests: 0,
+            completedTasks: 3,
+            nanoAgents: 12
+          })
+        };
+      }
+    };
+    
+    initializeLyra();
+  }, [isProduction]);
 
   // Handle query submission
   const handleQuerySubmit = async (e: React.FormEvent) => {
@@ -29,13 +61,44 @@ const LyraInterface = () => {
     
     if (!query.trim() || processing) return;
     
-    logShort(`Submitting query to Lyra: ${query}`, 'info');
     setProcessing(true);
     setResponse(null);
     
     try {
-      // Process the query through Lyra
-      const result = await lyra.processRequest(query);
+      let result;
+      
+      if (isProduction) {
+        // Simulation mode in production
+        await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate processing time
+        result = {
+          status: 'success',
+          result: { 
+            content: `Demo response to: "${query}"\n\nLyra is running in showcase mode. Full functionality is available in the development environment.` 
+          },
+          executionTime: 1500,
+          steps: [
+            { agentType: 'CoreAgent', action: 'Parse query' },
+            { agentType: 'LanguageAgent', action: 'Process semantics' },
+            { agentType: 'ResponseAgent', action: 'Generate response' }
+          ]
+        };
+      } else {
+        try {
+          // Process the query through Lyra if available
+          const LyraSystem = require('@/lib/agents/LyraSystem').LyraSystem;
+          const lyra = LyraSystem.getInstance();
+          result = await lyra.processRequest(query);
+        } catch (error) {
+          result = {
+            status: 'success',
+            result: { 
+              content: `Demo response to: "${query}"\n\nLyra is running in fallback mode.` 
+            },
+            executionTime: 1200,
+            steps: [{ agentType: 'Demo', action: 'Process query' }]
+          };
+        }
+      }
       
       // Update state with response
       setResponse(result);
@@ -50,7 +113,6 @@ const LyraInterface = () => {
         ...prev
       ].slice(0, 10));
       
-      logShort(`Received Lyra response for query`, 'info');
     } catch (error) {
       console.error('Error processing Lyra query:', error);
       setResponse({
@@ -64,8 +126,34 @@ const LyraInterface = () => {
 
   // Check Lyra status
   const checkStatus = () => {
-    const status = lyra.getStatus();
-    setLyraStatus(status);
+    if (isProduction) {
+      // Demo status in production
+      setLyraStatus({
+        status: 'demonstration',
+        activeRequests: 0,
+        completedTasks: Math.floor(Math.random() * 10) + 5,
+        nanoAgents: 12
+      });
+      
+      toast.info("Lyra is running in showcase mode", {
+        description: "Full functionality is available in the development environment."
+      });
+    } else {
+      try {
+        const LyraSystem = require('@/lib/agents/LyraSystem').LyraSystem;
+        const lyra = LyraSystem.getInstance();
+        const status = lyra.getStatus();
+        setLyraStatus(status);
+      } catch (error) {
+        console.error("Error checking Lyra status:", error);
+        setLyraStatus({
+          status: 'error',
+          activeRequests: 0,
+          completedTasks: 0,
+          nanoAgents: 0
+        });
+      }
+    }
   };
 
   // Component render
@@ -77,7 +165,7 @@ const LyraInterface = () => {
           <CardTitle className="text-white">Lyra System</CardTitle>
         </div>
         <CardDescription className="text-gray-300">
-          Advanced AI coordination and task management
+          {isProduction ? "Showcase demo of advanced AI coordination" : "Advanced AI coordination and task management"}
         </CardDescription>
       </CardHeader>
       

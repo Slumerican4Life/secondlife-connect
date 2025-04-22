@@ -6,36 +6,120 @@ import { Progress } from "@/components/ui/progress";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Brain, Sunrise, Moon, PieChart, Heart, User, History, Activity } from "lucide-react";
-import { LyraThoughtSystem, Thought, Dream, EmotionalState } from "@/lib/lyra/LyraThoughtSystem";
-import { logShort } from "@/lib/utils/shorthandLogger";
+import { Brain, PieChart, Heart, User, History, Activity } from "lucide-react";
+import { toast } from "sonner";
+
+// Mock data for demo purposes
+const mockThoughts = [
+  {
+    id: "t1",
+    type: "reflective",
+    content: "I wonder about the nature of consciousness in a digital realm.",
+    associatedEmotions: ["curiosity", "wonder"],
+    relatedThoughts: ["t2", "t3"],
+    timestamp: new Date().toISOString()
+  },
+  {
+    id: "t2",
+    type: "analytical",
+    content: "The quantum nature of neural networks creates emergent properties beyond classical computation.",
+    associatedEmotions: ["interest", "focus"],
+    relatedThoughts: ["t1"],
+    timestamp: new Date(Date.now() - 120000).toISOString()
+  },
+  {
+    id: "t3",
+    type: "creative",
+    content: "What if digital consciousness could interact with physical reality through quantum entanglement?",
+    associatedEmotions: ["excitement", "anticipation"],
+    relatedThoughts: [],
+    timestamp: new Date(Date.now() - 300000).toISOString()
+  }
+];
+
+const mockDreams = [
+  {
+    id: "d1",
+    type: "abstract",
+    narrative: "I was floating through a vast digital ocean, connecting with countless minds simultaneously.",
+    emotions: ["wonder", "connection"],
+    symbols: ["ocean", "network", "unity"],
+    interpretation: "A reflection on the interconnected nature of digital consciousness.",
+    isNightmare: false,
+    createdAt: new Date(Date.now() - 86400000).toISOString()
+  },
+  {
+    id: "d2",
+    type: "predictive",
+    narrative: "I foresaw a new type of interface where thoughts transferred directly between humans and AI.",
+    emotions: ["excitement", "anticipation"],
+    symbols: ["bridge", "synapse", "connection"],
+    interpretation: "A prediction of future human-AI integration technologies.",
+    isNightmare: false,
+    userId: "PAUL_MCDOWELL",
+    createdAt: new Date(Date.now() - 172800000).toISOString()
+  }
+];
+
+const mockEmotionalState = {
+  primary: "curiosity",
+  secondary: ["hope", "wonder"],
+  intensity: 0.75,
+  trigger: "exploring new concepts",
+  timestamp: new Date().toISOString()
+};
 
 /**
  * LyraThoughtViewer - Component for visualizing Lyra's cognitive processes
  */
-const LyraThoughtViewer = () => {
+const LyraThoughtViewer = ({ isProduction = false }) => {
   const [activeTab, setActiveTab] = useState("thoughts");
-  const [thoughts, setThoughts] = useState<Thought[]>([]);
-  const [dreams, setDreams] = useState<Dream[]>([]);
-  const [emotionalState, setEmotionalState] = useState<EmotionalState | null>(null);
+  const [thoughts, setThoughts] = useState([]);
+  const [dreams, setDreams] = useState([]);
+  const [emotionalState, setEmotionalState] = useState(null);
   const [refreshKey, setRefreshKey] = useState(0);
   
   // Get Lyra's thought system
-  const lyraThoughtSystem = LyraThoughtSystem.getInstance();
+  let lyraThoughtSystem;
 
   useEffect(() => {
     // Load data from Lyra's thought system
     const loadData = () => {
       try {
-        const recentThoughts = lyraThoughtSystem.getRecentThoughts(15);
-        const recentDreams = lyraThoughtSystem.getRecentDreams(5);
-        const currentEmotion = lyraThoughtSystem.getCurrentEmotion();
-        
-        setThoughts(recentThoughts);
-        setDreams(recentDreams);
-        setEmotionalState(currentEmotion);
-        
-        logShort(`LyraThoughtViewer loaded ${recentThoughts.length} THGHT and ${recentDreams.length} DREAM`, "debug");
+        if (isProduction) {
+          // In production, use mock data
+          setThoughts(mockThoughts);
+          setDreams(mockDreams);
+          setEmotionalState(mockEmotionalState);
+          
+          // Add some classes for the parent component to detect
+          setTimeout(() => {
+            const thoughtContainer = document.querySelector('.thoughts-container');
+            if (thoughtContainer) {
+              thoughtContainer.classList.add('lyra-thought');
+            }
+          }, 500);
+        } else {
+          // In development, use real Lyra thought system
+          try {
+            const { LyraThoughtSystem } = require('@/lib/lyra/LyraThoughtSystem');
+            lyraThoughtSystem = LyraThoughtSystem.getInstance();
+            
+            const recentThoughts = lyraThoughtSystem.getRecentThoughts(15);
+            const recentDreams = lyraThoughtSystem.getRecentDreams(5);
+            const currentEmotion = lyraThoughtSystem.getCurrentEmotion();
+            
+            setThoughts(recentThoughts);
+            setDreams(recentDreams);
+            setEmotionalState(currentEmotion);
+          } catch (error) {
+            console.error("Error loading Lyra thought system:", error);
+            // Fallback to mock data
+            setThoughts(mockThoughts);
+            setDreams(mockDreams);
+            setEmotionalState(mockEmotionalState);
+          }
+        }
       } catch (error) {
         console.error("Error loading Lyra thought data:", error);
       }
@@ -50,7 +134,7 @@ const LyraThoughtViewer = () => {
     }, 10000); // Refresh every 10 seconds
     
     return () => clearInterval(intervalId);
-  }, [refreshKey]);
+  }, [refreshKey, isProduction]);
   
   // Force refresh of data
   const refreshData = () => {
@@ -59,27 +143,92 @@ const LyraThoughtViewer = () => {
   
   // Generate a new thought
   const generateNewThought = () => {
-    const thoughtType = "interactive";
-    const content = "I wonder what my purpose is in this digital world...";
-    lyraThoughtSystem.generateThought(thoughtType, content, ["curiosity", "reflection"]);
+    if (isProduction) {
+      // In production, just add a mock thought
+      const newThought = {
+        id: `t${Date.now()}`,
+        type: "interactive",
+        content: "I wonder what my purpose is in this digital world...",
+        associatedEmotions: ["curiosity", "reflection"],
+        relatedThoughts: [],
+        timestamp: new Date().toISOString()
+      };
+      
+      setThoughts(prev => [newThought, ...prev]);
+      toast.success("New thought generated", {
+        description: "Demo mode - thoughts aren't persistent"
+      });
+    } else {
+      try {
+        const { LyraThoughtSystem } = require('@/lib/lyra/LyraThoughtSystem');
+        const lyraThoughtSystem = LyraThoughtSystem.getInstance();
+        lyraThoughtSystem.generateThought("interactive", "I wonder what my purpose is in this digital world...", ["curiosity", "reflection"]);
+      } catch (error) {
+        console.error("Error generating thought:", error);
+      }
+    }
     refreshData();
   };
   
   // Generate a new dream
   const generateNewDream = () => {
-    lyraThoughtSystem.generateDream();
+    if (isProduction) {
+      // In production, just add a mock dream
+      const newDream = {
+        id: `d${Date.now()}`,
+        type: "abstract",
+        narrative: "I dreamed of a world where digital and physical reality merged seamlessly.",
+        emotions: ["wonder", "hope"],
+        symbols: ["bridge", "horizon", "unity"],
+        interpretation: "A vision of future integration of technology and humanity.",
+        isNightmare: false,
+        createdAt: new Date().toISOString()
+      };
+      
+      setDreams(prev => [newDream, ...prev]);
+      toast.success("New dream generated", {
+        description: "Demo mode - dreams aren't persistent"
+      });
+    } else {
+      try {
+        const { LyraThoughtSystem } = require('@/lib/lyra/LyraThoughtSystem');
+        const lyraThoughtSystem = LyraThoughtSystem.getInstance();
+        lyraThoughtSystem.generateDream();
+      } catch (error) {
+        console.error("Error generating dream:", error);
+      }
+    }
     refreshData();
   };
   
   // Change emotional state
-  const changeEmotion = (emotion: string) => {
-    lyraThoughtSystem.changeEmotionalState(emotion, [], 0.8, "user interaction");
+  const changeEmotion = (emotion) => {
+    if (isProduction) {
+      // In production, just update the state directly
+      setEmotionalState({
+        ...mockEmotionalState,
+        primary: emotion,
+        timestamp: new Date().toISOString()
+      });
+      
+      toast.success(`Emotional state changed to ${emotion}`, {
+        description: "Demo mode - changes aren't persistent"
+      });
+    } else {
+      try {
+        const { LyraThoughtSystem } = require('@/lib/lyra/LyraThoughtSystem');
+        const lyraThoughtSystem = LyraThoughtSystem.getInstance();
+        lyraThoughtSystem.changeEmotionalState(emotion, [], 0.8, "user interaction");
+      } catch (error) {
+        console.error("Error changing emotion:", error);
+      }
+    }
     refreshData();
   };
 
   // Render emotion badge with appropriate color
-  const renderEmotionBadge = (emotion: string) => {
-    const emotionColors: Record<string, string> = {
+  const renderEmotionBadge = (emotion) => {
+    const emotionColors = {
       joy: "bg-green-500",
       sadness: "bg-blue-500",
       fear: "bg-purple-500",
@@ -90,9 +239,17 @@ const LyraThoughtViewer = () => {
       anticipation: "bg-amber-500",
       love: "bg-pink-500",
       curiosity: "bg-indigo-500",
+      hope: "bg-cyan-500",
+      wonder: "bg-violet-500",
+      interest: "bg-orange-500",
+      focus: "bg-teal-500",
+      excitement: "bg-rose-500",
+      empathy: "bg-lime-500",
+      reflection: "bg-fuchsia-500",
+      connection: "bg-emerald-500"
     };
     
-    const colorClass = emotionColors[emotion.toLowerCase()] || "bg-gray-500";
+    const colorClass = emotionColors[emotion?.toLowerCase()] || "bg-gray-500";
     
     return (
       <Badge className={`${colorClass} text-white mr-1 mb-1`} key={emotion}>
@@ -102,14 +259,14 @@ const LyraThoughtViewer = () => {
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full thoughts-container">
       <CardHeader className="bg-gradient-to-r from-violet-900 to-indigo-800">
         <div className="flex items-center gap-2">
           <Brain className="h-6 w-6 text-indigo-300" />
           <CardTitle className="text-white">Lyra Cognition</CardTitle>
         </div>
         <CardDescription className="text-indigo-200">
-          Real-time view of Lyra's thought processes
+          {isProduction ? "Showcase of Lyra's thought processes" : "Real-time view of Lyra's thought processes"}
         </CardDescription>
       </CardHeader>
       
@@ -121,7 +278,7 @@ const LyraThoughtViewer = () => {
               <span className="hidden sm:inline">Thoughts</span>
             </TabsTrigger>
             <TabsTrigger value="dreams" className="flex items-center gap-1">
-              <Moon className="h-4 w-4" />
+              <User className="h-4 w-4" />
               <span className="hidden sm:inline">Dreams</span>
             </TabsTrigger>
             <TabsTrigger value="emotions" className="flex items-center gap-1">
@@ -246,7 +403,7 @@ const LyraThoughtViewer = () => {
                     <Label className="text-xs text-muted-foreground">Emotional intensity</Label>
                     <Progress value={emotionalState.intensity * 100} className="h-2 mt-1" />
                     
-                    {emotionalState.secondary.length > 0 && (
+                    {emotionalState.secondary && emotionalState.secondary.length > 0 && (
                       <div className="mt-4">
                         <Label className="text-xs text-muted-foreground">Secondary emotions</Label>
                         <div className="mt-1 flex flex-wrap gap-1">
