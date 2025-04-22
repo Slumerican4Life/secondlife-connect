@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,14 @@ const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const { user, signIn, signUp } = useAuth();
+  
+  // Check for showcase redirect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('from') === 'showcase') {
+      window.location.href = '/showcase';
+    }
+  }, []);
   
   // If already logged in, redirect to home
   if (user) {
@@ -221,16 +230,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-const Login = () => {
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('from') === 'showcase') {
-      window.location.href = '/showcase';
-    }
-  }, []);
-  
-  return <LoginPage />;
-};
-
-export default Login;
