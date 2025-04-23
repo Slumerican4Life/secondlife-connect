@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
@@ -15,6 +16,7 @@ import SubscriptionsTabContent from "@/components/Monetization/Tabs/Subscription
 import MarketplaceTabContent from "@/components/Monetization/Tabs/MarketplaceTabContent";
 import BankingTabContent from "@/components/Monetization/Tabs/BankingTabContent";
 import AutomatedTabContent from "@/components/Monetization/Tabs/AutomatedTabContent";
+import MonetizationAIHub from "@/components/Monetization/MonetizationAIHub";
 import { useToast } from "@/components/ui/use-toast";
 import { AgentManager } from "@/lib/agents/AgentManager";
 
@@ -108,6 +110,11 @@ const MonetizationDashboard = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
               <RevenueCards />
+            </div>
+
+            {/* Add MonetizationAIHub component for intelligent monetization */}
+            <div className="mb-6">
+              <MonetizationAIHub />
             </div>
 
             <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
