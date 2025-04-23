@@ -9,6 +9,102 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ad_market_analysis: {
+        Row: {
+          analysis_date: string | null
+          category: string
+          competition_level: string
+          demand_score: number
+          id: string
+          price_trend: number
+        }
+        Insert: {
+          analysis_date?: string | null
+          category: string
+          competition_level: string
+          demand_score: number
+          id?: string
+          price_trend: number
+        }
+        Update: {
+          analysis_date?: string | null
+          category?: string
+          competition_level?: string
+          demand_score?: number
+          id?: string
+          price_trend?: number
+        }
+        Relationships: []
+      }
+      ad_opportunities: {
+        Row: {
+          ai_confidence_score: number
+          category: string
+          created_at: string | null
+          duration_days: number
+          estimated_reach: number
+          id: string
+          last_analysis_at: string | null
+          placement_type: string
+          status: string | null
+          suggested_price: number
+        }
+        Insert: {
+          ai_confidence_score: number
+          category: string
+          created_at?: string | null
+          duration_days: number
+          estimated_reach: number
+          id?: string
+          last_analysis_at?: string | null
+          placement_type: string
+          status?: string | null
+          suggested_price: number
+        }
+        Update: {
+          ai_confidence_score?: number
+          category?: string
+          created_at?: string | null
+          duration_days?: number
+          estimated_reach?: number
+          id?: string
+          last_analysis_at?: string | null
+          placement_type?: string
+          status?: string | null
+          suggested_price?: number
+        }
+        Relationships: []
+      }
+      advertiser_preferences: {
+        Row: {
+          budget_range: string
+          created_at: string | null
+          id: string
+          industry: string
+          preferred_placement: string[] | null
+          target_audience: string
+          updated_at: string | null
+        }
+        Insert: {
+          budget_range: string
+          created_at?: string | null
+          id?: string
+          industry: string
+          preferred_placement?: string[] | null
+          target_audience: string
+          updated_at?: string | null
+        }
+        Update: {
+          budget_range?: string
+          created_at?: string | null
+          id?: string
+          industry?: string
+          preferred_placement?: string[] | null
+          target_audience?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       auth_logs: {
         Row: {
           created_at: string
