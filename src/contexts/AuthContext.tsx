@@ -63,6 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   });
   const [subscription, setSubscription] = useState<UserSubscription | null>(null);
   
+  // Now useNavigate is safely used within Router context
   const navigate = useNavigate();
 
   useEffect(() => {

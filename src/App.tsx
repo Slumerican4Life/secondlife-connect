@@ -16,13 +16,15 @@ import RevenueOptimizer from "./pages/RevenueOptimizer";
 import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "./contexts/AuthContext";
 import AIAssistant from "./components/AIAssistant";
+import Login from "./pages/Login";
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/marketplace" element={<Marketplace />} />
           <Route path="/worlds" element={<Worlds />} />
@@ -38,8 +40,8 @@ const App = () => {
         </Routes>
         <Toaster />
         <AIAssistant />
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 
