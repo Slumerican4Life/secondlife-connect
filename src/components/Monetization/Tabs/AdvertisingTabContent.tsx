@@ -1,6 +1,6 @@
 
 import { AIAdvertisingManager } from '../AIAdvertisingManager'
-import { AdvertisingPerformance } from '../AdvertisingPerformance'
+import AdvertisingPerformance from '../AdvertisingPerformance'
 
 const AdvertisingTabContent = () => {
   return (
