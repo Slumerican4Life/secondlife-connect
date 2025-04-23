@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { 
   HomeIcon, UsersIcon, GlobeIcon, HeartIcon, ShoppingBagIcon, 
   BuildingIcon, ShieldIcon, UsersRoundIcon, DropletIcon, 
-  BrainCircuitIcon, DollarSignIcon, Settings2Icon
+  BrainCircuitIcon, DollarSignIcon, Settings2Icon, TrendingUpIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
@@ -32,7 +32,8 @@ const Sidebar = () => {
   const premiumLinks = [
     { name: "AI Showcase", href: "/showcase", icon: BrainCircuitIcon },
     { name: "Sponsorship", href: "/sponsorship", icon: DollarSignIcon },
-    { name: "Revenue Optimizer", href: "/revenue-optimizer", icon: Settings2Icon, new: true }
+    { name: "Revenue Optimizer", href: "/revenue-optimizer", icon: Settings2Icon },
+    { name: "Monetization", href: "/monetization", icon: TrendingUpIcon, new: true }
   ];
   
   return (

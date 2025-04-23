@@ -17,6 +17,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { AuthProvider } from "./contexts/AuthContext";
 import AIAssistant from "./components/AIAssistant";
 import Login from "./pages/Login";
+import MonetizationDashboard from "./pages/MonetizationDashboard";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/showcase" element={<Showcase />} />
           <Route path="/sponsorship" element={<Sponsorship />} />
           <Route path="/revenue-optimizer" element={<RevenueOptimizer />} />
+          <Route path="/monetization" element={<MonetizationDashboard />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Toaster />
