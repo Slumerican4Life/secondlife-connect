@@ -1,391 +1,387 @@
+
 import { BaseAIAgent, AgentResponse } from "./AIAgent";
-import { QuantumRevenueOptimizer } from "./QuantumRevenueOptimizer";
 import { logShort } from "../utils/shorthandLogger";
-
-interface MonetizationStrategy {
-  type: string;
-  name: string;
-  description: string;
-  estimatedRevenue: string;
-  implementationComplexity: 'low' | 'medium' | 'high';
-  requirements: string[];
-}
-
-interface AdvertiserProfile {
-  name: string;
-  industry: string;
-  budget: number;
-  targetDemographic: string;
-  preferredPlacement: string[];
-}
+import { QuantumRevenueOptimizer } from "./QuantumRevenueOptimizer";
 
 /**
- * Agent focused on managing monetization strategies and advertising partnerships
- * Enhanced with quantum-inspired optimization algorithms
+ * AI agent specialized in monetization and revenue optimization
+ * Leverages quantum-inspired algorithms for financial analysis
  */
 export class AIMonetizationAgent extends BaseAIAgent {
-  private monetizationStrategies: MonetizationStrategy[];
-  private potentialAdvertisers: AdvertiserProfile[];
   private revenueOptimizer: QuantumRevenueOptimizer;
-  private automatedRevenueEnabled: boolean = false;
-  private lastOptimizationDate?: Date;
+  private marketAnalytics: Record<string, any> = {};
+  private userSegments: Record<string, any> = {};
+  private revenueStreams: string[] = [
+    "premium_subscriptions",
+    "virtual_goods",
+    "sponsorships",
+    "advertising",
+    "transaction_fees",
+    "data_services",
+    "virtual_land_sales"
+  ];
   
   constructor() {
     super(
-      "Monetization Assistant", 
-      "AI agent that helps optimize revenue streams through various monetization channels"
+      "Monetization Specialist", 
+      "AI agent specializing in revenue optimization and monetization strategies"
     );
     
-    // Initialize the quantum revenue optimizer
     this.revenueOptimizer = QuantumRevenueOptimizer.getInstance();
-    logShort("Monetization agent initialized with quantum revenue optimizer", "info");
+    this.initMarketAnalytics();
     
-    // Initialize monetization strategies
-    this.monetizationStrategies = [
-      {
-        type: "subscription",
-        name: "Premium Membership",
-        description: "Recurring subscription model with tiered benefits",
-        estimatedRevenue: "High with good retention",
-        implementationComplexity: "medium",
-        requirements: ["Payment processor", "Member benefits", "Content gating"]
-      },
-      {
-        type: "virtual_currency",
-        name: "Linden Dollar Exchange",
-        description: "Integrate with official Linden Dollar system for seamless transactions",
-        estimatedRevenue: "High with strong user adoption",
-        implementationComplexity: "medium",
-        requirements: ["Linden API integration", "Secure wallet management", "Transaction monitoring"]
-      },
-      {
-        type: "advertising",
-        name: "Targeted Display Ads",
-        description: "Banner and interstitial ads based on user preferences",
-        estimatedRevenue: "Medium with high traffic",
-        implementationComplexity: "low",
-        requirements: ["Ad network integration", "User analytics"]
-      },
-      {
-        type: "marketplace",
-        name: "Transaction Fees",
-        description: "Commission on marketplace sales between users",
-        estimatedRevenue: "High with active marketplace",
-        implementationComplexity: "medium",
-        requirements: ["Marketplace functionality", "Payment escrow", "Dispute resolution"]
-      },
-      {
-        type: "premium_content",
-        name: "Premium Content Access",
-        description: "Pay-per-view or premium access to exclusive content",
-        estimatedRevenue: "Medium with quality content",
-        implementationComplexity: "low",
-        requirements: ["Content gating", "Payment processor"]
-      },
-      {
-        type: "land_leasing",
-        name: "Virtual Land Leasing",
-        description: "Lease parcels of virtual land to users for monthly fees",
-        estimatedRevenue: "Very high with prime locations",
-        implementationComplexity: "high",
-        requirements: ["Land management system", "Automated billing", "Zoning regulations"]
-      },
-      {
-        type: "creator_tools",
-        name: "Premium Creator Tools",
-        description: "Advanced tools for content creators with subscription fee",
-        estimatedRevenue: "Medium with creator adoption",
-        implementationComplexity: "medium",
-        requirements: ["Tool development", "Creator support", "Regular updates"]
+    logShort("Monetization Agent initialized with quantum revenue optimizer", "info");
+  }
+  
+  private initMarketAnalytics(): void {
+    // Initialize market analytics with simulated data
+    this.marketAnalytics = {
+      marketSize: 42000000, // $42M
+      growthRate: 0.18, // 18%
+      competitorAnalysis: [
+        { name: "Platform A", marketShare: 0.28, strengths: ["UI/UX", "Brand recognition"] },
+        { name: "Platform B", marketShare: 0.15, strengths: ["Tech innovation", "User retention"] },
+        { name: "Platform C", marketShare: 0.12, strengths: ["Content quality", "Creator tools"] }
+      ],
+      trendingCategories: [
+        { category: "Virtual fashion", growth: 0.32 },
+        { category: "Interactive experiences", growth: 0.28 },
+        { category: "Digital collectibles", growth: 0.25 }
+      ],
+      revenueDistribution: {
+        subscriptions: 0.35,
+        itemSales: 0.28,
+        realEstate: 0.22,
+        advertising: 0.12,
+        other: 0.03
       }
-    ];
+    };
     
-    // Initialize potential advertisers
-    this.potentialAdvertisers = [
-      {
-        name: "VirtualFashion Inc.",
-        industry: "Virtual Apparel",
-        budget: 5000,
-        targetDemographic: "Fashion-conscious users aged 18-35",
-        preferredPlacement: ["Profile pages", "Virtual events"]
-      },
-      {
-        name: "DigitalRealEstate Group",
-        industry: "Virtual Land",
-        budget: 12000,
-        targetDemographic: "High net worth users interested in virtual property",
-        preferredPlacement: ["Homepage", "Marketplace listings"]
-      },
-      {
-        name: "CryptoWallet Pro",
-        industry: "Cryptocurrency",
-        budget: 8000,
-        targetDemographic: "Crypto enthusiasts and investors",
-        preferredPlacement: ["Transaction pages", "Currency exchange screens"]
-      },
-      {
-        name: "AvatarCustomize",
-        industry: "Character Customization",
-        budget: 3500,
-        targetDemographic: "New users and customization enthusiasts",
-        preferredPlacement: ["User profile editor", "Social hubs"]
-      },
-      {
-        name: "LindenExchange",
-        industry: "Virtual Currency",
-        budget: 10000,
-        targetDemographic: "Active traders and premium users",
-        preferredPlacement: ["Marketplace", "Financial dashboards", "Premium features"]
-      },
-      {
-        name: "SecondLife Builders Guild",
-        industry: "Design & Construction",
-        budget: 7500,
-        targetDemographic: "Land owners and design enthusiasts",
-        preferredPlacement: ["Real estate listings", "Design showcases"]
-      }
-    ];
+    // Initialize user segments
+    this.userSegments = {
+      creators: { size: 0.12, averageSpend: 250, growthRate: 0.22 },
+      socializers: { size: 0.45, averageSpend: 120, growthRate: 0.18 },
+      collectors: { size: 0.28, averageSpend: 320, growthRate: 0.15 },
+      builders: { size: 0.15, averageSpend: 420, growthRate: 0.12 }
+    };
   }
   
   async processQuery(query: string): Promise<string> {
     const normalizedQuery = query.toLowerCase();
+    logShort(`Monetization agent processing query: ${query}`, "debug");
     
-    if (normalizedQuery.includes("automated") || normalizedQuery.includes("automatic") || 
-        normalizedQuery.includes("optimize") || normalizedQuery.includes("quantum")) {
-      return this.formatResponse({
-        message: "Automated revenue optimization initiated.",
-        success: true,
-        data: await this.handleAutomatedRevenueRequest()
+    if (normalizedQuery.includes("revenue") && normalizedQuery.includes("optimize")) {
+      // Run revenue optimization
+      const optimizationResult = this.revenueOptimizer.runOptimization({
+        riskTolerance: 5,
+        timeHorizon: 90,
+        initialBudget: 5000
       });
-    }
-    
-    if (normalizedQuery.includes("revenue") || normalizedQuery.includes("money") || normalizedQuery.includes("monetiz")) {
+      
       return this.formatResponse({
-        message: "I've analyzed potential monetization strategies for your platform.",
+        message: "Revenue optimization analysis completed with quantum algorithms",
         success: true,
         data: {
-          recommendedStrategies: this.monetizationStrategies.slice(0, 3),
-          estimatedMonthlyRevenue: "$5,000 - $15,000 depending on user activity and implementation",
-          keyRecommendation: "Implement a multi-faceted approach combining Linden Dollar integration, subscriptions, and transaction fees",
-          automatedOptimizationAvailable: true
+          estimatedRevenue: optimizationResult.estimatedTotalRevenue,
+          topOpportunities: optimizationResult.opportunities.slice(0, 3).map(o => o.name),
+          confidenceScore: optimizationResult.confidenceScore,
+          timelineEstimate: optimizationResult.timelineEstimate
         },
         suggestions: [
-          "Show me subscription models",
-          "How can I monetize virtual land?",
-          "Optimize Linden Dollar exchange",
-          "Enable automated revenue optimization"
+          "View detailed revenue breakdown",
+          "Modify optimization parameters",
+          "Export strategy to PDF",
+          "Schedule implementation meeting"
         ]
       });
     }
     
-    if (normalizedQuery.includes("advertis") || normalizedQuery.includes("sponsor")) {
+    if (normalizedQuery.includes("market") && 
+        (normalizedQuery.includes("analysis") || normalizedQuery.includes("analytics"))) {
       return this.formatResponse({
-        message: "I can help you connect with potential advertisers and optimize your ad strategy.",
+        message: "Market analysis report generated",
         success: true,
-        data: {
-          potentialAdvertisers: this.potentialAdvertisers,
-          recommendedPlacements: [
-            { location: "Homepage banner", estimatedCPM: "$2.50" },
-            { location: "Profile sidebar", estimatedCPM: "$1.75" },
-            { location: "Marketplace listings", estimatedCPM: "$3.20" }
-          ]
-        },
+        data: this.marketAnalytics,
         suggestions: [
-          "Connect me with VirtualFashion Inc.",
-          "Create an advertising package",
-          "Optimize ad placements",
-          "Enable automated revenue optimization"
+          "Compare to previous quarter",
+          "Analyze competitor strengths",
+          "Identify growth opportunities",
+          "Export market report"
         ]
       });
     }
     
-    if (normalizedQuery.includes("linden") || normalizedQuery.includes("currency") || normalizedQuery.includes("crypto")) {
+    if (normalizedQuery.includes("user") && 
+        (normalizedQuery.includes("segment") || normalizedQuery.includes("audience"))) {
       return this.formatResponse({
-        message: "Here are strategies for implementing Linden Dollar integration and cryptocurrency options.",
+        message: "User segment analysis completed",
+        success: true,
+        data: this.userSegments,
+        suggestions: [
+          "Target high-value segments",
+          "Develop retention strategies",
+          "Analyze conversion funnels",
+          "Create targeted offers"
+        ]
+      });
+    }
+    
+    if ((normalizedQuery.includes("subscription") || normalizedQuery.includes("premium")) && 
+        normalizedQuery.includes("model")) {
+      return this.formatResponse({
+        message: "Subscription model analysis completed",
         success: true,
         data: {
-          lindenDollarIntegration: {
-            officialExchange: true,
-            exchangeRate: "L$250 = $1 USD",
-            implementationComplexity: "Medium",
-            revenueModel: "Transaction fees + premium exchange rates",
-            estimatedMonthlyRevenue: "$2,500 - $7,500 depending on volume"
-          },
-          keyBenefits: [
-            "Seamless integration with Second Life economy",
-            "Established user trust and familiarity",
-            "Lower regulatory hurdles compared to cryptocurrency",
-            "Potential for high transaction volume"
+          recommendedTiers: [
+            {
+              name: "Basic",
+              price: 9.99,
+              features: ["Ad-free experience", "Basic customization", "Standard support"],
+              conversionRate: "3.2%",
+              retentionRate: "68%"
+            },
+            {
+              name: "Plus",
+              price: 19.99,
+              features: ["All Basic features", "Advanced customization", "Priority support", "Early access"],
+              conversionRate: "1.8%",
+              retentionRate: "82%"
+            },
+            {
+              name: "Pro",
+              price: 49.99,
+              features: ["All Plus features", "Exclusive content", "API access", "White-glove support"],
+              conversionRate: "0.5%",
+              retentionRate: "91%"
+            }
           ],
-          implementationSteps: [
-            "Establish official partnership with Linden Lab",
-            "Implement secure wallet system",
-            "Create transaction monitoring dashboard",
-            "Set competitive exchange rates and fee structure"
-          ]
+          keyMetrics: {
+            lifetimeValue: "$248",
+            acquisitionCost: "$32",
+            paybackPeriod: "3.2 months"
+          }
         },
         suggestions: [
-          "Set up Linden Dollar exchange",
-          "Implement crypto payments",
-          "Create subscription packages",
-          "Enable automated revenue optimization"
+          "Implement A/B pricing tests",
+          "Develop upgrade incentives",
+          "Create annual discount plan",
+          "Add premium-only features"
         ]
       });
     }
     
+    if (normalizedQuery.includes("sponsor") || 
+        (normalizedQuery.includes("brand") && normalizedQuery.includes("partnership"))) {
+      return this.formatResponse({
+        message: "Sponsorship opportunity analysis completed",
+        success: true,
+        data: {
+          recommendedPackages: [
+            {
+              name: "Event Sponsor",
+              price: "$2,500",
+              benefits: ["Logo placement", "Announcement mentions", "Booth space"],
+              estimatedReach: "25,000 users"
+            },
+            {
+              name: "Featured Partner",
+              price: "$8,000",
+              benefits: ["Home page placement", "In-app promotions", "Custom event", "Analytics report"],
+              estimatedReach: "85,000 users"
+            },
+            {
+              name: "Strategic Alliance",
+              price: "$25,000+",
+              benefits: ["Platform integration", "Co-branded content", "Exclusive marketing campaigns", "VIP events"],
+              estimatedReach: "200,000+ users"
+            }
+          ],
+          targetIndustries: ["Fashion", "Technology", "Entertainment", "Financial Services"],
+          potentialRevenue: "$450,000 annually"
+        },
+        suggestions: [
+          "Create sponsorship prospectus",
+          "Develop partner onboarding",
+          "Create measurement framework",
+          "Design integration options"
+        ]
+      });
+    }
+    
+    // Default response with general monetization info
     return this.formatResponse({
-      message: "I can help you maximize revenue through various monetization channels. What specific aspect are you interested in?",
+      message: "I'm your monetization specialist. How can I help optimize your revenue today?",
       success: true,
+      data: {
+        activeStreams: this.revenueStreams,
+        currentFocus: "Subscription model optimization",
+        recentInsight: "User segment 'Collectors' shows 15% higher willingness to pay for premium features"
+      },
       suggestions: [
-        "Show monetization options",
-        "Find potential advertisers",
-        "Calculate potential revenue",
-        "Optimize Linden Dollar integration",
-        "Enable automated revenue optimization"
+        "Optimize revenue strategy",
+        "Analyze market trends",
+        "Review user segments",
+        "Evaluate subscription model",
+        "Analyze sponsorship opportunities"
       ]
     });
   }
   
   /**
-   * Handle requests for automated revenue optimization
+   * Run a quantum revenue simulation with advanced parameters
    */
-  private async handleAutomatedRevenueRequest(): Promise<any> {
-    // Toggle automated revenue optimization
-    this.automatedRevenueEnabled = !this.automatedRevenueEnabled;
+  async runQuantumRevenueSim(parameters: any): Promise<any> {
+    logShort("Running quantum revenue simulation with advanced parameters", "info");
     
-    if (this.automatedRevenueEnabled) {
-      // Run initial optimization
-      const result = this.runRevenueOptimization();
-      this.lastOptimizationDate = new Date();
-      
-      return {
-        optimizationResult: result,
-        status: "ENABLED",
-        nextOptimizationTime: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
-        projectedMonthlyRevenue: `$${result.estimatedTotalRevenue.toFixed(2)}`,
-        confidenceScore: `${(result.confidenceScore * 100).toFixed(1)}%`,
-        implementationTimeline: `${result.timelineEstimate} days`
-      };
-    } else {
-      return {
-        status: "DISABLED",
-        lastOptimizationDate: this.lastOptimizationDate?.toISOString(),
-        previousResults: this.revenueOptimizer.getLastOptimizationResult()
-      };
-    }
+    // Adjust market conditions based on parameters
+    this.revenueOptimizer.updateMarketConditions({
+      "subscription-market-growth": parameters.subscriptionGrowth || 1.2,
+      "virtual-currency-demand": parameters.currencyDemand || 1.5,
+      "advertising-market-saturation": parameters.adSaturation || 0.8,
+      "content-monetization-trend": parameters.contentTrend || 1.3
+    });
+    
+    // Run the optimization
+    return this.revenueOptimizer.runOptimization({
+      riskTolerance: parameters.riskTolerance || 5,
+      timeHorizon: parameters.timeHorizon || 90,
+      initialBudget: parameters.budget || 5000
+    });
   }
   
   /**
-   * Run revenue optimization using the quantum optimizer
+   * Get optimized pricing tiers based on user segments
    */
-  private runRevenueOptimization(params?: {
-    riskTolerance?: number;
-    timeHorizon?: number;
-    initialBudget?: number;
-  }): any {
-    logShort("Running quantum-inspired revenue optimization", "info");
+  getPricingTierRecommendations(): any {
+    logShort("Generating optimized pricing tier recommendations", "info");
     
-    // Set market-aware preferences
-    this.revenueOptimizer.setUserPreferences({
-      "subscription": 1.2,
-      "virtual-currency": 1.5,
-      "marketplace": 1.3,
-      "advertising": 0.9,
-      "content": 1.1
-    });
-    
-    // Run the optimization algorithm
-    return this.revenueOptimizer.runOptimization(params);
-  }
-  
-  // Custom methods for monetization agent
-  async analyzeUserSegments(userData: any[]): Promise<any> {
-    // Analyze user data to identify high-value user segments for monetization
     return {
-      highValueSegments: [
-        { segment: "Active creators", monetizationPotential: "High", recommendedApproach: "Premium tools and visibility boosting" },
-        { segment: "Social connectors", monetizationPotential: "Medium", recommendedApproach: "Group features and event hosting" },
-        { segment: "Land owners", monetizationPotential: "Very high", recommendedApproach: "Property enhancement services and taxes" },
-        { segment: "Linden traders", monetizationPotential: "High", recommendedApproach: "Premium exchange rates and financial tools" }
+      tiers: [
+        {
+          name: "Basic",
+          price: 9.99,
+          features: ["Ad-free experience", "Basic customization", "Standard support"],
+          targetSegment: "socializers"
+        },
+        {
+          name: "Creator",
+          price: 24.99,
+          features: ["Advanced tools", "Analytics dashboard", "Priority support", "Early access"],
+          targetSegment: "creators"
+        },
+        {
+          name: "Collector",
+          price: 19.99,
+          features: ["Exclusive items", "Trading features", "Rarity alerts", "Collection tools"],
+          targetSegment: "collectors"
+        },
+        {
+          name: "Builder",
+          price: 29.99,
+          features: ["Advanced building tools", "Scripting capabilities", "Expanded land rights", "Asset importing"],
+          targetSegment: "builders"
+        },
+        {
+          name: "Enterprise",
+          price: "Custom",
+          features: ["All features", "White-label options", "API access", "Dedicated support"],
+          targetSegment: "business"
+        }
       ],
-      untappedOpportunities: [
-        "Education and training services",
-        "Exclusive virtual events",
-        "Digital collectibles marketplace",
-        "Linden Dollar investment products"
-      ]
+      recommendations: [
+        "Implement dynamic pricing based on user behavior",
+        "Create bundled offerings for complementary features",
+        "Introduce seasonal promotions to boost conversions",
+        "Develop loyalty rewards to improve retention"
+      ],
+      projectedRevenue: "$2.4M annually"
     };
   }
   
   /**
-   * Enhanced revenue projection with quantum optimization insights
+   * Generate a sponsorship prospectus
    */
-  async calculateRevenueProjection(userCount: number, activePercentage: number): Promise<any> {
-    // Get quantum optimization insights
-    const optimizationResult = this.revenueOptimizer.getLastOptimizationResult() || 
-                              this.runRevenueOptimization();
-    
-    // Calculate projected revenue based on user metrics and optimization insights
-    const activeUsers = userCount * (activePercentage / 100);
-    const subscriptionRevenue = activeUsers * 0.05 * 9.99; // 5% conversion at $9.99/month
-    const adRevenue = activeUsers * 0.5; // $0.50 per active user per month
-    const transactionRevenue = activeUsers * 0.2 * 2; // 20% make transactions with $2 average fee
-    const lindenExchangeRevenue = activeUsers * 0.15 * 3; // 15% use Linden exchange with $3 average fee
-    
-    // Apply optimization boost factors
-    const optimizationBoost = optimizationResult.confidenceScore * 0.3 + 1.0; // 1.0 to 1.3x boost
-    const totalMonthly = (subscriptionRevenue + adRevenue + transactionRevenue + lindenExchangeRevenue) * optimizationBoost;
+  generateSponsorshipProspectus(): any {
+    logShort("Generating comprehensive sponsorship prospectus", "info");
     
     return {
-      totalMonthly: totalMonthly,
-      optimizedTotal: totalMonthly * optimizationBoost,
-      breakdown: {
-        subscriptions: subscriptionRevenue * optimizationBoost,
-        advertising: adRevenue * optimizationBoost,
-        transactions: transactionRevenue * optimizationBoost,
-        lindenExchange: lindenExchangeRevenue * optimizationBoost
+      packages: [
+        {
+          tier: "Bronze",
+          price: "$1,000 - $2,500",
+          benefits: [
+            "Logo placement in directory",
+            "One announcement post",
+            "Basic analytics"
+          ],
+          bestFor: "Small local businesses"
+        },
+        {
+          tier: "Silver",
+          price: "$2,500 - $8,000",
+          benefits: [
+            "All Bronze benefits",
+            "Sidebar ad placement",
+            "Featured in newsletter",
+            "Custom profile page",
+            "Advanced analytics"
+          ],
+          bestFor: "Growing brands and startups"
+        },
+        {
+          tier: "Gold",
+          price: "$8,000 - $25,000",
+          benefits: [
+            "All Silver benefits",
+            "Home page banner",
+            "Sponsored content series",
+            "Co-branded event",
+            "Direct message campaigns",
+            "Detailed audience insights"
+          ],
+          bestFor: "Established brands seeking growth"
+        },
+        {
+          tier: "Platinum",
+          price: "$25,000+",
+          benefits: [
+            "All Gold benefits",
+            "Custom integration",
+            "Exclusive category sponsorship",
+            "VIP events access",
+            "Product placement",
+            "Consulting sessions",
+            "Early access to new features"
+          ],
+          bestFor: "Strategic partners and enterprise clients"
+        }
+      ],
+      audienceMetrics: {
+        monthlyUsers: 450000,
+        engagementRate: "32%",
+        avgSessionLength: "18 minutes",
+        demographicHighlights: [
+          "65% aged 25-44",
+          "58% higher income than industry average",
+          "73% early technology adopters"
+        ]
       },
-      optimizationInsights: {
-        recommendedFocus: optimizationResult.implementationOrder.slice(0, 3),
-        confidenceScore: optimizationResult.confidenceScore,
-        projectedIncrease: `${((optimizationBoost - 1) * 100).toFixed(1)}%`
-      },
-      growthOpportunities: [
-        "Increase subscription conversion by 2% with improved onboarding",
-        "Implement targeted ads for 30% higher CPM rates",
-        "Add premium marketplace options with 5% higher transaction fees",
-        "Optimize Linden Dollar exchange rates for 20% higher volume"
-      ]
+      successStories: [
+        {
+          brand: "TechVenture X",
+          packageType: "Gold",
+          results: "220% ROI, 45,000 qualified leads, 15% conversion to sale"
+        },
+        {
+          brand: "Lifestyle Unlimited",
+          packageType: "Platinum",
+          results: "180% ROI, 35% increase in brand awareness, 28,000 new customers"
+        }
+      ],
+      contactInfo: {
+        email: "partnerships@secondlifeconnect.com",
+        phone: "(555) 123-4567"
+      }
     };
-  }
-  
-  async matchAdvertisers(contentType: string, userDemographic: string): Promise<AdvertiserProfile[]> {
-    // Match content and user demographics with appropriate advertisers
-    return this.potentialAdvertisers.filter(advertiser => 
-      advertiser.targetDemographic.toLowerCase().includes(userDemographic.toLowerCase())
-    );
-  }
-
-  /**
-   * Handle receiving intelligence data from other agents
-   */
-  public receiveIntelligence(data: any): void {
-    if (data.type === 'market_data' || data.type === 'user_behavior') {
-      // Update the revenue optimizer with new market data
-      if (data.marketConditions) {
-        this.revenueOptimizer.updateMarketConditions(data.marketConditions);
-      }
-      
-      // Update user preferences based on behavior data
-      if (data.userPreferences) {
-        this.revenueOptimizer.setUserPreferences(data.userPreferences);
-      }
-      
-      // Re-run optimization if automated mode is enabled
-      if (this.automatedRevenueEnabled) {
-        this.runRevenueOptimization();
-        this.lastOptimizationDate = new Date();
-      }
-    }
   }
 }
