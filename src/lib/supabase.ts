@@ -6,10 +6,10 @@ import { logShort } from './utils/shorthandLogger';
 const supabaseUrl = 'https://aljcowxubzytfnjjybhn.supabase.co'
 const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFsamNvd3h1Ynp5dGZuamp5YmhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDUwMzQ4ODgsImV4cCI6MjA2MDYxMDg4OH0.YBenBK0T_vgom3VPDgN9Bvzri3tBE1mLwclSF1lBAGM'
 
-// Initialize the Supabase client with shorthand logging
-logShort("INIT Supabase client CONN", "info");
+// Initialize the Supabase client with auth configuration
+logShort("Initializing Supabase client", "info");
 
-const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     storage: localStorage,
     persistSession: true,

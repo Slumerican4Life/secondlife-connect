@@ -28,12 +28,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const { subscription, fetchUserSubscription } = useSubscription();
   const { setupTwoFactor, verifyTwoFactor } = useMFA();
   
-  // Now useNavigate is safely used within Router context
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Set up session listener
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    // First set up the auth state listener
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth state changed:", event, session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -43,9 +45,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setLoading(false);
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    // Then check for existing session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Initial session check:", session?.user?.email);
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -60,7 +62,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signUp = async (email: string, password: string, phoneNumber?: string) => {
     try {
-      const { error } = await supabase.auth.signUp({
+      setLoading(true);
+      console.log("Signing up with:", email);
+      
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         phone: phoneNumber,
@@ -71,43 +76,64 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       
       if (error) throw error;
       
+      console.log("Sign up result:", data);
+      
       if (phoneNumber) {
         toast.success('Account created! Verification required for both email and phone.');
       } else {
         toast.success('Account created! Please verify your email.');
       }
+      
+      return data;
     } catch (error: any) {
+      console.error("Sign up error:", error);
       toast.error(`Sign up failed: ${error.message}`);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      setLoading(true);
+      console.log("Signing in with:", email);
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
       
       if (error) throw error;
       
+      console.log("Sign in result:", data);
       toast.success('Signed in successfully');
+      navigate('/');
+      
+      return data;
     } catch (error: any) {
+      console.error("Sign in error:", error);
       toast.error(`Sign in failed: ${error.message}`);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 
   const signOut = async () => {
     try {
+      setLoading(true);
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
       
-      navigate('/');
+      navigate('/login');
       toast.info('Signed out successfully');
     } catch (error: any) {
+      console.error("Sign out error:", error);
       toast.error(`Sign out failed: ${error.message}`);
       throw error;
+    } finally {
+      setLoading(false);
     }
   };
 

@@ -3,7 +3,6 @@ import { Link, Navigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { Eye, EyeOff, Lock, Mail, UserPlus, AlertCircle } from "lucide-react";
@@ -67,49 +66,33 @@ const LoginPage = () => {
     
     try {
       if (isLogin) {
-        try {
-          await signIn(email, password);
-          authAgent.resetAttempts(email);
-        } catch (error: any) {
-          console.error("Authentication error:", error);
-          
-          const maxAttemptsReached = authAgent.trackLoginAttempt(email, false);
-          const currentAttempts = authAgent.getAttemptCount(email);
-          setAttempts(currentAttempts);
-          
-          if (maxAttemptsReached) {
-            setShowAssistance(true);
-            toast.warning(`Multiple login failures detected`, {
-              description: "Lyra Assistant has been activated to help you"
-            });
-          }
-          
-          if (error.message === 'Failed to fetch') {
-            setErrorMessage("Network error. Please check your internet connection and try again.");
-          } else {
-            setErrorMessage(error.message || "Authentication failed. Please try again.");
-          }
-          toast.error("Login failed - " + (error.message || "Authentication error"));
-        }
+        console.log("Attempting login with:", email);
+        await signIn(email, password);
       } else {
         // This is signup mode
-        try {
-          console.log("Attempting to sign up with:", email, password);
-          await signUp(email, password);
-          toast.success("Account created! You can now log in.");
-          setIsLogin(true); // Switch to login view after successful signup
-        } catch (error: any) {
-          console.error("Signup error:", error);
-          toast.error("Signup failed - " + (error.message || "Registration error"));
-          setErrorMessage(error.message || "Failed to create account. Please try again.");
-        }
+        console.log("Attempting to sign up with:", email);
+        await signUp(email, password);
+        toast.success("Account created! You can now log in.");
+        setIsLogin(true); // Switch to login view after successful signup
       }
     } catch (error: any) {
       console.error("Authentication error:", error);
       
+      if (isLogin) {
+        const currentAttempts = authAgent.getAttemptCount(email) + 1;
+        const maxAttemptsReached = authAgent.trackLoginAttempt(email, false);
+        setAttempts(currentAttempts);
+        
+        if (maxAttemptsReached) {
+          setShowAssistance(true);
+          toast.warning(`Multiple login failures detected`, {
+            description: "Lyra Assistant has been activated to help you"
+          });
+        }
+      }
+      
       if (error.message === 'Failed to fetch') {
         setErrorMessage("Network error. Please check your internet connection and try again.");
-        toast.error("Network error connecting to authentication service");
       } else {
         setErrorMessage(error.message || "Authentication failed. Please try again.");
       }
