@@ -6,7 +6,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DollarSign, TrendingUp, Users, BarChart2, CreditCard, ShoppingBag, Building, Brain, Zap } from "lucide-react";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { DollarSign, TrendingUp, Users, BarChart2, CreditCard, ShoppingBag, Building, Brain, Zap, Gift } from "lucide-react";
 
 import RevenueOverview from "@/components/Monetization/RevenueOverview";
 import AdvertisingPerformance from "@/components/Monetization/AdvertisingPerformance";
@@ -17,6 +18,26 @@ import SecureFinancePanel from "@/components/SecureFinancePanel";
 import AutomatedRevenuePanel from "@/components/AutomatedRevenuePanel";
 import { useToast } from "@/components/ui/use-toast";
 import { AgentManager } from "@/lib/agents/AgentManager";
+
+// Missing AIAgentHub component - creating simple placeholder
+const AIAgentHub = () => (
+  <div className="p-6">
+    <h3 className="text-xl font-semibold mb-4">AI Monetization Assistant</h3>
+    <div className="space-y-4">
+      <p>This intelligent agent uses quantum-inspired algorithms to help optimize your revenue streams.</p>
+      <div className="bg-muted p-4 rounded-lg">
+        <p className="font-medium">Revenue Optimization Suggestions</p>
+        <ul className="list-disc ml-5 mt-2 space-y-1 text-sm">
+          <li>Diversify ad placement to increase impression value</li>
+          <li>Optimize subscription tiers based on user engagement data</li>
+          <li>Implement virtual goods sales for premium members</li>
+          <li>Create limited-time promotional events</li>
+        </ul>
+      </div>
+      <Button className="w-full">Run Revenue Analysis</Button>
+    </div>
+  </div>
+);
 
 const MonetizationDashboard = () => {
   const isMobile = useIsMobile();
@@ -122,16 +143,12 @@ const MonetizationDashboard = () => {
               <TabsContent value="revenue" className="space-y-6">
                 <RevenueOverview />
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                  {/* Revenue Distribution Pie chart and Quantum Enhancement Panel*/}
-                  {/* Kept original further implementation for revenue distribution and quantum panel */}
                   <Card className="lg:col-span-2">
                     <CardHeader>
                       <CardTitle>Revenue Distribution</CardTitle>
                       <CardDescription>Percentage by revenue stream</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      {/* Recharts PieChart for revenueDistribution is handled here, can also be refactored later */}
-                      {/* For brevity, left as is */}
                       <p className="text-center text-muted-foreground italic">Revenue Distribution Chart would be here</p>
                     </CardContent>
                   </Card>
@@ -250,4 +267,3 @@ const MonetizationDashboard = () => {
 };
 
 export default MonetizationDashboard;
-
