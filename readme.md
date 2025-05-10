@@ -1,0 +1,1 @@
+# A Social Media platform for the game secondife that is like a facebook for the game.  it has all sorts of things ike a bloodbank for the bloodlines section of secondlife and a royalty section and slumerican corner
